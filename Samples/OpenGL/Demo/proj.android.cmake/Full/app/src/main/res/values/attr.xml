@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StrokeTextView">
+        <attr name="backgroundColor" format="color"></attr>
+        <attr name="wide" format="integer"></attr>
+    </declare-styleable>
+</resources>

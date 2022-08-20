@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/chooseView"
+        android:layout_width="189px"
+        android:layout_height="189px"
+        android:layout_marginTop="6px"
+        android:visibility="invisible"
+        android:background="@drawable/card_choose"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/memoriaView"
+        android:layout_width="173px"
+        android:layout_height="172px"
+        android:layout_marginTop="6px"
+
+        android:background="@drawable/no_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <com.live2d.rougelike.StrokeTextView
+        android:id="@+id/lvView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/info"
+        android:text="Lv 1/50"
+        android:textColor="#FFFFFF"
+        android:textSize="29.65px"
+        android:layout_marginLeft="5px"
+        android:layout_marginStart="5px"
+        android:layout_marginBottom="6px"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/memoriaView" />
+
+    <LinearLayout
+        android:id="@+id/unableToEquip"
+        android:layout_width="173px"
+        android:layout_height="172px"
+        android:layout_marginTop="6px"
+        android:background="@color/shader"
+        android:gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.live2d.rougelike.StrokeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/info"
+            android:text="无法装备"
+            android:textColor="#FFFFFF"
+            android:textSize="29.65px"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/equippingView"
+        android:src="@drawable/equiping2"
+        android:layout_width="88.9px"
+        android:layout_height="27.68px"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/memoriaView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bag_background"
+    tools:context=".MemoriaActivity">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="167px"
+        android:layout_height="76px"
+        android:layout_marginTop="15px"
+        android:layout_marginLeft="30px"
+        android:layout_marginStart="30px"
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/frame1"
+        android:layout_width="1591px"
+        android:layout_height="290px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/charAttribute"
+            android:layout_width="58px"
+            android:layout_height="58px"
+            android:layout_marginStart="18px"
+            android:layout_marginLeft="18px"
+            android:layout_marginTop="14px"
+            android:src="@drawable/fire"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/charName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="110px"
+            android:layout_marginTop="7px"
+            android:fontFamily="@font/info"
+            android:text="常盘七香"
+            android:textColor="#FFFFFF"
+            android:textSize="40px"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="55px"
+            android:layout_marginBottom="20px"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.live2d.rougelike.CardView
+                android:id="@+id/equipMemoria1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.live2d.rougelike.CardView
+                android:id="@+id/equipMemoria2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.live2d.rougelike.CardView
+                android:id="@+id/equipMemoria3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.live2d.rougelike.CardView
+                android:id="@+id/equipMemoria4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="960px"
+            android:layout_marginLeft="960px"
+            android:layout_marginBottom="45px"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/HPAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+8125"
+                android:textColor="@color/colorShader"
+                android:textSize="36px"
+                android:fontFamily="@font/info"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/ATKAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+4225"
+                android:fontFamily="@font/info"
+                android:textColor="@color/colorShader"
+                android:textSize="36px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/DEFAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+3700"
+                android:fontFamily="@font/info"
+                android:textColor="@color/colorShader"
+                android:textSize="36px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/uninstallAll"
+            android:layout_width="232px"
+            android:layout_height="95px"
+            android:layout_marginEnd="260px"
+            android:layout_marginRight="260px"
+            android:layout_marginBottom="60px"
+            android:src="@drawable/remove_all"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/confirm"
+            android:layout_width="223px"
+            android:layout_height="234px"
+            android:layout_marginEnd="23px"
+            android:layout_marginRight="23px"
+            android:layout_marginBottom="28px"
+            android:src="@drawable/confirm_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="633px"
+        android:layout_height="752px"
+        android:layout_marginEnd="0px"
+        android:layout_marginRight="0px"
+        android:layout_marginBottom="15px"
+        android:background="@drawable/frame2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.live2d.rougelike.CardView
+            android:id="@+id/showingMemoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="84px"
+            android:layout_marginLeft="84px"
+            android:layout_marginTop="140px"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/showingMemoriaName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50px"
+            android:layout_marginTop="66px"
+            android:fontFamily="@font/info"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="38px"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="420px"
+            android:layout_marginLeft="250px"
+            android:layout_marginTop="144px"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/HPShowing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorShader"
+                android:textSize="36px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/ATKShowing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorShader"
+                android:textSize="36px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/DEFShowing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorShader"
+                android:textSize="36px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/break_throughLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="290px"
+            android:layout_marginLeft="290px"
+            android:layout_marginTop="294px"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="39px"
+                android:layout_height="39px"
+                android:src="@drawable/break_through" />
+
+            <ImageView
+                android:layout_width="39px"
+                android:layout_height="39px"
+                android:src="@drawable/break_through" />
+
+            <ImageView
+                android:layout_width="39px"
+                android:layout_height="39px"
+                android:src="@drawable/break_through" />
+
+            <ImageView
+                android:layout_width="39px"
+                android:layout_height="39px"
+                android:src="@drawable/break_through" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/coolTimeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="282px"
+            android:layout_marginTop="345px"
+            android:fontFamily="@font/info"
+            android:text="冷却回合数 9"
+            android:textColor="@color/colorBrown"
+            android:textSize="26px"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/skillName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="82px"
+            android:layout_marginLeft="82px"
+            android:layout_marginTop="390px"
+            android:fontFamily="@font/info"
+            android:text=""
+            android:textColor="@color/colorPurple"
+            android:textSize="30px"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/skillIcon"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:layout_marginEnd="4px"
+            android:layout_marginRight="4px"
+            android:layout_marginBottom="312px"
+            android:src="@drawable/icon_skill_1012"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/skillDescription"
+            android:layout_width="480px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="82px"
+            android:layout_marginLeft="82px"
+            android:layout_marginTop="450px"
+            android:fontFamily="@font/info"
+            android:text=""
+            android:textColor="@color/colorShader"
+            android:textSize="30px"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/setView"
+            android:layout_width="335px"
+            android:layout_height="126px"
+            android:layout_marginEnd="130px"
+            android:layout_marginRight="130px"
+            android:layout_marginBottom="26px"
+            android:visibility="invisible"
+            android:src="@drawable/set"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frame3"
+        android:layout_width="1294px"
+        android:layout_height="86px"
+        android:layout_marginTop="300px"
+        android:layout_marginEnd="615px"
+        android:layout_marginRight="615px"
+        android:background="@drawable/frame3"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/cardNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="230px"
+            android:fontFamily="@font/info"
+            android:text="14/400"
+            android:textColor="#FFFFFF"
+            android:textSize="40px"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/order"
+            android:layout_width="157px"
+            android:layout_height="47px"
+            android:layout_marginEnd="40px"
+            android:layout_marginRight="40px"
+            android:src="@drawable/desc"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/orderBy"
+            android:layout_width="192px"
+            android:layout_height="66px"
+            android:layout_marginEnd="40px"
+            android:layout_marginRight="40px"
+            android:src="@drawable/order2"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/order"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="1211px"
+        android:layout_height="713px"
+        android:background="@drawable/frame4"
+        app:layout_constraintEnd_toEndOf="@id/frame3"
+        app:layout_constraintStart_toStartOf="@id/frame3"
+        app:layout_constraintTop_toBottomOf="@id/frame3">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cardsRecyclerView"
+            android:layout_marginHorizontal="30px"
+            android:layout_marginTop="5px"
+            android:layout_marginBottom="15px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

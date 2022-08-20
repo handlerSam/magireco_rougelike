@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- <meta http-equiv="content-type" content="text/html; charset=UTF-8"> -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta charset="utf-8">
+    <title>Magia Record Sprite Viewer</title>
+    <!-- <link rel="icon" type="image/GIF" href="https://kyu.gay/favicon.ico"> -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- <meta name="full-screen" content="yes">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="360-fullscreen" content="true"> -->
+    <style>
+        body,
+        canvas,
+        div {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -khtml-user-select: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        p {
+            color: white;
+        }
+
+        button {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #ffffff;
+            padding: 10px 20px;
+            -moz-border-radius: 30px;
+            -webkit-border-radius: 30px;
+            border-radius: 30px;
+            -moz-box-shadow:
+                0px 1px 3px rgba(0, 0, 0, 0.5),
+                inset 0px 0px 1px rgba(255, 255, 255, 0.7);
+            -webkit-box-shadow:
+                0px 1px 3px rgba(0, 0, 0, 0.5),
+                inset 0px 0px 1px rgba(255, 255, 255, 0.7);
+            box-shadow:
+                0px 1px 3px rgba(0, 0, 0, 0.5),
+                inset 0px 0px 1px rgba(255, 255, 255, 0.7);
+            text-shadow:
+                0px -1px 0px rgba(0, 0, 0, 0.4),
+                0px 1px 0px rgba(255, 255, 255, 0.3);
+        }
+
+        button.active {
+            background: linear-gradient(to bottom,
+                    #3498db,
+                    #2980b9);
+            background: -moz-linear-gradient(top,
+                    #3498db 0%,
+                    #2980b9);
+            background: -webkit-gradient(linear, left top, left bottom,
+                    from(#3498db),
+                    to(#2980b9));
+            border: 1px solid #2980b9;
+        }
+
+        button.inactive {
+            background: linear-gradient(to bottom,
+                    #e74c3c,
+                    #c0392b);
+            background: -moz-linear-gradient(top,
+                    #e74c3c 0%,
+                    #c0392b);
+            background: -webkit-gradient(linear, left top, left bottom,
+                    from(#e74c3c),
+                    to(#c0392b));
+            border: 1px solid #c0392b;
+        }
+
+        .darken {
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            left: 0px;
+        }
+
+        .selector {
+            width: 80%;
+            height: 90%;
+            position: absolute;
+            left: 10%;
+            background-color: gray;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .megucaIcon {
+            cursor: pointer;
+            height: 144px;
+            width: 130px;
+            display: inline-block;
+            margin-top: 20px;
+            margin-left: 20px;
+            border-radius: 3px;
+        }
+
+        .thumbbutton {
+            cursor: pointer;
+            height: 90px;
+            width: 120px;
+            display: inline-block;
+            margin-top: 20px;
+            margin-left: 20px;
+            border-radius: 3px;
+        }
+
+        table.wikitable {
+            margin: 1em 0;
+            background-color: #f2f2f2;
+            border-style: solid;
+            border-width: 1px;
+            border-color: black;
+            border-collapse: collapse;
+            color: black;
+            height: 100%;
+            width: 100%;
+        }
+
+        table.wikitable td {
+            border-style: solid;
+            border-width: 1px;
+            border-color: black;
+            border-collapse: collapse;
+        }
+    </style>
+    <style>
+        .cocosVideo:-moz-full-screen {
+            transform: matrix(1, 0, 0, 1, 0, 0) !important;
+        }
+
+        .cocosVideo:full-screen {
+            transform: matrix(1, 0, 0, 1, 0, 0) !important;
+        }
+
+        .cocosVideo:-webkit-full-screen {
+            transform: matrix(1, 0, 0, 1, 0, 0) !important;
+        }
+    </style>
+</head>
+
+<body style="padding:0; margin: 0; background: #ff000000;">
+    <!-- <div align="center">
+        <p style="display:inline-block;padding-right: 10px;">
+            <button id="btnCharacter" class="active" style="cursor:pointer" onclick="OnChangeCharacter()">Change Character</button>
+        </p>
+        <p style="display:inline-block;padding-right: 10px;">
+            <button id="btnBg" class="active" style="cursor:pointer" onclick="OnChangeBackground()">Change Background</button>
+        </p>
+    </div> -->
+    <!-- <div align="center">
+        <p style="display:inline-block"> Sprite: </p>
+        <select style="display:inline-block" id="select_sprite"> </select>
+        <p style="display:inline-block"> Animation: </p>
+        <select style="display:inline-block" id="select_animation"> </select>
+        <p id="display_name"></p>
+    </div> -->
+    <div align="center">
+        <div id="Cocos2dGameContainer" style="transform: rotate(0deg);">
+            <canvas id="gameCanvas"
+                style="background-color: transparent;" class="gameCanvas" tabindex="99" width="800"
+                height="800">
+            </canvas>
+        </div>
+    </div>
+    <script src="jquery.js"></script>
+    <script src="CCBoot.js"></script>
+    <script cocos="" src="main.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/event-manager/CCEventHelper.js"></script>
+    <script src="cocos2d-html5/CCDebugger.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/utils/BinaryLoader.js"></script>
+    <script src="cocos2d-html5/Base64Images.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCClass.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCCommon.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/cocoa/CCGeometry.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCSAXParser.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCLoaders.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCConfig.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/miniFramework.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCMacro.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCTypes.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCEGLView.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCScreen.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCVisibleRect.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCInputManager.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/platform/CCInputExtension.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/cocoa/CCAffineTransform.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/support/CCPointExtension.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/support/CCVertex.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/support/TransformUtils.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/event-manager/CCTouch.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/event-manager/CCEvent.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/event-manager/CCEventListener.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/event-manager/CCEventManager.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/event-manager/CCEventExtension.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/renderer/GlobalVertexBuffer.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/renderer/RendererCanvas.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/renderer/RendererWebGL.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/renderer/DirtyRegion.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/base-nodes/BaseNodesPropertyDefine.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/base-nodes/CCNode.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/base-nodes/CCNodeCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/base-nodes/CCNodeWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/base-nodes/CCAtlasNode.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/base-nodes/CCAtlasNodeCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/base-nodes/CCAtlasNodeWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/textures/TexturesWebGL.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/textures/TexturesPropertyDefine.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/textures/CCTexture2D.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/textures/CCTextureCache.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/textures/CCTextureAtlas.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/scenes/CCScene.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/scenes/CCLoaderScene.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/layers/CCLayer.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/layers/CCLayerCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/layers/CCLayerWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/SpritesPropertyDefine.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCSprite.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCSpriteCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCSpriteWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCSpriteBatchNode.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCBakeSprite.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCAnimation.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCAnimationCache.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCSpriteFrame.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/sprites/CCSpriteFrameCache.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCConfiguration.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCDirector.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCDirectorCanvas.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCDirectorWebGL.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCScheduler.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCDrawingPrimitivesCanvas.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCDrawingPrimitivesWebGL.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/labelttf/LabelTTFPropertyDefine.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/labelttf/CCLabelTTF.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/labelttf/CCLabelTTFCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/labelttf/CCLabelTTFWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/CCActionManager.js"></script>
+    <script src="cocos2d-html5/cocos2d/core/utils/CCProfiler.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/utility.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/vec2.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/vec3.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/vec4.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/ray2.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/mat3.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/mat4.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/plane.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/quaternion.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/aabb.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/gl/mat4stack.js"></script>
+    <script src="cocos2d-html5/cocos2d/kazmath/gl/matrix.js"></script>
+    <script src="cocos2d-html5/cocos2d/shaders/CCShaders.js"></script>
+    <script src="cocos2d-html5/cocos2d/shaders/CCShaderCache.js"></script>
+    <script src="cocos2d-html5/cocos2d/shaders/CCGLProgram.js"></script>
+    <script src="cocos2d-html5/cocos2d/shaders/CCGLProgramState.js"></script>
+    <script src="cocos2d-html5/cocos2d/shaders/CCGLStateCache.js"></script>
+    <script src="cocos2d-html5/cocos2d/render-texture/CCRenderTexture.js"></script>
+    <script src="cocos2d-html5/cocos2d/render-texture/CCRenderTextureCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/render-texture/CCRenderTextureWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/labels/CCLabelBMFont.js"></script>
+    <script src="cocos2d-html5/cocos2d/labels/CCLabelBMFontCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/labels/CCLabelBMFontWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/labels/CCLabelAtlas.js"></script>
+    <script src="cocos2d-html5/cocos2d/labels/CCLabelAtlasCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/labels/CCLabelAtlasWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/motion-streak/CCMotionStreak.js"></script>
+    <script src="cocos2d-html5/cocos2d/motion-streak/CCMotionStreakWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/node-grid/CCNodeGrid.js"></script>
+    <script src="cocos2d-html5/cocos2d/node-grid/CCNodeGridWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/shape-nodes/CCDrawNode.js"></script>
+    <script src="cocos2d-html5/cocos2d/shape-nodes/CCDrawNodeCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/shape-nodes/CCDrawNodeWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/clipping-nodes/CCClippingNode.js"></script>
+    <script src="cocos2d-html5/cocos2d/clipping-nodes/CCClippingNodeCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/clipping-nodes/CCClippingNodeWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/effects/CCGrid.js"></script>
+    <script src="cocos2d-html5/cocos2d/effects/CCGrabber.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions/CCAction.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions/CCActionInterval.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions/CCActionInstant.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions/CCActionEase.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions/CCActionCatmullRom.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions/CCActionTween.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions3d/CCActionGrid.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions3d/CCActionGrid3D.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions3d/CCActionTiledGrid.js"></script>
+    <script src="cocos2d-html5/cocos2d/actions3d/CCActionPageTurn3D.js"></script>
+    <script src="cocos2d-html5/cocos2d/progress-timer/CCProgressTimer.js"></script>
+    <script src="cocos2d-html5/cocos2d/progress-timer/CCActionProgressTimer.js"></script>
+    <script src="cocos2d-html5/cocos2d/progress-timer/CCProgressTimerCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/progress-timer/CCProgressTimerWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/transitions/CCTransition.js"></script>
+    <script src="cocos2d-html5/cocos2d/transitions/CCTransitionProgress.js"></script>
+    <script src="cocos2d-html5/cocos2d/transitions/CCTransitionPageTurn.js"></script>
+    <script src="cocos2d-html5/cocos2d/compression/ZipUtils.js"></script>
+    <script src="cocos2d-html5/cocos2d/compression/base64.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCPNGReader.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCTIFFReader.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCParticleSystem.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCParticleSystemCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCParticleSystemWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCParticleExamples.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCParticleBatchNode.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCParticleBatchNodeCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/particle/CCParticleBatchNodeWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/text-input/CCIMEDispatcher.js"></script>
+    <script src="cocos2d-html5/cocos2d/text-input/CCTextFieldTTF.js"></script>
+    <script src="cocos2d-html5/cocos2d/menus/CCMenuItem.js"></script>
+    <script src="cocos2d-html5/cocos2d/menus/CCMenu.js"></script>
+    <script src="cocos2d-html5/cocos2d/compression/gzip.js"></script>
+    <script src="cocos2d-html5/cocos2d/compression/zlib.min.js"></script>
+    <script src="cocos2d-html5/cocos2d/tilemap/CCTGAlib.js"></script>
+    <script src="cocos2d-html5/cocos2d/tilemap/CCTMXTiledMap.js"></script>
+    <script src="cocos2d-html5/cocos2d/tilemap/CCTMXXMLParser.js"></script>
+    <script src="cocos2d-html5/cocos2d/tilemap/CCTMXObjectGroup.js"></script>
+    <script src="cocos2d-html5/cocos2d/tilemap/CCTMXLayer.js"></script>
+    <script src="cocos2d-html5/cocos2d/tilemap/CCTMXLayerCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/tilemap/CCTMXLayerWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/parallax/CCParallaxNode.js"></script>
+    <script src="cocos2d-html5/cocos2d/parallax/CCParallaxNodeRenderCmd.js"></script>
+    <script src="cocos2d-html5/cocos2d/audio/CCAudio.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControl.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlButton.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlUtils.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCInvocation.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCMenuPassive.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlSaturationBrightnessPicker.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlHuePicker.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlColourPicker.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlSlider.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlSwitch.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlStepper.js"></script>
+    <script src="cocos2d-html5/extensions/gui/control-extension/CCControlPotentiometer.js"></script>
+    <script src="cocos2d-html5/extensions/gui/scrollview/CCScrollView.js"></script>
+    <script src="cocos2d-html5/extensions/gui/scrollview/CCScrollViewCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/gui/scrollview/CCScrollViewWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/gui/scrollview/CCSorting.js"></script>
+    <script src="cocos2d-html5/extensions/gui/scrollview/CCTableView.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCNodeLoader.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCBReaderUtil.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCControlLoader.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCSpriteLoader.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCNodeLoaderLibrary.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCBReader.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCBValue.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCBKeyframe.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCBSequence.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCBRelativePositioning.js"></script>
+    <script src="cocos2d-html5/extensions/ccb-reader/CCBAnimationManager.js"></script>
+    <script src="cocos2d-html5/extensions/editbox/CCEditBox.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/CCProtectedNode.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/CCProtectedNodeCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/CCProtectedNodeWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/system/CocosGUI.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/UIWidget.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/UIWidgetRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/UIScale9Sprite.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/UIScale9SpriteCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/base-classes/UIScale9SpriteWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UILayout.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UILayoutCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UILayoutWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UILayoutParameter.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UILayoutManager.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UIHBox.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UIRelativeBox.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UIVBox.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/system/UIHelper.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UIButton.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UICheckBox.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UIImageView.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UILoadingBar.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UISlider.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UIText.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UITextAtlas.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UITextBMFont.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UITextField.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UIVideoPlayer.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UIRichText.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/UIWebView.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/scroll-widget/UIScrollViewBar.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/scroll-widget/UIScrollView.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/scroll-widget/UIListView.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/scroll-widget/UIPageView.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/scroll-widget/UIPageViewIndicator.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/scroll-widget/UIScrollViewCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/uiwidgets/scroll-widget/UIScrollViewWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/components/CCComponent.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/components/CCComponentContainer.js"></script>
+    <script src="cocos2d-html5/extensions/ccui/layouts/UILayoutComponent.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/CocoStudio.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/utils/CCArmatureDefine.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/utils/CCDataReaderHelper.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/utils/CCSpriteFrameCacheHelper.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/utils/CCTransformHelp.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/utils/CCTweenFunction.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/utils/CCUtilMath.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/utils/CCArmatureDataManager.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/datas/CCDatas.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/display/CCDecorativeDisplay.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/display/CCDisplayFactory.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/display/CCDisplayManager.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/display/CCSkin.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/display/CCSkinRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/animation/CCProcessBase.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/animation/CCArmatureAnimation.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/animation/CCTween.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/physics/CCColliderDetector.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/CCArmature.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/CCArmatureCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/CCArmatureWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/armature/CCBone.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/action/CCActionFrame.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/action/CCActionManager.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/action/CCActionNode.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/action/CCActionObject.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/components/CCComAttribute.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/components/CCComAudio.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/components/CCComController.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/components/CCComRender.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/trigger/ObjectFactory.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/trigger/TriggerBase.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/trigger/TriggerMng.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/trigger/TriggerObj.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/timeline/ActionTimeline.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/timeline/Frame.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/timeline/Timeline.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/timeline/CCSkinNode.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/timeline/CCBoneNode.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/timeline/CCSkeletonNode.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/load.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/parsers/scene-1.x.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/parsers/uiParser-1.x.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/parsers/action-1.x.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/parsers/action-2.x.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/parsers/timelineParser-1.x.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/parsers/timelineParser-2.x.js"></script>
+    <script src="cocos2d-html5/extensions/cocostudio/loader/parsers/compatible.js"></script>
+    <script src="cocos2d-html5/extensions/spine/Spine.js"></script>
+    <script src="cocos2d-html5/extensions/spine/CCSkeleton.js"></script>
+    <script src="cocos2d-html5/extensions/spine/CCSkeletonAnimation.js"></script>
+    <script src="cocos2d-html5/extensions/spine/CCSkeletonTexture.js"></script>
+    <script src="cocos2d-html5/extensions/spine/CCSkeletonCanvasRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/spine/CCSkeletonWebGLRenderCmd.js"></script>
+    <script src="cocos2d-html5/extensions/ccpool/CCPool.js"></script>
+    <script src="app.js"></script>
+    <script src="resource.js"></script>
+    <script>
+        function setCharacterIdAndSprite(charId, sprite){
+            Handler_characterId = charId;
+            Handler_spriteId = sprite;
+        }
+        function setCharacterNameAndSprite(charName, sprite){
+            Handler_characterName = charName;
+            Handler_spriteName = sprite;
+        }
+        function setCanvasWidth(width){
+            Handler_canvasWidth = width;
+        }
+        function setPrefix(name){
+            Handler_prefix = name;
+        }
+        function changeCharacter(){
+            OnChangeCharacter();
+        }
+        function endGame(){
+            cc.game.pause();
+        }
+        function changeSprite(){
+            for (var i in Handler_armature.getAnimation()._animationData.movementNames){
+            if (Handler_armature.getAnimation()._animationData.movementNames[i] == Handler_spriteName){
+                Handler_spriteId = i;
+                console.log("found_movement:",i);
+                break;
+            }
+            console.log("movement:",Handler_armature.getAnimation()._animationData.movementNames[i]);
+        }
+            Handler_armature.getAnimation().playWithIndex(Handler_spriteId);
+        }
+        function setAnimationIndex(index){
+            Handler_animation_index = index;
+        }
+    </script>
+
+    <!-- <script type="text/javascript" src="cocos2d-js-v3.13-lite.js" charset="UTF-8"></script> -->
+    <div style="font-family: Arial; position: absolute; left: -100px; top: -100px; line-height: normal;"></div><input
+        type="text" id="imeDispatcherInput"
+        style="transform: translate3d(0px, 0px, 0px) rotateZ(0deg) scale(0) skewX(0deg) skewY(0deg); opacity: 0; font-size: 1px; position: absolute; top: 0px; left: 0px;"
+        tabindex="2">
+</body>
+
+</html>

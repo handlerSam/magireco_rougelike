@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DialogActivity">
+
+    <LinearLayout
+        android:id="@+id/live2dContainer"
+        android:layout_width="match_parent"
+        android:layout_height="1500px"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/blackMask"
+        android:background="#000000"
+        android:alpha="0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog"
+        android:layout_width="980px"
+        android:layout_height="300px"
+        android:layout_marginBottom="75px"
+        android:background="@drawable/dialogue_right"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/left_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140px"
+            android:layout_marginTop="15px"
+            android:fontFamily="@font/plot"
+            android:text="灯花"
+            android:textColor="#FFFFFF"
+            android:textSize="37px"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/middle_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="540px"
+            android:layout_marginTop="15px"
+            android:fontFamily="@font/plot"
+            android:text="灯花"
+            android:textColor="#FFFFFF"
+            android:textSize="37px"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/right_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15px"
+            android:layout_marginRight="140px"
+            android:fontFamily="@font/plot"
+            android:text="灯花"
+            android:textColor="#FFFFFF"
+            android:textSize="37px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="120px"
+            android:layout_marginTop="110px"
+            android:fontFamily="@font/plot"
+            android:text="不过，与其说是野兽，\n不如说对方是扭曲的天才。"
+            android:textColor="#575954"
+            android:textSize="46px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/choiceLinearLayout"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:id="@+id/choice0Layout"
+            android:gravity="center"
+            android:background="@drawable/dialog_choice"
+            android:layout_width="1304px"
+            android:layout_height="268px">
+            <TextView
+                android:id="@+id/choice0Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plot"
+                android:text="不过，与其说是野兽，\n不如说对方是扭曲的天才。"
+                android:textColor="#575954"
+                android:textSize="46px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/choice1Layout"
+            android:gravity="center"
+            android:background="@drawable/dialog_choice"
+            android:layout_marginTop="50px"
+            android:layout_width="1304px"
+            android:layout_height="268px">
+            <TextView
+                android:id="@+id/choice1Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plot"
+                android:text="不过，与其说是野兽，\n不如说对方是扭曲的天才。"
+                android:textColor="#575954"
+                android:textSize="46px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/choice2Layout"
+            android:gravity="center"
+            android:layout_marginTop="50px"
+            android:background="@drawable/dialog_choice"
+            android:layout_width="1304px"
+            android:layout_height="268px">
+            <TextView
+                android:id="@+id/choice2Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plot"
+                android:text="不过，与其说是野兽，\n不如说对方是扭曲的天才。"
+                android:textColor="#575954"
+                android:textSize="46px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/skip"
+        android:layout_width="153px"
+        android:layout_height="64px"
+        android:layout_marginTop="30px"
+        android:layout_marginEnd="50px"
+        android:background="@drawable/skip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

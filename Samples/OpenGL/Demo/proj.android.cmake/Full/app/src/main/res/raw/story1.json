@@ -1,0 +1,203 @@
+[
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "000",
+        "text": "...",
+        "speakerName": "忧",
+        "speakerDirection": 1,
+        "background": "00000"
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1face": "050",
+        "text": "欸？我这是在...医院？",
+        "speakerName": "忧",
+        "speakerDirection": 1,
+        "background": "21012"
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char0motion": "000",
+        "char0face": "050",
+        "char2id": "101401",
+        "char2motion": "100",
+        "char2face": "011",
+        "text": "忧，早上好。",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char0motion": "100",
+        "char0face": "011",
+        "char2id": "101401",
+        "text": "啊，音梦！早上好！",
+        "speakerName": "忧",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "000",
+        "char1face": "010",
+        "text": "（对了，几天前医生说我的病情奇迹般的好转了...）",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "200",
+        "char1face": "011",
+        "text": "（今天是和音梦和灯花约好出去玩的日子！）",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "（虽然姐姐说她最近功课比较多，没办法一起来...）",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char0motion": "000",
+        "char0face": "030",
+        "char2id": "101401",
+        "char2motion": "001",
+        "char2face": "030",
+        "text": "忧？在想事情吗。",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char2id": "101401",
+        "char2motion": "100",
+        "char2face": "011",
+        "text": "今天要出去玩，我们早点吃完早饭就出发吧。",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char0motion": "200",
+        "char0face": "011",
+        "char2id": "101401",
+        "text": "嗯！",
+        "speakerName": "忧",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "101401",
+        "char2id": "100701",
+        "char2motion": "201",
+        "char2face": "020",
+        "text": "太慢啦，音梦，忧！再这样下去今天我们就去不了几个地方了！",
+        "speakerName": "灯花",
+        "speakerDirection": 2,
+        "background": "21012"
+    },
+    {
+        "flag": 0,
+        "char0id": "101401",
+        "char0motion": "300",
+        "char0face": "000",
+        "char2id": "100701",
+        "text": "...我可不想被一到休息天早上不赖个半小时不起床的人这么说。",
+        "speakerName": "音梦",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "101401",
+        "char2id": "100701",
+        "char2motion": "201",
+        "char2face": "020",
+        "text": "那是因为平时礼拜天又没有什么要紧的事！",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char0id": "101401",
+        "char0face": "000",
+        "char1id": "101503",
+        "char1motion": "200",
+        "char1face": "020",
+        "char2id": "100701",
+        "char2face": "020",
+        "text": "好啦好啦两个人别吵了，再吵下去粥都要凉了...",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101401",
+        "char1face": "000",
+        "text": "东西都带好了吗？",
+        "speakerName": "音梦",
+        "speakerDirection": 1,
+        "background": "21011"
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char0motion": "200",
+        "char0face": "011",
+        "char2id": "100701",
+        "text": "嗯！水，面包，悲叹之种，姐姐给的零花钱也带好了！",
+        "speakerName": "忧",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "101401",
+        "char2id": "100701",
+        "char2motion": "200",
+        "char2face": "011",
+        "text": "以防万一下雨，我也带好伞了喵~",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char0id": "101401",
+        "char0motion": "100",
+        "char0face": "000",
+        "char2id": "100701",
+        "text": "你平时不是不下雨也会带伞吗？",
+        "speakerName": "音梦",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "101401",
+        "char2id": "100701",
+        "char2motion": "201",
+        "char2face": "020",
+        "text": "那是阳伞！",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "100",
+        "char1face": "041",
+        "text": "好啦好啦两个人别吵了，东西带齐我们就出发吧！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    }
+]

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/charMemoria"
+        android:layout_width="142px"
+        android:layout_height="142px"
+        android:src="@drawable/memoria_1045_s"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/skillIconFrame"
+        android:layout_width="78px"
+        android:layout_height="70px"
+        android:gravity="right"
+        android:background="@drawable/memoria_empty_icon"
+        app:layout_constraintStart_toEndOf="@id/charMemoria"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/skillIcon"
+            android:src="@drawable/icon_skill_1145"
+            android:layout_marginTop="6px"
+            android:layout_marginRight="6px"
+            android:layout_marginEnd="6px"
+            android:layout_width="58px"
+            android:layout_height="58px"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/max"
+        android:layout_width="95px"
+        android:layout_height="36px"
+        android:src="@drawable/max"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skillIconFrame" />
+
+    <com.live2d.rougelike.StrokeTextView
+        android:id="@+id/lvView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/info"
+        android:text="Lv1/30"
+        android:textColor="#FFFFFF"
+        android:textSize="28px"
+        android:layout_marginTop="7px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/max" />
+</androidx.constraintlayout.widget.ConstraintLayout>

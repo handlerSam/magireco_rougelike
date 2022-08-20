@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/effectDetailLayout"
+        android:layout_marginTop="25px"
+        android:layout_width="588px"
+        android:layout_height="47px"
+        android:background="@drawable/effect_detail_effect_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/effectDetailName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8px"
+            android:fontFamily="@font/info"
+            android:text="毒"
+            android:textColor="@color/colorShader"
+            android:textSize="34px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/effectDetailCD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="550px"
+            android:layout_marginBottom="4px"
+            android:fontFamily="@font/info"
+            android:text="1"
+            android:textColor="#FFFFFF"
+            android:textSize="34px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/effectDetailDescription"
+        android:layout_width="451px"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="137px"
+        android:layout_marginTop="4px"
+        android:fontFamily="@font/info"
+        android:text="防御力下降"
+        android:textColor="#FFFFFF"
+        android:textSize="34px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/effectDetailLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

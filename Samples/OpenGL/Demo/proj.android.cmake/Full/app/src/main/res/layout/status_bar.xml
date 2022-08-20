@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="170px"
+        android:layout_height="57px"
+        android:background="@drawable/character_status_frame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/attribute"
+        android:layout_width="53px"
+        android:layout_height="53px"
+        android:layout_marginStart="2px"
+        android:layout_marginBottom="2px"
+        android:background="@drawable/fire"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/hpBar"
+        android:layout_width="75px"
+        android:layout_height="15px"
+        android:background="@drawable/hp_bar"
+        android:layout_marginStart="3px"
+        android:layout_marginBottom="23px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/attribute" />
+
+    <ImageView
+        android:id="@+id/mpBar"
+        android:layout_width="80px"
+        android:layout_height="15px"
+        android:background="@drawable/magia_bar"
+        android:layout_marginStart="4px"
+        android:layout_marginBottom="5px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/attribute" />
+    <ImageView
+        android:id="@+id/dpBar"
+        android:layout_width="30px"
+        android:layout_height="15px"
+        android:background="@drawable/dopple_bar"
+        android:layout_marginStart="4px"
+        android:layout_marginBottom="5px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/attribute" />
+
+    <ImageView
+        android:id="@+id/smallSkill1"
+        android:layout_width="32px"
+        android:layout_height="32px"
+        android:layout_marginStart="7px"
+        android:layout_marginBottom="7px"
+        android:background="@drawable/skill_small_attack"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/hpBar"
+        app:layout_constraintStart_toStartOf="@id/hpBar" />
+    <ImageView
+        android:id="@+id/smallSkill2"
+        android:layout_width="32px"
+        android:layout_height="32px"
+        android:layout_marginStart="7px"
+        android:layout_marginBottom="7px"
+        android:visibility="invisible"
+        android:background="@drawable/skill_small_attack"
+        app:layout_constraintBottom_toTopOf="@id/hpBar"
+        app:layout_constraintStart_toEndOf="@id/smallSkill1" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1px"
+        android:layout_marginStart="35px"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/smallSkill2"
+        app:layout_constraintTop_toBottomOf="@id/hpBar">
+
+        <ImageView
+            android:id="@+id/number0"
+            android:layout_width="18px"
+            android:layout_height="24px"
+            android:background="@drawable/blue_0" />
+        <ImageView
+            android:id="@+id/number1"
+            android:layout_width="18px"
+            android:layout_height="24px"
+            android:background="@drawable/blue_1" />
+        <ImageView
+            android:id="@+id/number2"
+            android:layout_width="18px"
+            android:layout_height="24px"
+            android:background="@drawable/blue_7" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

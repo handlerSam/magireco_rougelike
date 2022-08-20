@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+//ext {
+//    geckoviewChannel = "nightly"
+//    geckoviewVersion = "70.0.20190712095934"
+//}
+
+android {
+    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
+
+    defaultConfig {
+        applicationId "com.live2d.rougelike"
+        minSdkVersion 23
+        targetSdkVersion PROP_TARGET_SDK_VERSION
+        versionCode 1
+        versionName "1.0"
+        externalNativeBuild {
+            ndk {
+                abiFilters = []
+                abiFilters.addAll(PROP_APP_ABI.split(':').collect{ it as String })
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+            version "3.10.2"
+        }
+    }
+    sourceSets.main {
+        assets.srcDir "../../../../../Resources"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+//    implementation "org.mozilla.geckoview:geckoview-${geckoviewChannel}:${geckoviewVersion}"
+}

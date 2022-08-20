@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorShader">#605E5E</color>
+    <color name="colorBrown">#a17125</color>
+    <color name="colorPurple">#5a306f</color>
+    <color name="shader">#80000000</color>
+    <color name="pink">#fb423d</color>
+    <color name="textPink">#e44c49</color>
+    <color name="skillTextPink">#e74979</color>
+    <color name="skillTextBlue">#1d80a9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="chargeNumberWhite">#e0dee1</color>
+    <color name="skillTextGreen">#49b761</color>
+    <color name="textPurple">#5a3070</color>
+    <color name="turnYellow">#cdac6b</color>
+    <color name="transparent">#00000000</color>
+    <color name="lightBlue">#0C96CF</color>
+    <color name="black">#000000</color>
+    <color name="chargeYellow">#f0a321</color>
+</resources>

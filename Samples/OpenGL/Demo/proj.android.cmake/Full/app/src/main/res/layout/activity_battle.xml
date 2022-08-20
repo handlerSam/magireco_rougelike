@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BattleActivity">
+
+    <ImageView
+        android:id="@+id/underlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/underlay_street"
+        android:scaleType="fitStart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <com.live2d.rougelike.SpriteViewer-->
+<!--        android:id="@+id/background_effect"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="800px"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/backgroundLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/backgroundLeft"
+            android:layout_width="2328px"
+            android:layout_height="wrap_content"
+            android:scaleType="fitEnd"
+            android:src="@drawable/background_street"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/backgroundRight"
+            android:layout_width="2328px"
+            android:layout_height="wrap_content"
+            android:scaleType="fitEnd"
+            android:src="@drawable/background_street"
+            app:layout_constraintStart_toEndOf="@id/backgroundLeft"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/characterLayout"
+            android:layout_width="match_parent"
+            android:layout_height="1300px"
+            app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="189px"
+        android:layout_height="45px"
+        android:layout_marginTop="20px"
+        android:visibility="gone"
+        android:background="@drawable/turn_frame"
+        app:layout_constraintEnd_toStartOf="@+id/small_plate_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TURN  5"
+            android:textSize="27px"
+            android:textColor="@color/turnYellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/small_plate_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/small_plate0"
+            android:layout_width="180px"
+            android:layout_height="180px">
+            <ImageView
+                android:id="@+id/small_plate0_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="9px"
+                android:background="@drawable/accele_plate" />
+            <ImageView
+                android:id="@+id/small_plate0_character"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="0px"
+                android:layout_marginBottom="7.5px"
+                android:background="@drawable/card_10155_d" />
+
+            <ImageView
+                android:id="@+id/small_plate_attributionFrame0"
+                android:layout_width="45.75px"
+                android:layout_height="45.75px"
+                android:layout_marginStart="11.25px"
+                android:layout_marginBottom="26.25px"
+                android:background="@drawable/attribute_frame"
+                app:layout_constraintBottom_toBottomOf="@id/small_plate0_background"
+                app:layout_constraintStart_toStartOf="@id/small_plate0_background" />
+
+            <ImageView
+                android:id="@+id/small_plate0_attribute"
+                android:layout_width="38.25px"
+                android:layout_height="38.25px"
+                android:layout_marginStart="15px"
+                android:layout_marginBottom="30px"
+                android:background="@drawable/fire"
+                app:layout_constraintBottom_toBottomOf="@id/small_plate0_background"
+                app:layout_constraintStart_toStartOf="@id/small_plate0_background" />
+
+            <ImageView
+                android:id="@+id/small_plate0_text"
+                android:layout_width="wrap_content"
+                android:layout_height="39px"
+                android:layout_margin="9px"
+                android:src="@drawable/charge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/small_plate0_arrow"
+                android:layout_width="51.75px"
+                android:layout_height="51.75px"
+                android:layout_marginEnd="9px"
+                android:layout_marginBottom="29.25px"
+                android:src="@drawable/blast_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/small_plate0_small_background"
+                android:layout_width="75px"
+                android:layout_height="75px"
+                android:layout_marginBottom="9px"
+                android:background="@drawable/accele_plate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                android:id="@+id/small_plate0_small_character"
+                android:layout_width="75px"
+                android:layout_height="75px"
+                android:layout_marginHorizontal="0px"
+                android:layout_marginBottom="7.5px"
+                android:background="@drawable/card_10155_d"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/small_plate_right_arrow0"
+            android:layout_width="76.5px"
+            android:layout_height="88.5px"
+            android:background="@drawable/right_arrow"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/small_plate1"
+            android:layout_width="180px"
+            android:layout_height="180px">
+            <ImageView
+                android:id="@+id/small_plate1_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="9px"
+                android:background="@drawable/accele_plate" />
+            <ImageView
+                android:id="@+id/small_plate1_character"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="0px"
+                android:layout_marginBottom="7.5px"
+                android:background="@drawable/card_10155_d" />
+
+            <ImageView
+                android:id="@+id/small_plate1_arrow"
+                android:layout_width="51.75px"
+                android:layout_height="51.75px"
+                android:layout_marginEnd="9px"
+                android:layout_marginBottom="19.5px"
+                android:src="@drawable/blast_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/small_plate_attributionFrame1"
+                android:layout_width="45.75px"
+                android:layout_height="45.75px"
+                android:layout_marginStart="11.25px"
+                android:layout_marginBottom="26.25px"
+                android:background="@drawable/attribute_frame"
+                app:layout_constraintBottom_toBottomOf="@id/small_plate1_background"
+                app:layout_constraintStart_toStartOf="@id/small_plate1_background" />
+
+            <ImageView
+                android:id="@+id/small_plate1_attribute"
+                android:layout_width="38.25px"
+                android:layout_height="38.25px"
+                android:layout_marginStart="15px"
+                android:layout_marginBottom="30px"
+                android:background="@drawable/fire"
+                app:layout_constraintBottom_toBottomOf="@id/small_plate1_background"
+                app:layout_constraintStart_toStartOf="@id/small_plate1_background" />
+            <ImageView
+                android:id="@+id/small_plate1_text"
+                android:layout_width="wrap_content"
+                android:layout_height="39px"
+                android:layout_margin="9px"
+                android:src="@drawable/charge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/small_plate1_small_background"
+                android:layout_width="75px"
+                android:layout_height="75px"
+                android:layout_marginBottom="9px"
+                android:background="@drawable/accele_plate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                android:id="@+id/small_plate1_small_character"
+                android:layout_width="75px"
+                android:layout_height="75px"
+                android:layout_marginHorizontal="0px"
+                android:layout_marginBottom="7.5px"
+                android:background="@drawable/card_10155_d"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/small_plate_right_arrow1"
+            android:layout_width="76.5px"
+            android:layout_height="88.5px"
+            android:background="@drawable/right_arrow"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/small_plate2"
+            android:layout_width="180px"
+            android:layout_height="180px">
+            <ImageView
+                android:id="@+id/small_plate2_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="9px"
+                android:background="@drawable/accele_plate" />
+            <ImageView
+                android:id="@+id/small_plate2_character"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="0px"
+                android:layout_marginBottom="7.5px"
+                android:background="@drawable/card_10155_d" />
+
+            <ImageView
+                android:id="@+id/small_plate_attributionFrame2"
+                android:layout_width="45.75px"
+                android:layout_height="45.75px"
+                android:layout_marginStart="11.25px"
+                android:layout_marginBottom="26.25px"
+                android:background="@drawable/attribute_frame"
+                app:layout_constraintBottom_toBottomOf="@id/small_plate2_background"
+                app:layout_constraintStart_toStartOf="@id/small_plate2_background" />
+
+            <ImageView
+                android:id="@+id/small_plate2_attribute"
+                android:layout_width="38.25px"
+                android:layout_height="38.25px"
+                android:layout_marginStart="15px"
+                android:layout_marginBottom="30px"
+                android:background="@drawable/fire"
+                app:layout_constraintBottom_toBottomOf="@id/small_plate2_background"
+                app:layout_constraintStart_toStartOf="@id/small_plate2_background" />
+
+            <ImageView
+                android:id="@+id/small_plate2_text"
+                android:layout_width="wrap_content"
+                android:layout_height="39px"
+                android:layout_margin="9px"
+                android:src="@drawable/charge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/small_plate2_arrow"
+                android:layout_width="51.75px"
+                android:layout_height="51.75px"
+                android:layout_marginEnd="9px"
+                android:layout_marginBottom="29.25px"
+                android:src="@drawable/blast_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                android:id="@+id/small_plate2_small_background"
+                android:layout_width="75px"
+                android:layout_height="75px"
+                android:layout_marginBottom="9px"
+                android:background="@drawable/accele_plate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                android:id="@+id/small_plate2_small_character"
+                android:layout_width="75px"
+                android:layout_height="75px"
+                android:layout_marginHorizontal="0px"
+                android:layout_marginBottom="7.5px"
+                android:background="@drawable/card_10155_d"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/characterStateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/platesLayout">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/characterTouchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/platesLayout">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/platesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="50px"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/magiaPlate"
+            android:layout_width="224px"
+            android:layout_height="287px"
+            android:background="@drawable/magia_plate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <LinearLayout
+            android:id="@+id/connectArrowLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="280px"
+            android:layout_marginBottom="100px"
+            android:gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/skillPlate"
+            app:layout_constraintStart_toEndOf="@id/magiaPlate">
+
+            <ImageView
+                android:id="@+id/connectArrowView0"
+                android:layout_marginHorizontal="75px"
+                android:background="@drawable/connect_arrow"
+                android:layout_width="131px"
+                android:layout_height="118px" />
+
+            <ImageView
+                android:id="@+id/connectArrowView1"
+                android:layout_marginHorizontal="75px"
+                android:background="@drawable/connect_arrow"
+                android:layout_width="131px"
+                android:layout_height="118px" />
+
+            <ImageView
+                android:id="@+id/connectArrowView2"
+                android:layout_marginHorizontal="75px"
+                android:background="@drawable/connect_arrow"
+                android:layout_width="131px"
+                android:layout_height="118px" />
+
+            <ImageView
+                android:id="@+id/connectArrowView3"
+                android:layout_marginHorizontal="75px"
+                android:background="@drawable/connect_arrow"
+                android:layout_width="131px"
+                android:layout_height="118px" />
+
+            <ImageView
+                android:id="@+id/connectArrowView4"
+                android:layout_marginHorizontal="75px"
+                android:background="@drawable/connect_arrow"
+                android:layout_width="131px"
+                android:layout_height="118px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/characterPlatesLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/skillPlate"
+            app:layout_constraintStart_toEndOf="@id/magiaPlate">
+
+            <com.live2d.rougelike.CharacterPlateView
+                android:id="@+id/charPlateView0"
+                android:layout_margin="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.live2d.rougelike.CharacterPlateView
+                android:id="@+id/charPlateView1"
+                android:layout_margin="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.live2d.rougelike.CharacterPlateView
+                android:id="@+id/charPlateView2"
+                android:layout_margin="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.live2d.rougelike.CharacterPlateView
+                android:id="@+id/charPlateView3"
+                android:layout_margin="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.live2d.rougelike.CharacterPlateView
+                android:id="@+id/charPlateView4"
+                android:layout_margin="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        
+        <ImageView
+            android:id="@+id/skillPlate"
+            android:layout_width="231px"
+            android:layout_height="260px"
+            android:background="@drawable/skill_plate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/skillBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20px"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/skill0"
+                android:layout_marginHorizontal="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/skillCharacter0"
+                    android:layout_width="300px"
+                    android:layout_height="412px"
+                    android:layout_marginBottom="90px"
+                    android:background="@drawable/card_10074_s"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill0_0"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill0_0_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill0_0"
+                    app:layout_constraintEnd_toEndOf="@id/skill0_0" />
+
+                <ImageView
+                    android:id="@+id/skill0_0_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill0_0_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill0_0" />
+                <ImageView
+                    android:id="@+id/skill0_1"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:id="@+id/skill0_1_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill0_1"
+                    app:layout_constraintEnd_toEndOf="@id/skill0_1" />
+
+                <ImageView
+                    android:id="@+id/skill0_1_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill0_1_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill0_1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/skill1"
+                android:layout_marginHorizontal="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/skillCharacter1"
+                    android:layout_width="300px"
+                    android:layout_height="412px"
+                    android:layout_marginBottom="90px"
+                    android:background="@drawable/card_10074_s"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill1_0"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill1_0_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill1_0"
+                    app:layout_constraintEnd_toEndOf="@id/skill1_0" />
+
+                <ImageView
+                    android:id="@+id/skill1_0_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill1_0_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill1_0" />
+                <ImageView
+                    android:id="@+id/skill1_1"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:id="@+id/skill1_1_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill1_1"
+                    app:layout_constraintEnd_toEndOf="@id/skill1_1" />
+
+                <ImageView
+                    android:id="@+id/skill1_1_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill1_1_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill1_1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/skill2"
+                android:layout_marginHorizontal="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/skillCharacter2"
+                    android:layout_width="300px"
+                    android:layout_height="412px"
+                    android:layout_marginBottom="90px"
+                    android:background="@drawable/card_10074_s"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill2_0"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill2_0_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill2_0"
+                    app:layout_constraintEnd_toEndOf="@id/skill2_0" />
+
+                <ImageView
+                    android:id="@+id/skill2_0_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill2_0_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill2_0" />
+                <ImageView
+                    android:id="@+id/skill2_1"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:id="@+id/skill2_1_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill2_1"
+                    app:layout_constraintEnd_toEndOf="@id/skill2_1" />
+
+                <ImageView
+                    android:id="@+id/skill2_1_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill2_1_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill2_1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/skill3"
+                android:layout_marginHorizontal="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/skillCharacter3"
+                    android:layout_width="300px"
+                    android:layout_height="412px"
+                    android:layout_marginBottom="90px"
+                    android:background="@drawable/card_10074_s"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill3_0"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill3_0_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill3_0"
+                    app:layout_constraintEnd_toEndOf="@id/skill3_0" />
+
+                <ImageView
+                    android:id="@+id/skill3_0_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill3_0_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill3_0" />
+                <ImageView
+                    android:id="@+id/skill3_1"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:id="@+id/skill3_1_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill3_1"
+                    app:layout_constraintEnd_toEndOf="@id/skill3_1" />
+
+                <ImageView
+                    android:id="@+id/skill3_1_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill3_1_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill3_1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/skill4"
+                android:layout_marginHorizontal="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/skillCharacter4"
+                    android:layout_width="300px"
+                    android:layout_height="412px"
+                    android:layout_marginBottom="90px"
+                    android:background="@drawable/card_10074_s"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill4_0"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/skill4_0_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill4_0"
+                    app:layout_constraintEnd_toEndOf="@id/skill4_0" />
+
+                <ImageView
+                    android:id="@+id/skill4_0_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill4_0_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill4_0" />
+                <ImageView
+                    android:id="@+id/skill4_1"
+                    android:layout_width="150px"
+                    android:layout_height="150px"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_skill_1012"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:id="@+id/skill4_1_time0"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintTop_toTopOf="@id/skill4_1"
+                    app:layout_constraintEnd_toEndOf="@id/skill4_1" />
+
+                <ImageView
+                    android:id="@+id/skill4_1_time1"
+                    android:layout_width="40px"
+                    android:layout_height="46.4px"
+                    android:layout_marginEnd="25px"
+                    android:background="@drawable/red_5"
+                    app:layout_constraintEnd_toEndOf="@id/skill4_1_time0"
+                    app:layout_constraintTop_toTopOf="@id/skill4_1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/charge_frame"
+        android:visibility="gone"
+        android:layout_width="217px"
+        android:layout_height="131px"
+        android:layout_marginTop="75px"
+        android:layout_marginEnd="50px"
+        android:background="@drawable/charge_accumlate_frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.live2d.rougelike.StrokeTextView
+        android:id="@+id/charge_number_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="207px"
+        android:layout_marginBottom="8px"
+        android:fontFamily="@font/info"
+        android:text="8"
+        android:textColor="@color/chargeNumberWhite"
+        android:textSize="57px"
+        android:visibility="gone"
+        app:backgroundColor="@color/chargeYellow"
+        app:layout_constraintBottom_toBottomOf="@id/charge_frame"
+        app:layout_constraintEnd_toEndOf="@id/charge_frame"
+        app:wide="7" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/skillEffectLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/connectConstraintLayout"
+        android:layout_width="710px"
+        android:layout_height="295px"
+        android:visibility="gone"
+        android:layout_marginStart="45px"
+        android:layout_marginBottom="300px"
+        android:background="@drawable/connect_detail_frame"
+        app:layout_constraintBottom_toBottomOf="@id/platesLayout"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="448px"
+            android:layout_height="56px"
+            android:layout_marginStart="34px"
+            android:layout_marginTop="29px"
+            android:background="@drawable/connect_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/connectDetailText"
+            android:layout_width="602px"
+            android:layout_height="wrap_content"
+            android:text="造成伤害提升[X]"
+            android:textColor="@color/textPurple"
+            android:textSize="37px"
+            android:fontFamily="@font/info"
+            android:layout_marginStart="54px"
+            android:layout_marginTop="100px"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/effectDetailLayout"
+        android:visibility="gone"
+        android:background="@color/shader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/shader"
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="764px"
+                android:layout_height="314px"
+                android:background="@drawable/effect_detail_title_frame">
+
+                <ImageView
+                    android:id="@+id/effectDetailCharAttr"
+                    android:layout_width="82px"
+                    android:layout_height="82px"
+                    android:layout_marginTop="17px"
+                    android:background="@drawable/fire"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/effectDetailCharName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="123px"
+                    android:fontFamily="@font/info"
+                    android:text="竖耳魔女"
+                    android:textColor="@color/colorShader"
+                    android:textSize="43px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/effectDetailHP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="190px"
+                    android:fontFamily="@font/info"
+                    android:text="400/400"
+                    android:textColor="@color/colorShader"
+                    android:textSize="32px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/effectDetailHPBar"
+                    android:layout_width="240px"
+                    android:layout_height="21px"
+                    android:background="@drawable/hp_bar"
+                    android:layout_marginStart="260px"
+                    android:layout_marginTop="240px"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="362px"
+                android:layout_height="51px"
+                android:layout_marginTop="20px"
+                android:background="@drawable/effect_detail_status_change"/>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/effectDetailEffectList"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/skillDetailLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/shader">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/skill_detail_background"
+            android:background="@drawable/skill_detail_background"
+            android:layout_width="1273px"
+            android:layout_height="704px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/skillDetailIcon"
+                android:layout_width="177px"
+                android:layout_height="177px"
+                android:layout_marginStart="94px"
+                android:layout_marginTop="181px"
+                android:background="@drawable/icon_skill_1013"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/skillDetailTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="298px"
+                android:layout_marginTop="174px"
+                android:fontFamily="@font/info"
+                android:text="爆炸消除"
+                android:textColor="@color/colorShader"
+                android:textSize="46px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/skillDetailCD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="635px"
+                android:layout_marginTop="245px"
+                android:fontFamily="@font/info"
+                android:text="5"
+                android:textColor="@color/pink"
+                android:textSize="46px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/skillDetailDescription"
+                android:layout_width="850px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="296px"
+                android:layout_marginTop="402px"
+                android:fontFamily="@font/info"
+                android:text="攻击力下降"
+                android:textColor="@color/colorShader"
+                android:textSize="44px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/skillDetailCancelButton"
+                android:layout_width="372px"
+                android:layout_height="126px"
+                android:layout_marginStart="197px"
+                android:layout_marginTop="527px"
+                android:background="@drawable/cancel_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/skillDetailInitialButton"
+                android:layout_width="372px"
+                android:layout_height="126px"
+                android:layout_marginEnd="197px"
+                android:layout_marginTop="527px"
+                android:background="@drawable/initiate_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/skill_launch_layout"
+        android:layout_width="match_parent"
+        android:layout_height="750px"
+        android:visibility="gone"
+        android:background="@drawable/black_transparent_gradient"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/skill_launch_frame"
+            android:layout_width="723px"
+            android:layout_height="102px"
+            android:layout_marginBottom="115px"
+            android:background="@drawable/skill_launch_frame"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/skill_launch_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17px"
+            android:fontFamily="@font/info"
+            android:text="无形爆裂[X]"
+            android:textColor="#FFFFFF"
+            android:textSize="50px"
+            app:layout_constraintBottom_toTopOf="@+id/skill_launch_frame"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<LinearLayout
+    android:id="@+id/tipLayout"
+    android:background="@drawable/loading_tip"
+    android:visibility="visible"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tipTitle"
+        android:textColor="#dab55d"
+        android:layout_marginTop="40px"
+        android:text="魔法少女"
+        android:fontFamily="@font/info"
+        android:textSize="50px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tipContent"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="120px"
+        android:text="    普遍意义上的“少女”在达到“资质”后，便有可能被丘比所选中——以能够许下任意一个愿望作为交换，签订成为魔法少女的契约。作为证明，她们将获得灵魂宝石以使用魔法。 "
+        android:fontFamily="@font/info"
+        android:textSize="42px"
+        android:layout_width="1100px"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5431,8 +5431,7 @@
             {
                 "name": "敌方状态异常时伤害UP",
                 "value": 32.5,
-                "target": "连携",
-                "time": 1,
+                "target": "自",
                 "probability": 100
             }
         ],
@@ -5445,8 +5444,7 @@
             {
                 "name": "敌方状态异常时伤害UP",
                 "value": 35,
-                "target": "连携",
-                "time": 1,
+                "target": "自",
                 "probability": 100
             }
         ]
@@ -9562,16 +9560,14 @@
             {
                 "name": "攻击力UP",
                 "value": 5,
-                "target": "自",
-                "time": 1
+                "target": "自"
             }
         ],
         "effectAfter": [
             {
                 "name": "攻击力UP",
                 "value": 5,
-                "target": "自",
-                "time": 1
+                "target": "自"
             }
         ]
     },
@@ -9591,16 +9587,14 @@
             {
                 "name": "防御力UP",
                 "value": 7.5,
-                "target": "自",
-                "time": 1
+                "target": "自"
             }
         ],
         "effectAfter": [
             {
                 "name": "防御力UP",
                 "value": 7.5,
-                "target": "自",
-                "time": 1
+                "target": "自"
             }
         ]
     },
@@ -10230,14 +10224,14 @@
                 "name": "战斗不能时获得攻击力UP",
                 "value": 5,
                 "target": "己全",
-                "time": 2,
+                "valueTime": 2,
                 "probability": 100
             },
             {
                 "name": "战斗不能时获得防御力UP",
                 "value": 10,
                 "target": "己全",
-                "time": 2,
+                "valueTime": 2,
                 "probability": 100
             }
         ],
@@ -10246,14 +10240,14 @@
                 "name": "战斗不能时获得攻击力UP",
                 "value": 6.3,
                 "target": "己全",
-                "time": 2,
+                "valueTime": 2,
                 "probability": 100
             },
             {
                 "name": "战斗不能时获得防御力UP",
                 "value": 12.6,
                 "target": "己全",
-                "time": 2,
+                "valueTime": 2,
                 "probability": 100
             }
         ]
@@ -10700,7 +10694,6 @@
                 "name": "AcceleMPUP",
                 "value": 12.5,
                 "target": "自",
-                "time": 1,
                 "probability": 100
             }
         ],
@@ -10714,7 +10707,6 @@
                 "name": "AcceleMPUP",
                 "value": 15,
                 "target": "自",
-                "time": 1,
                 "probability": 100
             }
         ]
@@ -11191,13 +11183,6 @@
                 "name": "异常状态耐性UP",
                 "value": 25,
                 "target": "自",
-                "probability": 100
-            },
-            {
-                "name": "给予状态诅咒",
-                "value": 15,
-                "target": "敌单",
-                "time": 3,
                 "probability": 100
             }
         ],
@@ -15782,7 +15767,6 @@
                 "name": "伤害削减",
                 "value": 10,
                 "target": "自",
-                "time": 3,
                 "probability": 100
             }
         ],
@@ -15796,7 +15780,6 @@
                 "name": "伤害削减",
                 "value": 15,
                 "target": "自",
-                "time": 3,
                 "probability": 100
             }
         ]
@@ -28390,21 +28373,13 @@
                 "name": "攻击时给予雾状态",
                 "value": 25,
                 "target": "自",
-                "time": 3,
+                "valueTime": 3,
                 "probability": 15
             },
             {
                 "name": "攻击力UP",
                 "value": 20,
                 "target": "自",
-                "time": 3,
-                "probability": 100
-            },
-            {
-                "name": "攻击力UP",
-                "value": 20,
-                "target": "自",
-                "time": 3,
                 "probability": 100
             }
         ],
@@ -28413,21 +28388,13 @@
                 "name": "攻击时给予雾状态",
                 "value": 25,
                 "target": "自",
-                "time": 3,
+                "valueTime": 3,
                 "probability": 20
             },
             {
                 "name": "攻击力UP",
                 "value": 25,
                 "target": "自",
-                "time": 3,
-                "probability": 100
-            },
-            {
-                "name": "攻击力UP",
-                "value": 25,
-                "target": "自",
-                "time": 3,
                 "probability": 100
             }
         ]

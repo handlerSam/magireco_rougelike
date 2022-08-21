@@ -31,8 +31,6 @@ import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
 import static com.live2d.rougelike.CharacterPlateView.CHARGE;
 
 public class MemoriaActivity extends AppCompatActivity {
-    //下标012分别对应234星记忆结晶
-    public int[][] USEDMEMORIA;
 
     public ArrayList<Character> characterList;
 
@@ -82,8 +80,6 @@ public class MemoriaActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memoria);
-
-        USEDMEMORIA = StartActivity.USEDMEMORIA;
 
         characterList = StartActivity.characterList;
 

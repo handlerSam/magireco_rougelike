@@ -313,8 +313,9 @@ public class StartActivity extends AppCompatActivity {
         monster1.mpAttackRatio = 0f;
         monster1.mpDefendRatio = 0f;
         monster1.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster1.initialEffectList.add(new Effect("攻击时给予状态雾",25,999,100,1));
+        //monster1.initialEffectList.add(new Effect("攻击时给予状态雾",25,999,100,1));
         //monster1.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
+        monster1.initialEffectList.add(new Effect("回避",0,999,100,0));
         monsterList.add(monster1);
 
         Character monster2 = new Character();
@@ -345,7 +346,7 @@ public class StartActivity extends AppCompatActivity {
         monster3.mpAttackRatio = 0f;
         monster3.mpDefendRatio = 0f;
         monster3.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster3.initialEffectList.add(new Effect("攻击时给予状态眩晕",0,999,100,1));
+        monster3.initialEffectList.add(new Effect("攻击时给予状态眩晕",0,999,100,2));
         //monster3.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         monsterList.add(monster3);
 
@@ -367,13 +368,16 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void initMemoria(){
+        for(int i = 0; i < 3; i++){
+            USEDMEMORIA[i] = new ArrayList<>();
+        }
         //把preloadMemoria中的记忆按照星级分到USEDMEMORIA中
         for(int i = 0; i < preloadMemoria.length; i++){
             int id = preloadMemoria[i];
             Memoria m = new Memoria(""+id,StartActivity.this);
             USEDMEMORIA[m.star-2].add(id);
         }
-        
+
         //把所有记忆都加载到背包中
         for(int i = 0; i < USEDMEMORIA.length; i++){
             for(int j = 0; j < USEDMEMORIA[i].size(); j++){

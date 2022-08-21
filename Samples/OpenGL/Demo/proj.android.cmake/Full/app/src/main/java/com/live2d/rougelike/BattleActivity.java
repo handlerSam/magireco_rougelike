@@ -63,7 +63,7 @@ public class BattleActivity extends AppCompatActivity {
     };
 
     public static int DELTA_BETWEEN_ATTACK_AND_DAMAGE = 700;
-    public static int DELTA_BETWEEN_EFFECT_SHOW = 1200;
+    public static int DELTA_BETWEEN_EFFECT_SHOW = 750;
 
 
     public Character[][] monsterFormation = new Character[3][3];
@@ -384,8 +384,7 @@ public class BattleActivity extends AppCompatActivity {
                                                 int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]]);
                                                 final Effect e = convertSkillEffectToEffect(effectList.get(tempI), abnormalStateResistance);
                                                 if(e != null){
-                                                    sendEffect(e,smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],false,true);
-                                                    leftEffectList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].add(e);
+                                                    handleEffectiveness(e,smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],false,true);
                                                 }
                                             }else if(effectList.get(tempI).target.equals("敌全")){
                                                 for(int j = 0; j < 3; j++){
@@ -394,8 +393,7 @@ public class BattleActivity extends AppCompatActivity {
                                                             int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[j][k]);
                                                             final Effect e = convertSkillEffectToEffect(effectList.get(tempI), abnormalStateResistance);
                                                             if(e != null){
-                                                                sendEffect(e,j,k,false,true);
-                                                                leftEffectList[j][k].add(e);
+                                                                handleEffectiveness(e,j,k,false,true);
                                                             }
                                                         }
                                                     }
@@ -463,8 +461,7 @@ public class BattleActivity extends AppCompatActivity {
                                                         int abnormalStateResistance = calculateAbnormalStateResistance(rightEffectList[c.formationX][c.formationY]);
                                                         final Effect e = convertSkillEffectToEffect(effectList.get(tempI), abnormalStateResistance);
                                                         if(e != null){
-                                                            sendEffect(e,c.formationX,c.formationY,true,true);
-                                                            rightEffectList[c.formationX][c.formationY].add(e);
+                                                            handleEffectiveness(e,c.formationX,c.formationY,true,true);
                                                         }
                                                     }else if(effectList.get(tempI).target.equals("己全")){
                                                         for(int j = 0; j < 3; j++){
@@ -473,8 +470,7 @@ public class BattleActivity extends AppCompatActivity {
                                                                     int abnormalStateResistance = calculateAbnormalStateResistance(rightEffectList[j][k]);
                                                                     final Effect e = convertSkillEffectToEffect(effectList.get(tempI), abnormalStateResistance);
                                                                     if(e != null){
-                                                                        sendEffect(e,j,k,true,true);
-                                                                        rightEffectList[j][k].add(e);
+                                                                        handleEffectiveness(e,j,k,true,true);
                                                                     }
                                                                 }
                                                             }
@@ -1322,12 +1318,9 @@ public class BattleActivity extends AppCompatActivity {
                                     skill_[i][0].setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            //if(characterMemoria[temp][0].CDNow == 0){
                                             if(clickable){
                                                 setSkillDetail(temp,0);
                                             }
-
-                                            //}
                                         }
                                     });
                                 }else if(c.breakThrough - memoriaNumber >= 1){
@@ -1396,8 +1389,14 @@ public class BattleActivity extends AppCompatActivity {
                         //说明是被动记忆
                         for(SkillEffect se : (StartActivity.characters[i].breakThrough == 4? m.effectAfterList:m.effectOriginList)){
                             Effect e = convertSkillEffectToEffect(se, 0);
-                            if (e != null) {
-                                rightEffectList[StartActivity.characters[i].formationX][StartActivity.characters[i].formationY].add(e);
+                            if (e != null){
+                                switch(e.name){
+                                        case "以MP积累状态开始战斗":
+                                            setMpOnCharacter(StartActivity.characters[i],(int)(1.0f*e.value*StartActivity.characters[i].getMaxMp()/100),true);
+                                            break;
+                                    default:
+                                        rightEffectList[StartActivity.characters[i].formationX][StartActivity.characters[i].formationY].add(e);
+                                }
                             }
                         }
                     }
@@ -1452,6 +1451,8 @@ public class BattleActivity extends AppCompatActivity {
                         setCharacterSkillTime(tempC,tempSkill,characterMemoria[tempC][tempSkill].CDNow);
 
 
+
+
                         final Character c = StartActivity.characters[tempC];
                         rightCharList[c.formationX][c.formationY].spriteName = "activate";
                         changeSprite(c.formationX,c.formationY,true);
@@ -1467,8 +1468,7 @@ public class BattleActivity extends AppCompatActivity {
                                         int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[chooseMonsterX][chooseMonsterY]);
                                         Effect e = convertSkillEffectToEffect((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI), abnormalStateResistance);
                                         if(e != null){
-                                            sendEffect(e,chooseMonsterX,chooseMonsterY,false,false);
-                                            leftEffectList[chooseMonsterX][chooseMonsterY].add(e);
+                                            handleEffectiveness(e,chooseMonsterX,chooseMonsterY,false,false);
                                         }
                                     }else if((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI).target.equals("敌全")){
                                         for(int i = 0; i < 3; i++){
@@ -1479,8 +1479,7 @@ public class BattleActivity extends AppCompatActivity {
                                                     int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[i][j]);
                                                     Effect e = convertSkillEffectToEffect((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI),abnormalStateResistance);
                                                     if(e != null){
-                                                        sendEffect(e,i,j,false,false);
-                                                        leftEffectList[i][j].add(e);
+                                                        handleEffectiveness(e,i,j,false,false);
                                                     }
                                                 }
                                             }
@@ -1489,13 +1488,14 @@ public class BattleActivity extends AppCompatActivity {
                                         for(int i = 0; i < 3; i++){
                                             for(int j = 0; j < 3; j++){
                                                 if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
-                                                    rightCharList[i][j].spriteName = "reaction";
-                                                    changeSprite(i,j,true);
+                                                    if(i != c.formationX || j != c.formationY){
+                                                        rightCharList[i][j].spriteName = "reaction";
+                                                        changeSprite(i,j,true);
+                                                    }
                                                     int abnormalStateResistance = calculateAbnormalStateResistance(rightEffectList[i][j]);
                                                     Effect e = convertSkillEffectToEffect((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI),abnormalStateResistance);
                                                     if(e != null){
-                                                        sendEffect(e,i,j,true,false);
-                                                        rightEffectList[i][j].add(e);
+                                                        handleEffectiveness(e,i,j,true,false);
                                                     }
                                                 }
                                             }
@@ -1505,8 +1505,7 @@ public class BattleActivity extends AppCompatActivity {
                                         int abnormalStateResistance = calculateAbnormalStateResistance(rightEffectList[c.formationX][c.formationY]);
                                         Effect e = convertSkillEffectToEffect((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI),abnormalStateResistance);
                                         if(e != null){
-                                            sendEffect(e,c.formationX,c.formationY,true,false);
-                                            rightEffectList[c.formationX][c.formationY].add(e);
+                                            handleEffectiveness(e,c.formationX,c.formationY,true,false);
                                         }
                                     }
 
@@ -2416,8 +2415,7 @@ public class BattleActivity extends AppCompatActivity {
                                 int abnormalStateResistance = calculateAbnormalStateResistance(rightEffectList[connectToX][connectToY]);
                                 Effect e = convertSkillEffectToEffect(tempArrayList.get(tempI), abnormalStateResistance);
                                 if(e != null){
-                                    sendEffect(e,connectToX,connectToY,true,true);
-                                    rightEffectList[connectToX][connectToY].add(e);
+                                    handleEffectiveness(e,connectToX,connectToY,true,true);
                                 }
                                 //如果是最后一个，则计划结束技能释放
                                 if(tempI == (tempArrayList.size() - 1)){
@@ -3161,9 +3159,13 @@ public class BattleActivity extends AppCompatActivity {
     }
 
     public void setDamageOnCharacter(Character c, int damage, boolean isRight){
+        //不负责发送伤害数字
         c.realHP -= damage;
         if(c.realHP <= 0){
             c.realHP = 0;
+        }
+        if(c.realHP >= c.getRealMaxHP()){
+            c.realHP = c.getRealMaxHP();
         }
         StateBar sb = isRight? rightStateBarList[c.formationX][c.formationY]:leftStateBarList[c.formationX][c.formationY];
         sb.updateHp(c.getRealMaxHP(),c.realHP);
@@ -3176,9 +3178,13 @@ public class BattleActivity extends AppCompatActivity {
     }
 
     public void setMpOnCharacter(Character c, int mp, boolean isRight){
+        //不负责发送数字
         c.realMP = mp;
         if(c.realMP >= c.getMaxMp()){
             c.realMP = c.getMaxMp();
+        }
+        if(c.realMP <= 0){
+            c.realMP = 0;
         }
         StateBar sb = isRight? rightStateBarList[c.formationX][c.formationY]:leftStateBarList[c.formationX][c.formationY];
         sb.updateMp(c.realMP);
@@ -3325,7 +3331,7 @@ public class BattleActivity extends AppCompatActivity {
         recoverCharacterSize(false);
         recoverCharacterSize(true);
         smallPlateNumber = 0;
-
+        clickable = false;
         platesLayout.setVisibility(View.INVISIBLE);
         touchImageListLayout[chooseMonsterX][chooseMonsterY].setVisibility(GONE);
 
@@ -3406,7 +3412,6 @@ public class BattleActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     int damage = (int)(1.0f*(rightCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                    rightCharList[tempI][tempJ].c.realHP -= damage;
                                     setDamageOnCharacter(rightCharList[tempI][tempJ].c,damage,true);
                                     sendDamageNumber(damage,tempI,tempJ,TEXT_RED,true,false);
                                     rightCharList[tempI][tempJ].spriteName = "damage";
@@ -3426,7 +3431,6 @@ public class BattleActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         int recoverHP = (int)(1.0f*(rightCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                        rightCharList[tempI][tempJ].c.realHP += recoverHP;
                                         setDamageOnCharacter(rightCharList[tempI][tempJ].c,-recoverHP,true);
                                         sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,true,false);
                                         sendEffect(e,tempI,tempJ,true,false);
@@ -3450,7 +3454,6 @@ public class BattleActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     int damage = (int)(1.0f*(leftCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                    leftCharList[tempI][tempJ].c.realHP -= damage;
                                     setDamageOnCharacter(leftCharList[tempI][tempJ].c,damage,false);
                                     sendDamageNumber(damage,tempI,tempJ,TEXT_RED,false,false);
                                     leftCharList[tempI][tempJ].spriteName = "damage";
@@ -3469,7 +3472,6 @@ public class BattleActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         int recoverHP = (int)(1.0f*(leftCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                        leftCharList[tempI][tempJ].c.realHP += recoverHP;
                                         setDamageOnCharacter(leftCharList[tempI][tempJ].c,-recoverHP,false);
                                         sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,false,false);
                                         sendEffect(e,tempI,tempJ,false,false);
@@ -3585,6 +3587,7 @@ public class BattleActivity extends AppCompatActivity {
         if(!randomChoosePlates()){
             //说明我方没有可行动角色
             startLeftAttack();
+            return;
         }else{
             showPlate();
         }
@@ -3614,13 +3617,69 @@ public class BattleActivity extends AppCompatActivity {
 
         smallPlateNumber = 0;
         clickable = true;
+
+
+    }
+
+    public void handleEffectiveness(Effect e, int x, int y, boolean isRight, boolean isMagnified){
+        Character c = isRight? rightCharList[x][y].c:leftCharList[x][y].c;
+        ArrayList<Effect> efList = isRight? rightEffectList[x][y]:leftEffectList[x][y];
+        switch(e.name){
+            // case "重抽为Accele的Disc":
+            // case "重抽为Blast的Disc":case "重抽Disc":
+            // case "重抽为同属性的Disc":case "重抽为Charge的Disc":
+            // case "BUFF解除":  case "DEBUFF解除": case "异常状态解除":
+            // case "重抽为自己的Disc":
+            // case "MP伤害":
+            case "HP回复":
+                int recoverHP = (int)(1.0f * e.value * c.getRealMaxHP() / 100);
+                setDamageOnCharacter(c,-recoverHP,isRight);
+                sendDamageNumber(recoverHP,x,y,TEXT_GREEN,isRight,isMagnified);
+                break;
+            case "MP回复":
+                //MP获得量 Buff
+                int MpGetBuff = 0;
+                for(int i = 0; i < efList.size(); i++){
+                    Effect e3 = efList.get(i);
+                    if(e3.name.equals("MP获得量DOWN")){
+                        MpGetBuff -= e3.value;
+                    }else if(e.name.equals("MP获得量UP")){
+                        MpGetBuff += e3.value;
+                    }
+                }
+                int recoverMP = (int)Math.floor(e.value * 10 * (1.0f * (100 + MpGetBuff)/100));
+                boolean isMpRecoverForbidden = isTriggerEffect(efList, "MP回复禁止");
+                if(!isMpRecoverForbidden){
+                    setMpOnCharacter(c, c.realMP + recoverMP,isRight);
+                    sendDamageNumber(recoverMP,x,y,TEXT_BLUE,isRight,isMagnified);
+                }else{
+                    Effect e2 = new Effect();
+                    e2.name = "MP回复禁止";
+                    sendEffect(e2,x,y,isRight,isMagnified);
+                }
+                break;
+            case "MP伤害":
+                int reduceMP = e.value * 10;
+                setMpOnCharacter(c,c.realMP - reduceMP,isRight);
+                sendDamageNumber(reduceMP,x,y,TEXT_BLUE,isRight,isMagnified);
+                break;
+            default:
+                sendEffect(e,x,y,isRight,isMagnified);
+                if(isRight){
+                    rightEffectList[x][y].add(e);
+                }else{
+                    leftEffectList[x][y].add(e);
+                }
+        }
+
+
     }
 
     public boolean isTriggerEffect(ArrayList<Effect> efList, String effectName){
         for(int i = 0; i < efList.size(); i++){
             Effect e = efList.get(i);
             if(e.name.equals(effectName)){
-                Log.d("Sam","colorToss:"+e.name+", 概率:"+e.probability);
+                //Log.d("Sam","colorToss:"+e.name+", 概率:"+e.probability);
                 if(colorToss(e.probability)){
                     return true;
                 }

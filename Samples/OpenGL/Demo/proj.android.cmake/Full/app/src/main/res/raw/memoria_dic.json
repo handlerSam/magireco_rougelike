@@ -11671,7 +11671,6 @@
                 "name": "DEBUFF解除",
                 "value": 4,
                 "target": "自",
-                "time": 3,
                 "probability": 100
             }
         ],
@@ -11687,7 +11686,6 @@
                 "name": "DEBUFF解除",
                 "value": 5,
                 "target": "自",
-                "time": 3,
                 "probability": 100
             }
         ]

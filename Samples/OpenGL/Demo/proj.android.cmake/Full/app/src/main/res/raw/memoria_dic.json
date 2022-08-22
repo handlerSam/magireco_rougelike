@@ -17103,7 +17103,6 @@
             },
             {
                 "name": "技能冷却加速",
-                "value": 15,
                 "target": "自",
                 "time": 1,
                 "probability": 40
@@ -17118,7 +17117,6 @@
             },
             {
                 "name": "技能冷却加速",
-                "value": 22.5,
                 "target": "自",
                 "time": 1,
                 "probability": 100
@@ -29450,7 +29448,7 @@
         "icon": "icon_skill_1213.png",
         "effectOrigin": [
             {
-                "name": "对魔女伤害上升",
+                "name": "造成伤害UP",
                 "value": 30,
                 "target": "自",
                 "probability": 100
@@ -29464,7 +29462,7 @@
         ],
         "effectAfter": [
             {
-                "name": "对魔女伤害上升",
+                "name": "造成伤害UP",
                 "value": 30,
                 "target": "自",
                 "probability": 100

@@ -163,7 +163,7 @@ public class BattleActivity extends AppCompatActivity {
                                         if(isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss)){
                                             //伤害计算
                                             int damage = getDamage(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,true);
-                                            setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false);
+                                            setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
                                             sendDamageNumber(damage,
                                                     smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
                                                     (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c)>=0)? TEXT_RED:TEXT_BLUE,false,true);
@@ -214,7 +214,7 @@ public class BattleActivity extends AppCompatActivity {
 
                                         //计算受击MP和受击动画
                                         if(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realHP > 0){
-                                            int defendMP = getDefendMP(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,false);
+                                            int defendMP = getDefendMP(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,false);
                                             setMpOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realMP+defendMP,false);
                                             if((isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss))){
                                                 //没有回避
@@ -241,8 +241,19 @@ public class BattleActivity extends AppCompatActivity {
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
+                                        //攻击MP
                                         int mp = getAttackMP(c,true,temp.plate);
-                                        setMpOnCharacter(c,c.realMP+mp,true);
+                                        c.realMP += mp;
+                                        //Blast攻击时MP获得
+                                        int blastAttackMp = 0;
+                                        ArrayList<Effect> efList = rightEffectList[c.formationX][c.formationY];
+                                        for(int i = 0; i < efList.size(); i++){
+                                            Effect e = efList.get(i);
+                                            if(e.name.equals("Blast攻击时MP获得")){
+                                                blastAttackMp += e.value;
+                                            }
+                                        }
+
                                         for(int i = 0; i < 3; i++){
                                             SpriteViewer sv = (temp.plate == CharacterPlateView.BLAST_VERTICAL)? leftCharList[i][smallPlateYList[smallPlateNumber]] : leftCharList[smallPlateXList[smallPlateNumber]][i];
                                             //攻击者是否触发异常状态miss效果
@@ -262,9 +273,12 @@ public class BattleActivity extends AppCompatActivity {
                                                     }
                                                 }
                                                 if(isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss)){
+
+                                                    //BlastMp结算
+                                                    c.realMP += blastAttackMp;
                                                     //计算伤害
                                                     int damage = getDamage(c,sv.c,true);
-                                                    setDamageOnCharacter(sv.c,damage,false);
+                                                    setDamageOnCharacter(sv.c,damage,false,true);
                                                     if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
                                                         sendDamageNumber(damage,
                                                                 i,smallPlateYList[smallPlateNumber],
@@ -276,7 +290,6 @@ public class BattleActivity extends AppCompatActivity {
                                                     }
 
                                                     //攻击时概率附带异常效果计算
-                                                    ArrayList<Effect> efList = rightEffectList[c.formationX][c.formationY];
                                                     for(int j = 0; j < efList.size(); j++){
                                                         Effect e = efList.get(j);
                                                         switch(e.name){
@@ -345,7 +358,7 @@ public class BattleActivity extends AppCompatActivity {
                                                 }
 
                                                 if(sv.c.realHP > 0){
-                                                    int defendMP = getDefendMP(sv.c,false);
+                                                    int defendMP = getDefendMP(c,sv.c,false);
                                                     setMpOnCharacter(sv.c,sv.c.realMP+defendMP,false);
                                                     if((isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss))){
                                                         //没有回避
@@ -360,6 +373,7 @@ public class BattleActivity extends AppCompatActivity {
                                                 }
                                             }
                                         }
+                                        setMpOnCharacter(c,c.realMP,true);
                                         chargeNumber = 0;
                                         updateChargeView();
                                     }
@@ -406,12 +420,12 @@ public class BattleActivity extends AppCompatActivity {
                             //播放受众动画
                             if(c.magiaTarget.equals("敌单")){
                                 int damage = getDamage(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,true);
-                                setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false);
+                                setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
                                 sendDamageNumber(damage,
                                         smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
                                         (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c)>=0)?TEXT_RED:TEXT_BLUE,false,true);
                                 if(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realHP > 0){
-                                    int defendMP = getDefendMP(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,false);
+                                    int defendMP = getDefendMP(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,false);
                                     setMpOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realMP+defendMP,false);
                                     leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].spriteName = "damage";
                                     changeSprite(smallPlateXList[smallPlateNumber], smallPlateYList[smallPlateNumber],false);
@@ -422,12 +436,12 @@ public class BattleActivity extends AppCompatActivity {
                                     for(int j = 0; j < 3; j++){
                                         if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
                                             int damage = getDamage(c,leftCharList[i][j].c,true);
-                                            setDamageOnCharacter(leftCharList[i][j].c,damage,false);
+                                            setDamageOnCharacter(leftCharList[i][j].c,damage,false,true);
                                             sendDamageNumber(damage,
                                                     i,j,
                                                     (isRestrained(c,leftCharList[i][j].c)>=0)?TEXT_RED:TEXT_BLUE,false,true);
                                             if(leftCharList[i][j].c.realHP > 0){
-                                                int defendMP = getDefendMP(leftCharList[i][j].c,false);
+                                                int defendMP = getDefendMP(c,leftCharList[i][j].c,false);
                                                 setMpOnCharacter(leftCharList[i][j].c,leftCharList[i][j].c.realMP+defendMP,false);
                                                 leftCharList[i][j].spriteName = "damage";
                                                 changeSprite(i, j,false);
@@ -584,7 +598,7 @@ public class BattleActivity extends AppCompatActivity {
                                             if(isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss)){
                                                 //计算伤害
                                                 int damage = getDamage(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c,false);
-                                                setDamageOnCharacter(rightCharList[x][y].c,damage,true);
+                                                setDamageOnCharacter(rightCharList[x][y].c,damage,true,true);
                                                 sendDamageNumber(damage,
                                                         x,y,
                                                         (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c)>=0)?TEXT_RED:TEXT_BLUE,true,true);
@@ -643,7 +657,7 @@ public class BattleActivity extends AppCompatActivity {
                                                 enemyChargeNumber = 0;
                                             }
                                             if(rightCharList[x][y].c.realHP > 0){
-                                                int defendMP = getDefendMP(rightCharList[x][y].c,true);
+                                                int defendMP = getDefendMP(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c,true);
                                                 setMpOnCharacter(rightCharList[x][y].c,rightCharList[x][y].c.realMP+defendMP,true);
                                                 if((isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss))){
                                                     rightCharList[x][y].spriteName = "damage";
@@ -665,8 +679,20 @@ public class BattleActivity extends AppCompatActivity {
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+                                            //攻击MP
                                             int mp = getAttackMP(leftCharList[monsterAttackerX][monsterAttackerY].c,false,monsterPlate);
-                                            setMpOnCharacter(leftCharList[monsterAttackerX][monsterAttackerY].c,leftCharList[monsterAttackerX][monsterAttackerY].c.realMP+mp,false);
+                                            leftCharList[monsterAttackerX][monsterAttackerY].c.realMP += mp;
+
+                                            //Blast攻击时MP获得
+                                            int blastAttackMp = 0;
+                                            ArrayList<Effect> efList = leftEffectList[monsterAttackerX][monsterAttackerY];
+                                            for(int i = 0; i < efList.size(); i++){
+                                                Effect e = efList.get(i);
+                                                if(e.name.equals("Blast攻击时MP获得")){
+                                                    blastAttackMp += e.value;
+                                                }
+                                            }
+
                                             for(int i = 0; i < 3; i++){
                                                 SpriteViewer sv = (monsterPlate == CharacterPlateView.BLAST_VERTICAL)? rightCharList[i][y]:rightCharList[x][i];
                                                 if(sv != null && sv.c.realHP > 0) {
@@ -686,9 +712,11 @@ public class BattleActivity extends AppCompatActivity {
                                                         }
                                                     }
                                                     if(isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss)){
+                                                        //BlastMp
+                                                        leftCharList[monsterAttackerX][monsterAttackerY].c.realMP += blastAttackMp;
                                                         //计算伤害
                                                         int damage = getDamage(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false);
-                                                        setDamageOnCharacter(sv.c, damage, true);
+                                                        setDamageOnCharacter(sv.c, damage, true,true);
                                                         if ((monsterPlate == CharacterPlateView.BLAST_VERTICAL)) {
                                                             sendDamageNumber(damage, i, y, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c) >= 0)?TEXT_RED:TEXT_BLUE, true, true);
                                                         } else {
@@ -696,7 +724,6 @@ public class BattleActivity extends AppCompatActivity {
                                                         }
 
                                                         //攻击时概率附带异常效果计算
-                                                        ArrayList<Effect> efList = leftEffectList[monsterAttackerX][monsterAttackerY];
                                                         for(int j = 0; j < efList.size(); j++){
                                                             Effect e = efList.get(j);
                                                             switch(e.name){
@@ -763,7 +790,7 @@ public class BattleActivity extends AppCompatActivity {
 
                                                     enemyChargeNumber = 0;
                                                     if(sv.c.realHP > 0){
-                                                        int defendMP = getDefendMP(sv.c,true);
+                                                        int defendMP = getDefendMP(leftCharList[monsterAttackerX][monsterAttackerY].c,sv.c,true);
                                                         setMpOnCharacter(sv.c,sv.c.realMP+defendMP,true);
                                                         if((isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss))){
                                                             sv.spriteName = "damage";
@@ -777,6 +804,7 @@ public class BattleActivity extends AppCompatActivity {
                                                     }
                                                 }
                                             }
+                                            setMpOnCharacter(leftCharList[monsterAttackerX][monsterAttackerY].c,leftCharList[monsterAttackerX][monsterAttackerY].c.realMP,false);
                                         }
                                     },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                                 }
@@ -1430,7 +1458,7 @@ public class BattleActivity extends AppCompatActivity {
         skillDetailCD.setText(""+(characterMemoria[c][skill].breakthrough == 4? characterMemoria[c][skill].CDAfter:characterMemoria[c][skill].CDOrigin));
         skillDetailDescription.setText(characterMemoria[c][skill].getEffectDescription());
         skillDetailLayout.setVisibility(VISIBLE);
-        if(characterMemoria[c][skill].CDNow == 0){
+        if(characterMemoria[c][skill].CDNow == 0 && !hasAbnormalState(rightEffectList[StartActivity.characters[c].formationX][StartActivity.characters[c].formationY],new String[]{"技能封印"})){
             final Memoria m = characterMemoria[c][skill];
             final int tempC = c;
             final int tempSkill = skill;
@@ -1449,9 +1477,6 @@ public class BattleActivity extends AppCompatActivity {
 
                         skill_[tempC][tempSkill].setImageResource(getImageByString(characterMemoria[tempC][tempSkill].icon));
                         setCharacterSkillTime(tempC,tempSkill,characterMemoria[tempC][tempSkill].CDNow);
-
-
-
 
                         final Character c = StartActivity.characters[tempC];
                         rightCharList[c.formationX][c.formationY].spriteName = "activate";
@@ -1699,7 +1724,7 @@ public class BattleActivity extends AppCompatActivity {
             for(int i = 0; i < charPlateViewList.length; i++){
                 charPlateViewList[i].cancelShader();
                 if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
-                    if(StartActivity.characters[i].realMP >= 1000){
+                    if(StartActivity.characters[i].realMP >= 1000 && !hasAbnormalState(rightEffectList[StartActivity.characters[i].formationX][StartActivity.characters[i].formationY],new String[]{"magia封印"})){
                         charPlateViewList[i].setVisibility(VISIBLE);
                         charPlateViewList[i].setPlate(StartActivity.characters[i],(StartActivity.characters[i].realMP >= DOPPEL_NEED_MP)? DOPPEL:MAGIA);
                     }else{
@@ -2474,10 +2499,10 @@ public class BattleActivity extends AppCompatActivity {
             case "对魔女伤害上升":case "火属性攻击力UP": case "Blast伤害UP": case "Blast伤害削减":
             case "被弱点属性攻击时MPUP": case "MP获得量UP": case "濒死时防御力UP":case "濒死时攻击力UP": case "Doppel伤害UP":case "状态异常1回无效": case "Magia封印无效":
             case "回避无效": case "反击无效": case "毒无效":case "挑拨无效": case "诅咒无效":
-            case "雾 无效": case "忍耐": case "烧伤无效":case "黑暗无效":case "技能封印无效":
+            case "雾无效":  case "烧伤无效":case "黑暗无效":case "技能封印无效":
             case "魅惑无效": case "DEBUFF无效": case "无视防御力": case "伤害削减无效":
             case "眩晕无效":case "技能冷却加速": case "拘束无效": case "幻惑无效":case "挑拨":case "追击":case "反击":case "回避":
-            case "暴击":case "保护同伴":
+            case "暴击": case "保护同伴": case "忍耐":
             case "水属性攻击力UP":case "木属性攻击力UP":
             case "光属性攻击力UP":case "暗属性攻击力UP":
             case "攻击时给予状态毒":case "攻击时给予状态烧伤":case "攻击时给予状态诅咒":
@@ -2499,7 +2524,6 @@ public class BattleActivity extends AppCompatActivity {
             case "MP回复":case "HP回复":  case "DEBUFF解除":case "异常状态解除":case "HP自动回复":
                 ef = new SkillEffectView(BattleActivity.this, skillEffectLayout, " "+e.name+" ", R.anim.skill_positive_effect, R.color.white, R.color.skillTextGreen, false);
                 break;
-
         }
         ef.setId(generateViewId());
         skillEffectLayout.addView(ef);
@@ -3158,9 +3182,26 @@ public class BattleActivity extends AppCompatActivity {
         positionList[1] = -1;
     }
 
-    public void setDamageOnCharacter(Character c, int damage, boolean isRight){
+    public void setDamageOnCharacter(Character c, int damage, boolean isRight, boolean isMagnified){
         //不负责发送伤害数字
         c.realHP -= damage;
+
+        if(c.realHP <= 0){
+            //是否触发忍耐
+            ArrayList<Effect> efList = isRight? rightEffectList[c.formationX][c.formationY]:leftEffectList[c.formationX][c.formationY];
+            for(int i = 0; i < efList.size(); i++){
+                Effect e = efList.get(i);
+                if(e.name.equals("忍耐")){
+                    c.realHP = 1;
+                    sendEffect(e,c.formationX,c.formationY,isRight,isMagnified);
+                    efList.remove(e);
+                    break;
+                }
+            }
+        }
+
+
+
         if(c.realHP <= 0){
             c.realHP = 0;
         }
@@ -3170,7 +3211,7 @@ public class BattleActivity extends AppCompatActivity {
         StateBar sb = isRight? rightStateBarList[c.formationX][c.formationY]:leftStateBarList[c.formationX][c.formationY];
         sb.updateHp(c.getRealMaxHP(),c.realHP);
         if(c.realHP == 0){
-            Log.d("Sam","characterDead");
+//            Log.d("Sam","characterDead");
             SpriteViewer sv = isRight? rightCharList[c.formationX][c.formationY]:leftCharList[c.formationX][c.formationY];
             sv.spriteName = "dead";
             changeSprite(c.formationX, c.formationY, isRight);
@@ -3204,7 +3245,6 @@ public class BattleActivity extends AppCompatActivity {
             isFirstPlateA = (smallPlateList[0] <= 4) && (plateList[smallPlateList[0]].plate == ACCELE);
         }
 
-
         //单盘原始MP
         int simplePlateOriginMp = 0;
         switch(isPlayerAttack ? plateList[smallPlateList[smallPlateNumber]].plate : plateType){
@@ -3214,10 +3254,14 @@ public class BattleActivity extends AppCompatActivity {
                 }else{
                     simplePlateOriginMp = 70 + smallPlateNumber * 35;
                 }
-                break; case BLAST_HORIZONTAL: case BLAST_VERTICAL: if(isFirstPlateA){
+                break;
+            case BLAST_HORIZONTAL: case BLAST_VERTICAL:
+                if(isFirstPlateA){
                     return 30;
                 }
-                return 0; case CHARGE: if(isFirstPlateA){
+                return 0;
+            case CHARGE:
+                if(isFirstPlateA){
                     simplePlateOriginMp = 50 + smallPlateNumber * 10;
                 }else{
                     simplePlateOriginMp = 20 + smallPlateNumber * 10;
@@ -3228,16 +3272,18 @@ public class BattleActivity extends AppCompatActivity {
         //AcceleMP Buff
         int AcceleMpBuff = 0;
         ArrayList<Effect> efList = isPlayerAttack ? rightEffectList[attacker.formationX][attacker.formationY]:leftEffectList[attacker.formationX][attacker.formationY];
-        for(int i = 0; i < efList.size(); i++){
-            Effect e = efList.get(i);
-            if(e.name.equals("AcceleMPDOWN")){
-                AcceleMpBuff -= e.value;
-            }else if(e.name.equals("AcceleMPUP")){
-                AcceleMpBuff += e.value;
+        if((isPlayerAttack ? plateList[smallPlateList[smallPlateNumber]].plate : plateType) == ACCELE){
+            for(int i = 0; i < efList.size(); i++){
+                Effect e = efList.get(i);
+                if(e.name.equals("AcceleMPDOWN")){
+                    AcceleMpBuff -= e.value;
+                }else if(e.name.equals("AcceleMPUP")){
+                    AcceleMpBuff += e.value;
+                }
             }
+            if(AcceleMpBuff >= 100)AcceleMpBuff = 100;
+            if(AcceleMpBuff <= -95)AcceleMpBuff = -95;
         }
-        if(AcceleMpBuff >= 100)AcceleMpBuff = 100;
-        if(AcceleMpBuff <= -95)AcceleMpBuff = -95;
 
         //叠C倍率
         float multiChargeCoefficient = 1.0f;
@@ -3267,7 +3313,7 @@ public class BattleActivity extends AppCompatActivity {
         return (int)Math.floor(Math.floor(Math.round(simplePlateOriginMp* 1.0f*(100+AcceleMpBuff)/100 )* multiChargeCoefficient)*attackMpRatio* 1.0f*(100+MpGetBuff)/100);
     }
 
-    public int getDefendMP(Character defender, boolean isRight){
+    public int getDefendMP(Character attacker, Character defender, boolean isRight){
         //基础受击MP
         int fundamentalDefendMp = 40;
 
@@ -3290,7 +3336,21 @@ public class BattleActivity extends AppCompatActivity {
         if(MpGetBuff >= 100)MpGetBuff = 100;
         if(MpGetBuff <= -95)MpGetBuff = -95;
 
-        return (int)Math.floor(fundamentalDefendMp * defendMpRatio * 1.0f * (100 + MpGetBuff)/100);
+        //被弱点属性攻击时MPUP
+        int MpGetFromRestraintAttacker = 0;
+        if(isRestrained(attacker,defender) == 1){
+            efList = isRight ? rightEffectList[defender.formationX][defender.formationY]:leftEffectList[defender.formationX][defender.formationY];
+            for(int i = 0; i < efList.size(); i++){
+                Effect e = efList.get(i);
+                if(e.name.equals("被弱点属性攻击时MPUP")){
+                    MpGetFromRestraintAttacker += e.value;
+                }
+            }
+        }
+
+
+        return (int)Math.floor(fundamentalDefendMp * defendMpRatio * 1.0f * (100 + MpGetBuff)/100)
+                + (int)Math.floor(MpGetFromRestraintAttacker * defendMpRatio * 1.0f * (100 + MpGetBuff)/100);
     }
 
     public Character judgeProvocation(Character attacker, Character target, boolean isPlayerAttack){
@@ -3412,7 +3472,7 @@ public class BattleActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     int damage = (int)(1.0f*(rightCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                    setDamageOnCharacter(rightCharList[tempI][tempJ].c,damage,true);
+                                    setDamageOnCharacter(rightCharList[tempI][tempJ].c,damage,true,false);
                                     sendDamageNumber(damage,tempI,tempJ,TEXT_RED,true,false);
                                     rightCharList[tempI][tempJ].spriteName = "damage";
                                     changeSprite(tempI, tempJ,true);
@@ -3431,7 +3491,7 @@ public class BattleActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         int recoverHP = (int)(1.0f*(rightCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                        setDamageOnCharacter(rightCharList[tempI][tempJ].c,-recoverHP,true);
+                                        setDamageOnCharacter(rightCharList[tempI][tempJ].c,-recoverHP,true,false);
                                         sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,true,false);
                                         sendEffect(e,tempI,tempJ,true,false);
                                     }
@@ -3454,7 +3514,7 @@ public class BattleActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     int damage = (int)(1.0f*(leftCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                    setDamageOnCharacter(leftCharList[tempI][tempJ].c,damage,false);
+                                    setDamageOnCharacter(leftCharList[tempI][tempJ].c,damage,false,false);
                                     sendDamageNumber(damage,tempI,tempJ,TEXT_RED,false,false);
                                     leftCharList[tempI][tempJ].spriteName = "damage";
                                     changeSprite(tempI, tempJ,false);
@@ -3472,7 +3532,7 @@ public class BattleActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         int recoverHP = (int)(1.0f*(leftCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                        setDamageOnCharacter(leftCharList[tempI][tempJ].c,-recoverHP,false);
+                                        setDamageOnCharacter(leftCharList[tempI][tempJ].c,-recoverHP,false,false);
                                         sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,false,false);
                                         sendEffect(e,tempI,tempJ,false,false);
                                     }
@@ -3541,15 +3601,23 @@ public class BattleActivity extends AppCompatActivity {
         //更新主动技能cd
         for(int i = 0; i < 5; i++){
             if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
+                boolean isSkillCDAccelerated = false;
+                if(isTriggerEffect(rightEffectList[StartActivity.characters[i].formationX][StartActivity.characters[i].formationY],"技能冷却加速")){
+                    isSkillCDAccelerated = true;
+                }
                 for(int j = 0; j < 4; j++){
                     if(StartActivity.characters[i].memoriaList[j] != null){
                         if(StartActivity.characters[i].memoriaList[j].CDNow > 0){
+                            StartActivity.characters[i].memoriaList[j].CDNow--;
+                        }
+                        if(isSkillCDAccelerated && StartActivity.characters[i].memoriaList[j].CDNow > 0){
                             StartActivity.characters[i].memoriaList[j].CDNow--;
                         }
                     }
                 }
             }
         }
+
         //更新角色effect时效
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
@@ -3625,15 +3693,49 @@ public class BattleActivity extends AppCompatActivity {
         Character c = isRight? rightCharList[x][y].c:leftCharList[x][y].c;
         ArrayList<Effect> efList = isRight? rightEffectList[x][y]:leftEffectList[x][y];
         switch(e.name){
-            // case "重抽为Accele的Disc":
-            // case "重抽为Blast的Disc":case "重抽Disc":
-            // case "重抽为同属性的Disc":case "重抽为Charge的Disc":
-            // case "BUFF解除":  case "DEBUFF解除": case "异常状态解除":
-            // case "重抽为自己的Disc":
-            // case "MP伤害":
+            // case "重抽为Accele的Disc":// case "重抽为Blast的Disc":
+            // case "重抽为同属性的Disc":case "重抽为Charge的Disc":// case "重抽为自己的Disc":
+            case "重抽Disc":
+                randomChoosePlates();
+                break;
+            case "BUFF解除":
+                for(int i = 0; i < efList.size(); i++){
+                    Effect e2 = efList.get(i);
+                    if(e2.time < 999 && judgeBuffAndDebuff(e2) == 1){
+                        efList.remove(e2);
+                        i--;
+                    }
+                }
+                break;
+            case "DEBUFF解除":
+                for(int i = 0; i < efList.size(); i++){
+                    Effect e2 = efList.get(i);
+                    if(e2.time < 999 && judgeBuffAndDebuff(e2) == -1){
+                        efList.remove(e2);
+                        i--;
+                    }
+                }
+                break;
+            case "异常状态解除":
+                for(int i = 0; i < efList.size(); i++){
+                    Effect e2 = efList.get(i);
+                    if(e2.time < 999){
+                        switch(e2.name){
+                            case "毒": case "烧伤": case "诅咒":
+                            case "魅惑": case "眩晕": case "拘束":
+                            case "雾": case "黑暗": case "幻惑":
+                            case "技能封印": case "Magia封印":
+                            case "MP回复禁止": case "HP回复禁止":
+                                efList.remove(e2);
+                                i--;
+                            default:
+                        }
+                    }
+                }
+                break;
             case "HP回复":
                 int recoverHP = (int)(1.0f * e.value * c.getRealMaxHP() / 100);
-                setDamageOnCharacter(c,-recoverHP,isRight);
+                setDamageOnCharacter(c,-recoverHP,isRight,isMagnified);
                 sendDamageNumber(recoverHP,x,y,TEXT_GREEN,isRight,isMagnified);
                 break;
             case "MP回复":
@@ -3664,6 +3766,19 @@ public class BattleActivity extends AppCompatActivity {
                 sendDamageNumber(reduceMP,x,y,TEXT_BLUE,isRight,isMagnified);
                 break;
             default:
+
+                if(judgeBuffAndDebuff(e) == -1){
+                    //检查DEBUFF无效
+                    for(int i = 0; i < efList.size(); i++){
+                        Effect e2 = efList.get(i);
+                        if(e2.name.equals("DEBUFF无效")){
+                            efList.remove(e2);
+                            sendEffect(e2,x,y,isRight,isMagnified);
+                            return;
+                        }
+                    }
+                }
+
                 sendEffect(e,x,y,isRight,isMagnified);
                 if(isRight){
                     rightEffectList[x][y].add(e);
@@ -3673,6 +3788,40 @@ public class BattleActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public int judgeBuffAndDebuff(Effect e){
+        //1为正面buff, -1为负面, 0为其他
+        switch(e.name){
+            case"攻击力UP": case"防御力UP":
+            case"造成伤害UP":case"伤害削减":case "Magia伤害削减":case "HP最大时防御力UP":
+            case "异常状态耐性UP": case "Blast攻击时MP获得": case "AcceleMPUP": case "HP最大时攻击力UP":
+            case "Charge盘伤害UP": case "Charge后伤害UP":case "敌方状态异常时伤害UP":
+            case "战斗不能时获得防御力UP": case "战斗不能时获得攻击力UP":case "Magia伤害UP":
+            case "对魔女伤害上升":case "火属性攻击力UP": case "Blast伤害UP": case "Blast伤害削减":
+            case "被弱点属性攻击时MPUP": case "MP获得量UP": case "濒死时防御力UP":case "濒死时攻击力UP": case "Doppel伤害UP":case "状态异常1回无效": case "Magia封印无效":
+            case "回避无效": case "反击无效": case "毒无效":case "挑拨无效": case "诅咒无效":
+            case "雾无效": case "忍耐": case "烧伤无效":case "黑暗无效":case "技能封印无效":
+            case "魅惑无效": case "DEBUFF无效": case "无视防御力": case "伤害削减无效":
+            case "眩晕无效":case "技能冷却加速": case "拘束无效": case "幻惑无效":case "挑拨":case "追击":case "反击":case "回避":
+            case "暴击":case "保护同伴":
+            case "水属性攻击力UP":case "木属性攻击力UP":
+            case "光属性攻击力UP":case "暗属性攻击力UP":
+            case "攻击时给予状态毒":case "攻击时给予状态烧伤":case "攻击时给予状态诅咒":
+            case "攻击时给予状态魅惑":case "攻击时给予状态眩晕":case "攻击时给予状态拘束":
+            case "攻击时给予状态雾":case "攻击时给予状态黑暗":case "攻击时给予状态幻惑":
+            case "攻击时给予状态技能封印":case "攻击时给予状态Magia封印":
+            case "攻击时给予状态HP回复禁止":case "攻击时给予状态MP回复禁止":
+                return 1;
+            case"攻击力DOWN": case"防御力DOWN":
+            case"造成伤害DOWN": case "AcceleMPDOWN":
+            case "异常状态耐性DOWN":case "MP获得量DOWN":case "Blast伤害DOWN":case "Magia伤害DOWN":
+            case "MP伤害":case "幻惑":case "诅咒":case "毒": case "技能封印":case "魅惑":case "给予状态眩晕":
+            case "拘束":case "雾": case "黑暗":case "烧伤": case "Magia封印":case "BUFF解除":case "MP回复禁止":case "HP回复禁止":
+                return -1;
+            default:
+                return 0;
+        }
     }
 
     public boolean isTriggerEffect(ArrayList<Effect> efList, String effectName){

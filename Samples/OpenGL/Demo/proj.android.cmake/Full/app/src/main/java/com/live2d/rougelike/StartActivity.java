@@ -48,7 +48,9 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
         initMemoria();
         initCharacterList();
-        initMonsterList();
+        //initMonsterList();
+
+        initBossList();
 
         formationList.add(new Formation(new int[][]{{1,0,1},{0,2,0},{1,0,1}}, "英勇梯队"));
         formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP",10,"自",0,100));
@@ -300,6 +302,25 @@ public class StartActivity extends AppCompatActivity {
         characters[3] = characterList.get(1);
     }
 
+    public void initBossList(){
+        Character monster1 = new Character();
+        monster1.element = "dark";
+        monster1.spriteName = "monster_无名人工智能之谣";
+        monster1.name = "无名人工智能之谣";
+        monster1.lv = 80;
+        monster1.HP = 180000;
+        monster1.realHP = monster1.HP;
+        monster1.ATK = 12000;
+        monster1.DEF = 3000;
+        monster1.mpAttackRatio = 0f;
+        monster1.mpDefendRatio = 0f;
+        monster1.plateList = new int[]{BLAST_HORIZONTAL,BLAST_VERTICAL,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
+        monster1.initialEffectList.add(new Effect("攻击时给予状态雾",25,999,50,1));
+        monster1.initialEffectList.add(new Effect("攻击时给予状态诅咒",15,999,40,1));
+        monster1.initialEffectList.add(new Effect("回避",0,999,20,0));
+        monsterList.add(monster1);
+    }
+
     public void initMonsterList(){
         Character monster1 = new Character();
         monster1.element = "tree";
@@ -308,14 +329,14 @@ public class StartActivity extends AppCompatActivity {
         monster1.lv = 80;
         monster1.HP = 90000;
         monster1.realHP = monster1.HP;
-        monster1.ATK = 12000;
+        monster1.ATK = 10000;
         monster1.DEF = 3000;
         monster1.mpAttackRatio = 0f;
         monster1.mpDefendRatio = 0f;
         monster1.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         //monster1.initialEffectList.add(new Effect("攻击时给予状态雾",25,999,100,1));
         //monster1.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
-        monster1.initialEffectList.add(new Effect("回避",0,999,100,0));
+        monster1.initialEffectList.add(new Effect("回避",0,999,20,0));
         monsterList.add(monster1);
 
         Character monster2 = new Character();
@@ -330,7 +351,7 @@ public class StartActivity extends AppCompatActivity {
         monster2.mpAttackRatio = 0f;
         monster2.mpDefendRatio = 0f;
         monster2.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster2.initialEffectList.add(new Effect("攻击时给予状态烧伤",5,999,100,1));
+        monster2.initialEffectList.add(new Effect("攻击时给予状态烧伤",5,999,20,1));
         //monster2.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         monsterList.add(monster2);
 
@@ -346,7 +367,7 @@ public class StartActivity extends AppCompatActivity {
         monster3.mpAttackRatio = 0f;
         monster3.mpDefendRatio = 0f;
         monster3.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster3.initialEffectList.add(new Effect("攻击时给予状态眩晕",0,999,100,2));
+        monster3.initialEffectList.add(new Effect("攻击时给予状态眩晕",0,999,20,2));
         //monster3.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         monsterList.add(monster3);
 
@@ -357,12 +378,12 @@ public class StartActivity extends AppCompatActivity {
         monster4.lv = 80;
         monster4.HP = 150000;
         monster4.realHP = monster4.HP;
-        monster4.ATK = 12000;
+        monster4.ATK = 10000;
         monster4.DEF = 3000;
         monster4.mpAttackRatio = 0f;
         monster4.mpDefendRatio = 0f;
         monster4.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster4.initialEffectList.add(new Effect("攻击时给予状态幻惑",50,999,100,1));
+        monster4.initialEffectList.add(new Effect("攻击时给予状态幻惑",50,999,20,1));
         //monster4.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         monsterList.add(monster4);
     }

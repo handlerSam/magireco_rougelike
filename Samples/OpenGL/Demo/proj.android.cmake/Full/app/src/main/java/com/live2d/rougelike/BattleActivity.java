@@ -55,6 +55,7 @@ public class BattleActivity extends AppCompatActivity {
     final public static int TEXT_BLUE = 1;
     final public static int TEXT_GREEN = 2;
 
+    public boolean isBossBattle = true;
 
     final public static float[][] multiChargeTable = new float[][]{
             /*ACCELE伤害*/{1.0f,1.1f,1.2f,1.3f,1.4f,1.5f,1.6f,1.7f,1.8f,1.9f,2.0f,2.1f,2.2f,2.3f,2.4f,2.5f,2.6f,2.7f,2.8f,2.9f,3.0f},
@@ -218,9 +219,15 @@ public class BattleActivity extends AppCompatActivity {
                                             setMpOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realMP+defendMP,false);
                                             if((isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss))){
                                                 //没有回避
-                                                leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].spriteName = "damage";
-                                                changeSprite(smallPlateXList[smallPlateNumber], smallPlateYList[smallPlateNumber],false);
-                                                leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                                if(!isBossBattle){
+                                                    leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].spriteName = "damage";
+                                                    changeSprite(smallPlateXList[smallPlateNumber], smallPlateYList[smallPlateNumber],false);
+                                                    leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                                }else{
+                                                    leftCharList[1][1].spriteName = "damage";
+                                                    changeSprite(1, 1,false);
+                                                    leftCharList[1][1].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                                }
                                             }
                                         }
                                         if(temp.plate == ACCELE){
@@ -298,43 +305,42 @@ public class BattleActivity extends AppCompatActivity {
                                                             case "攻击时给予状态雾": case "攻击时给予状态黑暗": case "攻击时给予状态幻惑":
                                                             case "攻击时给予状态技能封印": case "攻击时给予状态Magia封印":
                                                             case "攻击时给予状态HP回复禁止": case "攻击时给予状态MP回复禁止":
-                                                                //检查对方是否有该异常无效
-                                                                boolean isEffectImmune;
-                                                                //获取对方异常耐性
-                                                                int abnormalStateResistance;
-
-                                                                if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
-                                                                    abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[i][smallPlateYList[smallPlateNumber]]);
-                                                                    isEffectImmune = isTriggerEffect(leftEffectList[i][smallPlateYList[smallPlateNumber]],e.name.substring(7)+"无效");
-                                                                }else{
-                                                                    abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[smallPlateXList[smallPlateNumber]][i]);
-                                                                    isEffectImmune = isTriggerEffect(leftEffectList[smallPlateXList[smallPlateNumber]][i],e.name.substring(7)+"无效");
-                                                                }
-                                                                if(colorToss(e.probability - abnormalStateResistance)){
-                                                                    Effect e2 = new Effect();
-                                                                    if(!isEffectImmune){
-                                                                        e2.name = e.name.substring(7);
-                                                                        e2.time = e.valueTime;
-                                                                        e2.value = e.value;
-                                                                        if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
-                                                                            leftEffectList[i][smallPlateYList[smallPlateNumber]].add(e2);
-                                                                            sendEffect(e2,i,smallPlateYList[smallPlateNumber],false,true);
-                                                                        }else{
-                                                                            leftEffectList[smallPlateXList[smallPlateNumber]][i].add(e2);
-                                                                            sendEffect(e2,smallPlateXList[smallPlateNumber],i,false,true);
-                                                                        }
+                                                                if(!isBossBattle || (isBossBattle && (i == 1))){
+                                                                    //检查对方是否有该异常无效
+                                                                    boolean isEffectImmune;
+                                                                    //获取对方异常耐性
+                                                                    int abnormalStateResistance;
+                                                                    if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
+                                                                        abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[i][smallPlateYList[smallPlateNumber]]);
+                                                                        isEffectImmune = isTriggerEffect(leftEffectList[i][smallPlateYList[smallPlateNumber]],e.name.substring(7)+"无效");
                                                                     }else{
-                                                                        e2.name = e.name.substring(7)+"无效";
-                                                                        if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
-                                                                            sendEffect(e2,i,smallPlateYList[smallPlateNumber],false,true);
-                                                                        }else{
-                                                                            sendEffect(e2,smallPlateXList[smallPlateNumber],i,false,true);
-                                                                        }
+                                                                        abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[smallPlateXList[smallPlateNumber]][i]);
+                                                                        isEffectImmune = isTriggerEffect(leftEffectList[smallPlateXList[smallPlateNumber]][i],e.name.substring(7)+"无效");
                                                                     }
-
-
+                                                                    if(colorToss(e.probability - abnormalStateResistance)){
+                                                                        Effect e2 = new Effect();
+                                                                        if(!isEffectImmune){
+                                                                            e2.name = e.name.substring(7);
+                                                                            e2.time = e.valueTime;
+                                                                            e2.value = e.value;
+                                                                            if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
+                                                                                leftEffectList[i][smallPlateYList[smallPlateNumber]].add(e2);
+                                                                                sendEffect(e2,i,smallPlateYList[smallPlateNumber],false,true);
+                                                                            }else{
+                                                                                leftEffectList[smallPlateXList[smallPlateNumber]][i].add(e2);
+                                                                                sendEffect(e2,smallPlateXList[smallPlateNumber],i,false,true);
+                                                                            }
+                                                                        }else{
+                                                                            e2.name = e.name.substring(7)+"无效";
+                                                                            if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
+                                                                                sendEffect(e2,i,smallPlateYList[smallPlateNumber],false,true);
+                                                                            }else{
+                                                                                sendEffect(e2,smallPlateXList[smallPlateNumber],i,false,true);
+                                                                            }
+                                                                        }
                                                                 }
-                                                                break;
+                                                            }
+                                                            break;
                                                             default:
                                                         }
                                                     }
@@ -362,13 +368,20 @@ public class BattleActivity extends AppCompatActivity {
                                                     setMpOnCharacter(sv.c,sv.c.realMP+defendMP,false);
                                                     if((isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss))){
                                                         //没有回避
-                                                        sv.spriteName = "damage";
-                                                        if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
-                                                            changeSprite(i, smallPlateYList[smallPlateNumber],false);
+                                                        if(!isBossBattle){
+                                                            sv.spriteName = "damage";
+                                                            if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
+                                                                changeSprite(i, smallPlateYList[smallPlateNumber],false);
+                                                            }else{
+                                                                changeSprite(smallPlateXList[smallPlateNumber],i,false);
+                                                            }
+                                                            sv.webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
                                                         }else{
-                                                            changeSprite(smallPlateXList[smallPlateNumber],i,false);
+                                                            leftCharList[1][1].spriteName = "damage";
+                                                            changeSprite(1, 1,false);
+                                                            leftCharList[1][1].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
                                                         }
-                                                        sv.webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+
                                                     }
                                                 }
                                             }
@@ -404,10 +417,12 @@ public class BattleActivity extends AppCompatActivity {
                                                 for(int j = 0; j < 3; j++){
                                                     for(int k = 0; k < 3; k++){
                                                         if(leftCharList[j][k] != null && leftCharList[j][k].c.realHP > 0){
-                                                            int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[j][k]);
-                                                            final Effect e = convertSkillEffectToEffect(effectList.get(tempI), abnormalStateResistance);
-                                                            if(e != null){
-                                                                handleEffectiveness(e,j,k,false,true);
+                                                            if(!isBossBattle || (isBossBattle && (j == 1) && (k == 1))){
+                                                                int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[j][k]);
+                                                                final Effect e = convertSkillEffectToEffect(effectList.get(tempI), abnormalStateResistance);
+                                                                if(e != null){
+                                                                    handleEffectiveness(e,j,k,false,true);
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -427,9 +442,15 @@ public class BattleActivity extends AppCompatActivity {
                                 if(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realHP > 0){
                                     int defendMP = getDefendMP(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,false);
                                     setMpOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realMP+defendMP,false);
-                                    leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].spriteName = "damage";
-                                    changeSprite(smallPlateXList[smallPlateNumber], smallPlateYList[smallPlateNumber],false);
-                                    leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                    if(!isBossBattle){
+                                        leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].spriteName = "damage";
+                                        changeSprite(smallPlateXList[smallPlateNumber], smallPlateYList[smallPlateNumber],false);
+                                        leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                    }else{
+                                        leftCharList[1][1].spriteName = "damage";
+                                        changeSprite(1, 1,false);
+                                        leftCharList[1][1].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                    }
                                 }
                             }else if(c.magiaTarget.equals("敌全")){
                                 for(int i = 0; i < 3; i++){
@@ -443,9 +464,12 @@ public class BattleActivity extends AppCompatActivity {
                                             if(leftCharList[i][j].c.realHP > 0){
                                                 int defendMP = getDefendMP(c,leftCharList[i][j].c,false);
                                                 setMpOnCharacter(leftCharList[i][j].c,leftCharList[i][j].c.realMP+defendMP,false);
-                                                leftCharList[i][j].spriteName = "damage";
-                                                changeSprite(i, j,false);
-                                                leftCharList[i][j].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                                if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                                                    leftCharList[i][j].spriteName = "damage";
+                                                    changeSprite(i, j,false);
+                                                    leftCharList[i][j].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                                }
+
                                             }
                                         }
                                     }
@@ -579,10 +603,12 @@ public class BattleActivity extends AppCompatActivity {
                                 final boolean isMissNullified = isTriggerEffect(leftEffectList[monsterAttackerX][monsterAttackerY],"回避无效");
 
                                 if(monsterPlate == CharacterPlateView.ACCELE || monsterPlate == CharacterPlateView.CHARGE){
-                                    leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attack_out";
-                                    changeSprite(monsterAttackerX,monsterAttackerY,false);
-                                    setCharacterAttackPosition(x,y,monsterAttackerX,monsterAttackerY,false);
-                                    leftCharList[monsterAttackerX][monsterAttackerY].setVisibility(VISIBLE);
+                                    if(!isBossBattle){
+                                        leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attack_out";
+                                        changeSprite(monsterAttackerX,monsterAttackerY,false);
+                                        setCharacterAttackPosition(x,y,monsterAttackerX,monsterAttackerY,false);
+                                        leftCharList[monsterAttackerX][monsterAttackerY].setVisibility(VISIBLE);
+                                    }
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -668,14 +694,17 @@ public class BattleActivity extends AppCompatActivity {
                                         }
                                     },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                                 }else if(monsterPlate == CharacterPlateView.BLAST_VERTICAL || monsterPlate == CharacterPlateView.BLAST_HORIZONTAL){
-                                    leftCharList[monsterAttackerX][monsterAttackerY].spriteName = (monsterPlate == CharacterPlateView.BLAST_VERTICAL)?"attackv_out":"attackh_out";
-                                    changeSprite(monsterAttackerX,monsterAttackerY,false);
-                                    if(monsterPlate == CharacterPlateView.BLAST_VERTICAL){
-                                        setCharacterAttackPosition(1,y,monsterAttackerX,monsterAttackerY,false);
-                                    }else{
-                                        setCharacterAttackPosition(x,1,monsterAttackerX,monsterAttackerY,false);
+                                    if(!isBossBattle){
+                                        leftCharList[monsterAttackerX][monsterAttackerY].spriteName = (monsterPlate == CharacterPlateView.BLAST_VERTICAL)?"attackv_out":"attackh_out";
+                                        changeSprite(monsterAttackerX,monsterAttackerY,false);
+                                        if(monsterPlate == CharacterPlateView.BLAST_VERTICAL){
+                                            setCharacterAttackPosition(1,y,monsterAttackerX,monsterAttackerY,false);
+                                        }else{
+                                            setCharacterAttackPosition(x,1,monsterAttackerX,monsterAttackerY,false);
+                                        }
+                                        leftCharList[monsterAttackerX][monsterAttackerY].setVisibility(VISIBLE);
                                     }
-                                    leftCharList[monsterAttackerX][monsterAttackerY].setVisibility(VISIBLE);
+
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -808,7 +837,18 @@ public class BattleActivity extends AppCompatActivity {
                                         }
                                     },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                                 }
-                                leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 4 + ")");
+                                if(!isBossBattle){
+                                    leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 4 + ")");
+                                }else{
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Message m = new Message();
+                                            m.what = 4;
+                                            handler.sendMessage(m);
+                                        }
+                                    },2500);
+                                }
                                 break;
                             }else{
                                 tempCount++;
@@ -853,19 +893,24 @@ public class BattleActivity extends AppCompatActivity {
                                         if(temp2Count == chooseMonster){
                                             int plate = monsterFormation[i][j].plateList[(int)(Math.random()*5)];
                                             monsterPlate = plate;
-                                            monsterAttackerX = i;
-                                            monsterAttackerY = j;
-                                            final int tempi = i;
-                                            final int tempj = j;
-                                            if(plate == CharacterPlateView.ACCELE || plate == CharacterPlateView.CHARGE){
-                                                leftCharList[i][j].spriteName = "attack_in";
-                                            }else if(plate == CharacterPlateView.BLAST_HORIZONTAL){
-                                                leftCharList[i][j].spriteName = "attackh_in";
-                                            }else if(plate == CharacterPlateView.BLAST_VERTICAL){
-                                                leftCharList[i][j].spriteName = "attackv_in";
+                                            if(isBossBattle){
+                                                monsterAttackerX = 1;
+                                                monsterAttackerY = 1;
+                                            }else{
+                                                monsterAttackerX = i;
+                                                monsterAttackerY = j;
                                             }
-                                            leftCharList[i][j].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
-                                            changeSprite(i,j, false);
+                                            final int tempi = monsterAttackerX;
+                                            final int tempj = monsterAttackerY;
+                                            if(plate == CharacterPlateView.ACCELE || plate == CharacterPlateView.CHARGE){
+                                                leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attack_in";
+                                            }else if(plate == CharacterPlateView.BLAST_HORIZONTAL){
+                                                leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackh_in";
+                                            }else if(plate == CharacterPlateView.BLAST_VERTICAL){
+                                                leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackv_in";
+                                            }
+                                            leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
+                                            changeSprite(monsterAttackerX,monsterAttackerY, false);
                                             handler.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -1488,8 +1533,14 @@ public class BattleActivity extends AppCompatActivity {
                                 public void run() {
                                     //播放受众对应动画
                                     if((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI).target.equals("敌单")){
-                                        leftCharList[chooseMonsterX][chooseMonsterY].spriteName = "damage";
-                                        changeSprite(chooseMonsterX,chooseMonsterY,false);
+                                        if(!isBossBattle){
+                                            leftCharList[chooseMonsterX][chooseMonsterY].spriteName = "damage";
+                                            changeSprite(chooseMonsterX,chooseMonsterY,false);
+                                        }else{
+                                            leftCharList[1][1].spriteName = "damage";
+                                            changeSprite(1,1,false);
+                                        }
+
                                         int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[chooseMonsterX][chooseMonsterY]);
                                         Effect e = convertSkillEffectToEffect((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI), abnormalStateResistance);
                                         if(e != null){
@@ -1499,12 +1550,14 @@ public class BattleActivity extends AppCompatActivity {
                                         for(int i = 0; i < 3; i++){
                                             for(int j = 0; j < 3; j++){
                                                 if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                                                    leftCharList[i][j].spriteName = "damage";
-                                                    changeSprite(i,j,false);
-                                                    int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[i][j]);
-                                                    Effect e = convertSkillEffectToEffect((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI),abnormalStateResistance);
-                                                    if(e != null){
-                                                        handleEffectiveness(e,i,j,false,false);
+                                                    if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                                                        leftCharList[i][j].spriteName = "damage";
+                                                        changeSprite(i,j,false);
+                                                        int abnormalStateResistance = calculateAbnormalStateResistance(leftEffectList[i][j]);
+                                                        Effect e = convertSkillEffectToEffect((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(tempI),abnormalStateResistance);
+                                                        if(e != null){
+                                                            handleEffectiveness(e,i,j,false,false);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1545,8 +1598,10 @@ public class BattleActivity extends AppCompatActivity {
                                                 for(int i = 0; i < 3; i++){
                                                     for(int j = 0; j < 3; j++){
                                                         if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                                                            leftCharList[i][j].spriteName = getRecoverOriginSpriteName(i,j,false,"wait",false);
-                                                            changeSprite(i, j, false);
+                                                            if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                                                                leftCharList[i][j].spriteName = getRecoverOriginSpriteName(i,j,false,"wait",false);
+                                                                changeSprite(i, j, false);
+                                                            }
                                                         }
                                                         if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                                                             rightCharList[i][j].spriteName = getRecoverOriginSpriteName(i,j,true,"wait",false);
@@ -1573,10 +1628,19 @@ public class BattleActivity extends AppCompatActivity {
 
     public void loadCharacter(){
         Formation formation = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
-        monsterFormation[0][0] = StartActivity.monsterList.get(0);
-        monsterFormation[1][0] = StartActivity.monsterList.get(1);
-        monsterFormation[1][2] = StartActivity.monsterList.get(2);
-        monsterFormation[2][0] = StartActivity.monsterList.get(3);
+        if(isBossBattle){
+            monsterFormation[1][1] = StartActivity.monsterList.get(0);
+            monsterFormation[0][1] = StartActivity.monsterList.get(0);
+            monsterFormation[2][1] = StartActivity.monsterList.get(0);
+            monsterFormation[1][0] = StartActivity.monsterList.get(0);
+            monsterFormation[1][2] = StartActivity.monsterList.get(0);
+        }else{
+            monsterFormation[0][0] = StartActivity.monsterList.get(0);
+            monsterFormation[1][0] = StartActivity.monsterList.get(1);
+            monsterFormation[1][2] = StartActivity.monsterList.get(2);
+            monsterFormation[2][0] = StartActivity.monsterList.get(3);
+        }
+
 
         int count = 0;
         for(int i = 0; i < 3; i++){
@@ -1604,7 +1668,7 @@ public class BattleActivity extends AppCompatActivity {
                                     effectDetailCharName.setText(StartActivity.characters[tempCount].name);
                                     effectDetailHP.setText(StartActivity.characters[tempCount].realHP + "/" + StartActivity.characters[tempCount].getRealMaxHP());
                                     int realHp = StartActivity.characters[tempCount].realHP;
-                                    if(realHp<=0){
+                                    if(((int)(1.0f*realHp/StartActivity.characters[tempCount].getRealMaxHP()*240)) <= 0){
                                         effectDetailHPBar.setVisibility(INVISIBLE);
                                     }else{
                                         effectDetailHPBar.setVisibility(VISIBLE);
@@ -1629,16 +1693,19 @@ public class BattleActivity extends AppCompatActivity {
                     count++;
                 }
                 if(monsterFormation[i][j] != null && monsterFormation[i][j].realHP > 0){
+
                     createNewSprite(i,j, false, !monsterFormation[i][j].spriteName.startsWith("monster"));
                     leftCharList[i][j].charName = monsterFormation[i][j].spriteName;
                     leftCharList[i][j].spriteName = "wait";
                     leftCharList[i][j].prefix = "mini_";
                     leftCharList[i][j].c = monsterFormation[i][j];
-                    monsterFormation[i][j].formationX = i;
-                    monsterFormation[i][j].formationY = j;
-                    leftStateBarList[i][j].updateHp(leftCharList[i][j].c.getRealMaxHP(),leftCharList[i][j].c.realHP);
-                    leftStateBarList[i][j].updateMp(leftCharList[i][j].c.realMP);
-                    leftStateBarList[i][j].setAttr(monsterFormation[i][j].element);
+                    if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                        monsterFormation[i][j].formationX = i;
+                        monsterFormation[i][j].formationY = j;
+                        leftStateBarList[i][j].updateHp(leftCharList[i][j].c.getRealMaxHP(),leftCharList[i][j].c.realHP);
+                        leftStateBarList[i][j].updateMp(leftCharList[i][j].c.realMP);
+                        leftStateBarList[i][j].setAttr(monsterFormation[i][j].element);
+                    }
                     leftEffectList[i][j] = monsterFormation[i][j].initialEffectList;
                     final int tempCount = count;
                     final Character mon = monsterFormation[i][j];
@@ -1650,7 +1717,7 @@ public class BattleActivity extends AppCompatActivity {
                                 effectDetailCharName.setText(mon.name);
                                 effectDetailHP.setText(mon.realHP + "/" + mon.HP);
                                 int realHp = mon.realHP;
-                                if(realHp<=0){
+                                if(((int)(1.0f*realHp/mon.HP*240))<=0){
                                     effectDetailHPBar.setVisibility(INVISIBLE);
                                 }else{
                                     effectDetailHPBar.setVisibility(VISIBLE);
@@ -1659,13 +1726,24 @@ public class BattleActivity extends AppCompatActivity {
                                     effectDetailHPBar.setLayoutParams(p);
                                 }
                                 effectDetailEffectList.removeAllViews();
-                                if(leftEffectList[mon.formationX][mon.formationY].size() > 0){
-                                    for(int i = 0; i < leftEffectList[mon.formationX][mon.formationY].size(); i++){
-                                        Effect e = leftEffectList[mon.formationX][mon.formationY].get(i);
-                                        EffectDetailLayout edl = new EffectDetailLayout(BattleActivity.this,e);
-                                        effectDetailEffectList.addView(edl);
+                                if(isBossBattle){
+                                    if(leftEffectList[1][1].size() > 0){
+                                        for(int i = 0; i < leftEffectList[1][1].size(); i++){
+                                            Effect e = leftEffectList[1][1].get(i);
+                                            EffectDetailLayout edl = new EffectDetailLayout(BattleActivity.this,e);
+                                            effectDetailEffectList.addView(edl);
+                                        }
+                                    }
+                                }else{
+                                    if(leftEffectList[mon.formationX][mon.formationY].size() > 0){
+                                        for(int i = 0; i < leftEffectList[mon.formationX][mon.formationY].size(); i++){
+                                            Effect e = leftEffectList[mon.formationX][mon.formationY].get(i);
+                                            EffectDetailLayout edl = new EffectDetailLayout(BattleActivity.this,e);
+                                            effectDetailEffectList.addView(edl);
+                                        }
                                     }
                                 }
+
                                 effectDetailLayout.setVisibility(VISIBLE);
                             }
                             return true;
@@ -1809,73 +1887,78 @@ public class BattleActivity extends AppCompatActivity {
     }
  
     public void createNewSprite(int x, int y, boolean isRight, boolean needScaleX){
-        totalSpriteNumber++;
-        if(isRight && (rightCharList[x][y] != null) && rightCharList[x][y].c.realHP > 0){
-            characterLayout.removeView(rightCharList[x][y]);
-            rightCharList[x][y].webView.loadUrl("javascript:endGame()");
-            rightCharList[x][y] = null;
-        }
-        if(!isRight && (leftCharList[x][y] != null) && leftCharList[x][y].c.realHP > 0){
-            characterLayout.removeView(leftCharList[x][y]);
-            leftCharList[x][y].webView.loadUrl("javascript:endGame()");
-            leftCharList[x][y] = null;
-        }
-        SpriteViewer sp = new SpriteViewer(this);
-        sp.setZ(x);
-        ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(CHARACTER_NORMAL_SIZE,CHARACTER_NORMAL_SIZE);
-        sp.setLayoutParams(p);
-        sp.setId(View.generateViewId());
-        characterLayout.addView(sp);
-        ConstraintSet sampleSet = new ConstraintSet();
-        sampleSet.clone(characterLayout);
-        if(isRight){
-            sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1));
-        }else{
-            sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1));
-        }
-        sampleSet.connect(sp.getId(),ConstraintSet.BOTTOM,characterLayout.getId(),ConstraintSet.BOTTOM,130*(2-x));
-        sampleSet.applyTo(characterLayout);
-        sp.setVisibility(View.VISIBLE);
-        if(isRight){
-            rightCharList[x][y] = sp;
-        }else{
-            leftCharList[x][y] = sp;
-//            sp.setPivotX(0);
-            if(needScaleX){
-                leftCharList[x][y].setScaleX(-1);
+        if(isRight || !isBossBattle || (x == 1 && y == 1)){
+            totalSpriteNumber++;
+            if(isRight && (rightCharList[x][y] != null) && rightCharList[x][y].c.realHP > 0){
+                characterLayout.removeView(rightCharList[x][y]);
+                rightCharList[x][y].webView.loadUrl("javascript:endGame()");
+                rightCharList[x][y] = null;
             }
-        }
+            if(!isRight && (leftCharList[x][y] != null) && leftCharList[x][y].c.realHP > 0){
+                characterLayout.removeView(leftCharList[x][y]);
+                leftCharList[x][y].webView.loadUrl("javascript:endGame()");
+                leftCharList[x][y] = null;
+            }
+            SpriteViewer sp = new SpriteViewer(this, false);
+            sp.setZ(x);
+            ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(CHARACTER_NORMAL_SIZE,CHARACTER_NORMAL_SIZE);
+            sp.setLayoutParams(p);
+            sp.setId(View.generateViewId());
+            characterLayout.addView(sp);
+            ConstraintSet sampleSet = new ConstraintSet();
+            sampleSet.clone(characterLayout);
+            if(isRight){
+                sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1));
+            }else{
+                sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1));
+            }
+            sampleSet.connect(sp.getId(),ConstraintSet.BOTTOM,characterLayout.getId(),ConstraintSet.BOTTOM,130*(2-x));
+            sampleSet.applyTo(characterLayout);
+            sp.setVisibility(View.VISIBLE);
+            if(isRight){
+                rightCharList[x][y] = sp;
+            }else{
+                leftCharList[x][y] = sp;
+//            sp.setPivotX(0);
+                if(needScaleX){
+                    leftCharList[x][y].setScaleX(-1);
+                }
+            }
 
-        if(isRight){
-            StateBar sb = new StateBar(this);
-            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            sb.setLayoutParams(lp);
-            sb.setId(View.generateViewId());
-            characterTouchLayout.addView(sb);
-            ConstraintSet set = new ConstraintSet();
-            set.clone(characterTouchLayout);
-            set.connect(sb.getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+CHARACTER_NORMAL_SIZE*3/7);
-            set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9+270);
-            set.applyTo(characterTouchLayout);
+            if(isRight){
+                StateBar sb = new StateBar(this);
+                ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                sb.setLayoutParams(lp);
+                sb.setId(View.generateViewId());
+                characterTouchLayout.addView(sb);
+                ConstraintSet set = new ConstraintSet();
+                set.clone(characterTouchLayout);
+                set.connect(sb.getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+CHARACTER_NORMAL_SIZE*3/7);
+                set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9+270);
+                set.applyTo(characterTouchLayout);
 //            imageView.setBackgroundResource(R.color.colorPurple);
-            rightStateBarList[x][y] = sb;
-            sb.setVisibility(View.VISIBLE);
+                rightStateBarList[x][y] = sb;
+                sb.setVisibility(View.VISIBLE);
+            }else{
+                StateBar sb = new StateBar(this);
+
+                ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                sb.setLayoutParams(lp);
+                sb.setId(View.generateViewId());
+                characterTouchLayout.addView(sb);
+                ConstraintSet set = new ConstraintSet();
+                set.clone(characterTouchLayout);
+                set.connect(sb.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-170)/2);
+                set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9+270);
+                set.applyTo(characterTouchLayout);
+//            imageView.setBackgroundResource(R.color.colorPurple);
+                leftStateBarList[x][y] = sb;
+                sb.setVisibility(View.VISIBLE);
+            }
         }else{
-            StateBar sb = new StateBar(this);
-
-            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            sb.setLayoutParams(lp);
-            sb.setId(View.generateViewId());
-            characterTouchLayout.addView(sb);
-            ConstraintSet set = new ConstraintSet();
-            set.clone(characterTouchLayout);
-            set.connect(sb.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-170)/2);
-            set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9+270);
-            set.applyTo(characterTouchLayout);
-//            imageView.setBackgroundResource(R.color.colorPurple);
-            leftStateBarList[x][y] = sb;
-            sb.setVisibility(View.VISIBLE);
+            leftCharList[x][y] = new SpriteViewer(this,true);
         }
+
 
 
         if(!isRight){
@@ -1930,9 +2013,11 @@ public class BattleActivity extends AppCompatActivity {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 if(isRight){
-                    if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                        hideSprite(i,j,false);
-                        leftStateBarList[i][j].setVisibility(GONE);
+                    if(leftCharList[i][j] != null){
+                        if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                            hideSprite(i,j,false);
+                            leftStateBarList[i][j].setVisibility(GONE);
+                        }
                     }
                     if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                         rightStateBarList[i][j].setVisibility(VISIBLE);
@@ -1941,15 +2026,17 @@ public class BattleActivity extends AppCompatActivity {
                         changeCharacterPosition(i,j, true,true);
                     }
                 }else{
-                    if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
+                    if(rightCharList[i][j] != null){
                         hideSprite(i,j,true);
                         rightStateBarList[i][j].setVisibility(GONE);
                     }
                     if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                        leftStateBarList[i][j].setVisibility(VISIBLE);
-                        leftCharList[i][j].setVisibility(View.INVISIBLE);
-                        setCharacterSize(i,j,CHARACTER_MAGNIFIED_SIZE,false);
-                        changeCharacterPosition(i,j,false,true);
+                        if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                            leftStateBarList[i][j].setVisibility(VISIBLE);
+                            leftCharList[i][j].setVisibility(View.INVISIBLE);
+                            setCharacterSize(i,j,CHARACTER_MAGNIFIED_SIZE,false);
+                            changeCharacterPosition(i,j,false,true);
+                        }
                     }
                 }
 
@@ -1971,7 +2058,7 @@ public class BattleActivity extends AppCompatActivity {
                     }
                     if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                         rightStateBarList[i][j].setVisibility(VISIBLE);
-                        rightCharList[i][j].setVisibility(View.INVISIBLE);
+                        //rightCharList[i][j].setVisibility(View.INVISIBLE);
                         setCharacterSize(i,j,CHARACTER_NORMAL_SIZE,true);
                         changeCharacterPosition(i,j, true,false);
                     }
@@ -1980,10 +2067,12 @@ public class BattleActivity extends AppCompatActivity {
                         cancelHideSprite(i,j,true);
                     }
                     if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                        leftStateBarList[i][j].setVisibility(VISIBLE);
-                        leftCharList[i][j].setVisibility(View.INVISIBLE);
-                        setCharacterSize(i,j,CHARACTER_NORMAL_SIZE,false);
-                        changeCharacterPosition(i,j,false,false);
+                        if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                            leftStateBarList[i][j].setVisibility(VISIBLE);
+                            //leftCharList[i][j].setVisibility(View.INVISIBLE);
+                            setCharacterSize(i,j,CHARACTER_NORMAL_SIZE,false);
+                            changeCharacterPosition(i,j,false,false);
+                        }
                     }
                 }
 
@@ -2318,8 +2407,10 @@ public class BattleActivity extends AppCompatActivity {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                    leftCharList[i][j].spriteName = "stance";
-                    changeSprite(i, j, false);
+                    if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                        leftCharList[i][j].spriteName = "stance";
+                        changeSprite(i, j, false);
+                    }
                 }
                 if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                     rightCharList[i][j].spriteName = getRecoverOriginSpriteName(i,j,true,"stance", false);
@@ -3199,23 +3290,25 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
-
-
-
         if(c.realHP <= 0){
             c.realHP = 0;
         }
         if(c.realHP >= c.getRealMaxHP()){
             c.realHP = c.getRealMaxHP();
         }
+//        Log.d("Sam","剩余HP:" + c.realHP);
+
         StateBar sb = isRight? rightStateBarList[c.formationX][c.formationY]:leftStateBarList[c.formationX][c.formationY];
-        sb.updateHp(c.getRealMaxHP(),c.realHP);
-        if(c.realHP == 0){
+        if(sb != null){
+            sb.updateHp(c.getRealMaxHP(),c.realHP);
+            if(c.realHP == 0){
 //            Log.d("Sam","characterDead");
-            SpriteViewer sv = isRight? rightCharList[c.formationX][c.formationY]:leftCharList[c.formationX][c.formationY];
-            sv.spriteName = "dead";
-            changeSprite(c.formationX, c.formationY, isRight);
+                SpriteViewer sv = isRight? rightCharList[c.formationX][c.formationY]:leftCharList[c.formationX][c.formationY];
+                sv.spriteName = "dead";
+                changeSprite(c.formationX, c.formationY, isRight);
+            }
         }
+
     }
 
     public void setMpOnCharacter(Character c, int mp, boolean isRight){
@@ -3420,19 +3513,25 @@ public class BattleActivity extends AppCompatActivity {
                             if(tempCount == chooseMonster){
                                 int plate = monsterFormation[i][j].plateList[(int)(Math.random()*5)];
                                 monsterPlate = plate;
-                                monsterAttackerX = i;
-                                monsterAttackerY = j;
-                                if(plate == CharacterPlateView.ACCELE || plate == CharacterPlateView.CHARGE){
-                                    leftCharList[i][j].spriteName = "attack_in";
-                                }else if(plate == CharacterPlateView.BLAST_HORIZONTAL){
-                                    leftCharList[i][j].spriteName = "attackh_in";
-                                }else if(plate == CharacterPlateView.BLAST_VERTICAL){
-                                    leftCharList[i][j].spriteName = "attackv_in";
+                                if(isBossBattle){
+                                    monsterAttackerX = 1;
+                                    monsterAttackerY = 1;
+                                }else{
+                                    monsterAttackerX = i;
+                                    monsterAttackerY = j;
                                 }
-                                leftCharList[i][j].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
-                                changeSprite(i,j, false);
-                                final int tempi = i;
-                                final int tempj = j;
+
+                                if(plate == CharacterPlateView.ACCELE || plate == CharacterPlateView.CHARGE){
+                                    leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attack_in";
+                                }else if(plate == CharacterPlateView.BLAST_HORIZONTAL){
+                                    leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackh_in";
+                                }else if(plate == CharacterPlateView.BLAST_VERTICAL){
+                                    leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackv_in";
+                                }
+                                leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
+                                changeSprite(monsterAttackerX,monsterAttackerY, false);
+                                final int tempi = monsterAttackerX;
+                                final int tempj = monsterAttackerY;
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -3471,12 +3570,14 @@ public class BattleActivity extends AppCompatActivity {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    int damage = (int)(1.0f*(rightCharList[tempI][tempJ].c.realHP)*e.value/100);
+                                    int damage = (int)(1.0f*(rightCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
                                     setDamageOnCharacter(rightCharList[tempI][tempJ].c,damage,true,false);
                                     sendDamageNumber(damage,tempI,tempJ,TEXT_RED,true,false);
-                                    rightCharList[tempI][tempJ].spriteName = "damage";
-                                    changeSprite(tempI, tempJ,true);
-                                    rightCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                    if(rightCharList[tempI][tempJ].c.realHP > 0){
+                                        rightCharList[tempI][tempJ].spriteName = "damage";
+                                        changeSprite(tempI, tempJ,true);
+                                        rightCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                    }
                                     sendEffect(e,tempI,tempJ,true,false);
                                 }
                             }, tempWaitTime);
@@ -3490,7 +3591,7 @@ public class BattleActivity extends AppCompatActivity {
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        int recoverHP = (int)(1.0f*(rightCharList[tempI][tempJ].c.realHP)*e.value/100);
+                                        int recoverHP = (int)(1.0f*(rightCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
                                         setDamageOnCharacter(rightCharList[tempI][tempJ].c,-recoverHP,true,false);
                                         sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,true,false);
                                         sendEffect(e,tempI,tempJ,true,false);
@@ -3505,41 +3606,45 @@ public class BattleActivity extends AppCompatActivity {
                     }
                 }
                 if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                    int tempWaitTime = 100;
-                    ArrayList<Effect> efList = leftEffectList[i][j];
-                    for(int k = 0; k < efList.size(); k++){
-                        final Effect e = efList.get(k);
-                        if(e.name.equals("毒") || e.name.equals("烧伤") || e.name.equals("诅咒")){
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    int damage = (int)(1.0f*(leftCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                    setDamageOnCharacter(leftCharList[tempI][tempJ].c,damage,false,false);
-                                    sendDamageNumber(damage,tempI,tempJ,TEXT_RED,false,false);
-                                    leftCharList[tempI][tempJ].spriteName = "damage";
-                                    changeSprite(tempI, tempJ,false);
-                                    leftCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
-                                    sendEffect(e,tempI,tempJ,false,false);
-                                }
-                            }, tempWaitTime);
-                            tempWaitTime += DELTA_BETWEEN_EFFECT_SHOW;
-                            if(maxWaitTime < tempWaitTime){
-                                maxWaitTime = tempWaitTime;
-                            }
-                        }else if(e.name.equals("HP自动回复")){
-                            if(!isTriggerEffect(efList,"HP回复禁止")){
+                    if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                        int tempWaitTime = 100;
+                        ArrayList<Effect> efList = leftEffectList[i][j];
+                        for(int k = 0; k < efList.size(); k++){
+                            final Effect e = efList.get(k);
+                            if(e.name.equals("毒") || e.name.equals("烧伤") || e.name.equals("诅咒")){
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        int recoverHP = (int)(1.0f*(leftCharList[tempI][tempJ].c.realHP)*e.value/100);
-                                        setDamageOnCharacter(leftCharList[tempI][tempJ].c,-recoverHP,false,false);
-                                        sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,false,false);
+                                        int damage = (int)(1.0f*(leftCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
+                                        setDamageOnCharacter(leftCharList[tempI][tempJ].c,damage,false,false);
+                                        sendDamageNumber(damage,tempI,tempJ,TEXT_RED,false,false);
+                                        if(leftCharList[tempI][tempJ].c.realHP > 0){
+                                            leftCharList[tempI][tempJ].spriteName = "damage";
+                                            changeSprite(tempI, tempJ,false);
+                                            leftCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                        }
                                         sendEffect(e,tempI,tempJ,false,false);
                                     }
                                 }, tempWaitTime);
                                 tempWaitTime += DELTA_BETWEEN_EFFECT_SHOW;
                                 if(maxWaitTime < tempWaitTime){
                                     maxWaitTime = tempWaitTime;
+                                }
+                            }else if(e.name.equals("HP自动回复")){
+                                if(!isTriggerEffect(efList,"HP回复禁止")){
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            int recoverHP = (int)(1.0f*(leftCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
+                                            setDamageOnCharacter(leftCharList[tempI][tempJ].c,-recoverHP,false,false);
+                                            sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,false,false);
+                                            sendEffect(e,tempI,tempJ,false,false);
+                                        }
+                                    }, tempWaitTime);
+                                    tempWaitTime += DELTA_BETWEEN_EFFECT_SHOW;
+                                    if(maxWaitTime < tempWaitTime){
+                                        maxWaitTime = tempWaitTime;
+                                    }
                                 }
                             }
                         }
@@ -3566,9 +3671,24 @@ public class BattleActivity extends AppCompatActivity {
         if(leftCharList[chooseMonsterX][chooseMonsterY].c.realHP <= 0){
             touchImageListLayout[chooseMonsterX][chooseMonsterY].setVisibility(GONE);
             findAliveCharacter(tempP,false);
-            chooseMonsterX = tempP[0];
-            chooseMonsterY = tempP[1];
+            if(tempP[0] == -1){
+                //说明敌人全部被干掉了
+                win();
+                return;
+            }else{
+                chooseMonsterX = tempP[0];
+                chooseMonsterY = tempP[1];
+            }
             touchImageListLayout[chooseMonsterX][chooseMonsterY].setVisibility(VISIBLE);
+        }
+
+        //判断我方是否全部死亡
+        tempP = new int[]{-1,-1};
+        findAliveCharacter(tempP,true);
+        if(tempP[0] == -1){
+            //说明我方全部被干掉了
+            lose();
+            return;
         }
 
         //更新角色diamond数量
@@ -3636,15 +3756,17 @@ public class BattleActivity extends AppCompatActivity {
                     }
                 }
                 if(leftEffectList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                    if(leftEffectList[i][j].size()>0){
-                        for(int k = 0; k < leftEffectList[i][j].size(); k++){
-                            Effect e = leftEffectList[i][j].get(k);
-                            if(e.time < 999){
-                                e.time--;
-                            }
-                            if(e.time <= 0){
-                                leftEffectList[i][j].remove(e);
-                                k--;
+                    if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                        if(leftEffectList[i][j].size()>0){
+                            for(int k = 0; k < leftEffectList[i][j].size(); k++){
+                                Effect e = leftEffectList[i][j].get(k);
+                                if(e.time < 999){
+                                    e.time--;
+                                }
+                                if(e.time <= 0){
+                                    leftEffectList[i][j].remove(e);
+                                    k--;
+                                }
                             }
                         }
                     }
@@ -3672,8 +3794,10 @@ public class BattleActivity extends AppCompatActivity {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 if(leftCharList[i][j] != null && leftCharList[i][j].c.realHP > 0){
-                    leftCharList[i][j].spriteName = getRecoverOriginSpriteName(i,j,false,"wait",false);
-                    changeSprite(i, j, false);
+                    if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
+                        leftCharList[i][j].spriteName = getRecoverOriginSpriteName(i,j,false,"wait",false);
+                        changeSprite(i, j, false);
+                    }
                 }
                 if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                     rightCharList[i][j].spriteName = getRecoverOriginSpriteName(i,j,true,"wait",false);
@@ -3753,7 +3877,8 @@ public class BattleActivity extends AppCompatActivity {
                 boolean isMpRecoverForbidden = isTriggerEffect(efList, "MP回复禁止");
                 if(!isMpRecoverForbidden){
                     setMpOnCharacter(c, c.realMP + recoverMP,isRight);
-                    sendDamageNumber(recoverMP,x,y,TEXT_BLUE,isRight,isMagnified);
+                    sendDamageNumber(recoverMP/10,x,y,TEXT_BLUE,isRight,isMagnified);
+                    sendEffect(e,x,y,isRight,isMagnified);
                 }else{
                     Effect e2 = new Effect();
                     e2.name = "MP回复禁止";
@@ -3763,7 +3888,8 @@ public class BattleActivity extends AppCompatActivity {
             case "MP伤害":
                 int reduceMP = e.value * 10;
                 setMpOnCharacter(c,c.realMP - reduceMP,isRight);
-                sendDamageNumber(reduceMP,x,y,TEXT_BLUE,isRight,isMagnified);
+                sendDamageNumber(e.value,x,y,TEXT_BLUE,isRight,isMagnified);
+                sendEffect(e,x,y,isRight,isMagnified);
                 break;
             default:
 

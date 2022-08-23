@@ -1,6 +1,7 @@
 package com.live2d.rougelike;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,14 +49,18 @@ public class StateBar extends ConstraintLayout {
     }
 
     public void updateHp(){
-        if(realHp<=0){
+        if(realHp <= 0){
             hpBar.setVisibility(INVISIBLE);
             this.setVisibility(INVISIBLE);
         }else{
-            hpBar.setVisibility(VISIBLE);
-            ConstraintLayout.LayoutParams p = (ConstraintLayout.LayoutParams) hpBar.getLayoutParams();
-            p.width = (int)(1.0f*realHp/fullHp*100);
-            hpBar.setLayoutParams(p);
+            if(((int)(1.0f*realHp/fullHp*100)) <= 0){
+                hpBar.setVisibility(INVISIBLE);
+            }else{
+                hpBar.setVisibility(VISIBLE);
+                ConstraintLayout.LayoutParams p = (ConstraintLayout.LayoutParams) hpBar.getLayoutParams();
+                p.width = (int)(1.0f*realHp/fullHp*100);
+                hpBar.setLayoutParams(p);
+            }
         }
     }
 
@@ -94,16 +99,24 @@ public class StateBar extends ConstraintLayout {
                 number2.setVisibility(INVISIBLE);
             }
 
+            if(((int)((Math.min(realMp,1000)) * 0.08)) > 0){
+                mpBar.setVisibility(VISIBLE);
+                ConstraintLayout.LayoutParams p = (ConstraintLayout.LayoutParams) mpBar.getLayoutParams();
+                p.width = (int)((Math.min(realMp,1000)) * 0.08);
+                mpBar.setLayoutParams(p);
+            }else{
+                mpBar.setVisibility(INVISIBLE);
+            }
 
-            mpBar.setVisibility(VISIBLE);
-            ConstraintLayout.LayoutParams p = (ConstraintLayout.LayoutParams) mpBar.getLayoutParams();
-            p.width = (int)((Math.min(realMp,1000)) * 0.08);
-            mpBar.setLayoutParams(p);
             if(realMp > 1000){
-                dpBar.setVisibility(VISIBLE);
-                ConstraintLayout.LayoutParams p2 = (ConstraintLayout.LayoutParams) dpBar.getLayoutParams();
-                p2.width = (int)((realMp - 1000) * 0.08);
-                dpBar.setLayoutParams(p2);
+                if(((int)((realMp - 1000) * 0.08)) > 0){
+                    dpBar.setVisibility(VISIBLE);
+                    ConstraintLayout.LayoutParams p2 = (ConstraintLayout.LayoutParams) dpBar.getLayoutParams();
+                    p2.width = (int)((realMp - 1000) * 0.08);
+                    dpBar.setLayoutParams(p2);
+                }else{
+                    dpBar.setVisibility(INVISIBLE);
+                }
             }else{
                 dpBar.setVisibility(INVISIBLE);
             }

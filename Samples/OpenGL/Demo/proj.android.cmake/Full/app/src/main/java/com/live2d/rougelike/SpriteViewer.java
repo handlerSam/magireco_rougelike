@@ -148,49 +148,50 @@ public class SpriteViewer extends ConstraintLayout {
     }
 
     @SuppressLint("JavascriptInterface")
-    public SpriteViewer(@NonNull Context context) {
+    public SpriteViewer(@NonNull Context context, boolean isEmpty) {
         super(context);
-        this.context = context;
-        View v = LayoutInflater.from(context).inflate(R.layout.sprite_viewer_layout, SpriteViewer.this);
-        webView = v.findViewById(R.id.webview);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setSupportZoom(true);
-        webView.getSettings().setAllowFileAccess(true);
-        webView.getSettings().setAllowFileAccessFromFileURLs(true);
-        webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setAllowContentAccess(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setAppCacheEnabled(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.setHorizontalScrollBarEnabled(false);//水平不显示
-        webView.setVerticalScrollBarEnabled(false); //垂直不显示
-        webView.loadUrl("file:///android_asset/html/sprite_viewer.htm");
+        if(!isEmpty){
+            this.context = context;
+            View v = LayoutInflater.from(context).inflate(R.layout.sprite_viewer_layout, SpriteViewer.this);
+            webView = v.findViewById(R.id.webview);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setSupportZoom(true);
+            webView.getSettings().setAllowFileAccess(true);
+            webView.getSettings().setAllowFileAccessFromFileURLs(true);
+            webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+            webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+            webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+            webView.getSettings().setDomStorageEnabled(true);
+            webView.getSettings().setAllowContentAccess(true);
+            webView.getSettings().setLoadWithOverviewMode(true);
+            webView.getSettings().setAppCacheEnabled(true);
+            webView.getSettings().setUseWideViewPort(true);
+            webView.setHorizontalScrollBarEnabled(false);//水平不显示
+            webView.setVerticalScrollBarEnabled(false); //垂直不显示
+            webView.loadUrl("file:///android_asset/html/sprite_viewer.htm");
 //        webView.loadUrl("https://kyu.gay/");
-        WebView.setWebContentsDebuggingEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient(){
-            //webView.setWebViewClient(new WebViewClient() {
+            WebView.setWebContentsDebuggingEnabled(true);
+            webView.setWebChromeClient(new WebChromeClient(){
+                //webView.setWebViewClient(new WebViewClient() {
 
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if(newProgress == 100){
-                    Log.d("HTMLAndroid",newProgress+"");
-                    webView.loadUrl("javascript:setCharacterNameAndSprite(\""+ charName +"\",\""+ spriteName +"\")");
-                    webView.loadUrl("javascript:setCanvasWidth(" + canvasWidth + ")");
-                    webView.loadUrl("javascript:setPrefix(\"" + prefix + "\")");
+                @Override
+                public void onProgressChanged(WebView view, int newProgress) {
+                    if(newProgress == 100){
+                        Log.d("HTMLAndroid",newProgress+"");
+                        webView.loadUrl("javascript:setCharacterNameAndSprite(\""+ charName +"\",\""+ spriteName +"\")");
+                        webView.loadUrl("javascript:setCanvasWidth(" + canvasWidth + ")");
+                        webView.loadUrl("javascript:setPrefix(\"" + prefix + "\")");
+                    }
+                    super.onProgressChanged(view, newProgress);
                 }
-                super.onProgressChanged(view, newProgress);
-            }
 
-            @Override
-            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                Log.d("HTMLView", consoleMessage.message() + " -- From line "
-                        + consoleMessage.lineNumber() + " of "
-                        + consoleMessage.sourceId());
-                return super.onConsoleMessage(consoleMessage);
-            }
+                @Override
+                public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                    Log.d("HTMLView", consoleMessage.message() + " -- From line "
+                            + consoleMessage.lineNumber() + " of "
+                            + consoleMessage.sourceId());
+                    return super.onConsoleMessage(consoleMessage);
+                }
 //            @Override
 //            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
 //                return super.shouldInterceptRequest(view, request);
@@ -198,16 +199,17 @@ public class SpriteViewer extends ConstraintLayout {
 //            public void onReceivedSslError (WebView view, SslErrorHandler handler, SslError error) {
 //                handler.proceed() ;
 //            }
-        });
-        webView.setWebViewClient(new WebViewClient() {
-            public void onReceivedSslError (WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed() ;
-            }
-        });
-        webView.setBackgroundColor(Color.parseColor("#00000000"));
+            });
+            webView.setWebViewClient(new WebViewClient() {
+                public void onReceivedSslError (WebView view, SslErrorHandler handler, SslError error) {
+                    handler.proceed() ;
+                }
+            });
+            webView.setBackgroundColor(Color.parseColor("#00000000"));
 
-        webView.addJavascriptInterface(new JsInterface(this, (BattleActivity)context),"AndroidMethod");
-        webView.setVisibility(GONE);
+            webView.addJavascriptInterface(new JsInterface(this, (BattleActivity)context),"AndroidMethod");
+            webView.setVisibility(GONE);
+        }
     }
 
     public void resetCharacter(){

@@ -28,7 +28,7 @@ public class StartActivity extends AppCompatActivity {
 
     public static Character[] characters = {null,null,null,null,null};
 
-    public static ArrayList<Character> monsterList = new ArrayList<>();
+//    public static ArrayList<Character> monsterList = new ArrayList<>();
 
     public int[] preloadMemoria = {1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1037, 1038, 1039, 1041, 1042, 1043, 1044, 1045, 1046, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1059, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1103, 1105, 1106, 1107, 1112, 1113, 1115, 1117, 1119, 1120, 1121, 1122, 1124, 1126, 1127, 1130, 1131, 1132, 1133, 1134, 1136, 1137, 1138, 1140, 1142, 1144, 1145, 1146, 1151, 1152, 1154, 1155, 1156, 1160, 1161, 1162, 1163, 1164, 1166, 1167, 1168, 1169, 1171, 1174, 1176, 1177, 1179, 1180, 1182, 1186, 1187, 1188, 1189, 1192, 1193, 1195, 1196, 1197, 1199, 1200, 1202, 1207, 1209, 1210, 1214, 1215, 1216, 1218, 1219, 1221, 1222, 1224, 1225, 1226, 1227, 1229, 1230, 1231, 1232, 1234, 1235, 1236, 1237, 1239, 1240, 1241, 1243, 1244, 1246, 1247, 1250, 1251, 1252, 1253, 1255, 1259, 1260, 1261, 1262, 1264, 1265, 1266, 1267, 1268, 1270, 1271, 1272, 1273, 1274, 1277, 1278, 1280, 1283, 1284, 1285, 1286, 1288, 1289, 1290, 1291, 1293, 1294, 1295, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1309, 1310, 1311, 1313, 1316, 1317, 1318, 1320, 1321, 1322, 1324, 1326, 1327, 1329, 1330, 1331, 1332, 1334, 1336, 1337, 1339, 1340, 1341, 1342, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1353, 1354, 1355, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1367, 1368, 1369, 1370, 1371, 1374, 1376, 1377, 1378, 1379, 1381, 1382, 1383, 1384, 1386, 1387, 1388, 1390, 1391, 1392, 1393, 1394, 1395, 1396, 1397, 1398, 1400, 1401, 1403, 1404, 1405, 1406, 1407, 1409, 1411, 1412, 1417, 1418, 1419, 1420, 1421, 1423, 1424, 1428, 1429, 1430, 1431, 1432, 1434, 1435, 1437, 1438, 1439, 1440, 1441, 1443, 1444, 1445, 1446, 1449, 1450, 1453, 1454, 1456, 1457, 1458, 1460, 1461, 1465, 1466, 1469, 1472, 1473, 1474, 1475, 1476, 1477, 1478, 1479, 1481, 1482, 1483, 1486, 1487, 1489, 1490, 1491, 1492, 1494, 1495, 1496, 1497, 1501, 1502, 1503, 1504, 1505, 1509, 1510, 1511, 1512, 1515, 1516, 1519, 1520, 1521, 1522, 1524, 1525, 1526, 1529, 1530, 1531, 1532, 1534, 1535, 1536, 1537, 1541, 1542, 1543, 1545, 1546, 1547, 1548, 1550, 1551, 1552, 1553, 1555, 1557, 1558, 1559, 1561, 1562, 1564, 1565, 1566, 1568, 1569, 1570, 1571, 1572, 1574, 1575, 1576, 1577, 1578, 1579, 1580, 1582, 1583, 1584, 1585, 1587, 1588, 1590, 1591, 1592, 1593, 1594, 1595, 1597, 1599, 1600, 1601, 1602, 1604, 1605, 1606, 1607, 1609, 1610, 1611, 1612, 1613, 1614, 1616, 1617, 1619, 1620, 1621, 1624, 1625, 1626, 1627, 1629, 1630, 1631, 1632, 1634, 1635, 1636, 1637, 1639, 1640, 1641, 1642, 1643, 1645, 1646, 1647, 1648, 1650, 1651, 1652, 1653, 1655, 1656, 1657, 1659, 1660, 1661, 1663, 1664, 1665, 1666, 1668, 1669, 1670, 1671, 1673, 1674, 1675, 1676, 1677, 1678, 1679, 1681, 1682, 1683, 1684, 1686, 1687, 1688, 1689, 1691, 1692, 1693, 1696, 1697, 1699, 1702, 1703, 1704, 1706, 1707, 1708, 1709, 1712, 1713, 1714, 1715, 1719, 1720, 1723, 1724, 1726, 1728, 1729, 1730, 1731, 1732};
 
@@ -37,6 +37,8 @@ public class StartActivity extends AppCompatActivity {
     public static ArrayList<Character> characterList = new ArrayList<>();
 
     public static ArrayList<Memoria> memoriaBag = new ArrayList<>();
+
+    public static ArrayList<BattleInfo> battleInfoList = new ArrayList<>();
 
     public static int SCREEN_WIDTH = 0;
 
@@ -48,85 +50,10 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
         initMemoria();
         initCharacterList();
-        //initMonsterList();
 
-        initBossList();
+        initBattleInfoList();
 
-        formationList.add(new Formation(new int[][]{{1,0,1},{0,2,0},{1,0,1}}, "英勇梯队"));
-        formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP",10,"自",0,100));
-        formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("防御力UP",10,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{1,0,0},{2,1,2},{1,0,0}}, "光明方阵"));
-        formationList.get(1).gridAllEffectList[1][0].add(new SkillEffect("防御力UP",10,"自",0,100));
-        formationList.get(1).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP",10,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{0,1,0},{2,1,2},{0,1,0}}, "强力十字"));
-        formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("防御力UP",10,"自",0,100));
-        formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("攻击力DOWN",10,"自",0,100));
-        formationList.get(2).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP",10,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·火"));
-        formationList.get(3).gridAllEffectList[0][2].add(new SkillEffect("火属性攻击力UP",15,"自",0,100));
-        formationList.get(3).gridAllEffectList[1][0].add(new SkillEffect("火属性攻击力UP",15,"自",0,100));
-        formationList.get(3).gridAllEffectList[2][2].add(new SkillEffect("火属性攻击力UP",15,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·水"));
-        formationList.get(4).gridAllEffectList[0][2].add(new SkillEffect("水属性攻击力UP",15,"自",0,100));
-        formationList.get(4).gridAllEffectList[1][0].add(new SkillEffect("水属性攻击力UP",15,"自",0,100));
-        formationList.get(4).gridAllEffectList[2][2].add(new SkillEffect("水属性攻击力UP",15,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·木"));
-        formationList.get(5).gridAllEffectList[0][2].add(new SkillEffect("木属性攻击力UP",15,"自",0,100));
-        formationList.get(5).gridAllEffectList[1][0].add(new SkillEffect("木属性攻击力UP",15,"自",0,100));
-        formationList.get(5).gridAllEffectList[2][2].add(new SkillEffect("木属性攻击力UP",15,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·光"));
-        formationList.get(6).gridAllEffectList[0][2].add(new SkillEffect("光属性攻击力UP",15,"自",0,100));
-        formationList.get(6).gridAllEffectList[1][0].add(new SkillEffect("光属性攻击力UP",15,"自",0,100));
-        formationList.get(6).gridAllEffectList[2][2].add(new SkillEffect("光属性攻击力UP",15,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·暗"));
-        formationList.get(7).gridAllEffectList[0][2].add(new SkillEffect("暗属性攻击力UP",15,"自",0,100));
-        formationList.get(7).gridAllEffectList[1][0].add(new SkillEffect("暗属性攻击力UP",15,"自",0,100));
-        formationList.get(7).gridAllEffectList[2][2].add(new SkillEffect("暗属性攻击力UP",15,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{0,1,0},{1,2,1},{0,1,0}}, "英勇十字"));
-        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("防御力UP",15,"自",0,100));
-        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("异常状态耐性UP",10,"自",0,100));
-        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("Blast伤害UP",10,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{2,0,2},{0,1,0},{2,0,2}}, "守护之力"));
-        formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("HP自动回复",2,"自",0,100));
-        formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("防御力UP",10,"自",0,100));
-        formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("HP自动回复",2,"自",0,100));
-        formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("防御力UP",10,"自",0,100));
-        formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("HP自动回复",2,"自",0,100));
-        formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("防御力UP",10,"自",0,100));
-        formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("HP自动回复",2,"自",0,100));
-        formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("防御力UP",10,"自",0,100));
-
-        formationList.add(new Formation(new int[][]{{1,0,1},{0,2,0},{1,0,1}}, "强力梯队"));
-        formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP",10,"自",0,100));
-        formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("伤害削减",5,"自",0,100));
-
-//        GeckoView view = findViewById(R.id.geckoview);
-//        GeckoSession session = new GeckoSession(new GeckoSessionSettings.Builder().usePrivateMode(true)
-//                .useTrackingProtection(true)
-//                .userAgentMode(USER_AGENT_MODE_MOBILE)
-//                .userAgentOverride("")
-//                .suspendMediaWhenInactive(true)
-//                .allowJavascript(true).build());
-//
-//        session.setContentDelegate(new GeckoSession.ContentDelegate() {});
-//
-//        if (sRuntime == null) {
-//            // GeckoRuntime can only be initialized once per process
-//            sRuntime = GeckoRuntime.create(this);
-//        }
-//
-//        session.open(sRuntime);
-//        view.setSession(session);
-//        session.loadUri("about:buildconfig"); // Or any other URL...
+        initFormation();
 
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -136,6 +63,7 @@ public class StartActivity extends AppCompatActivity {
         Log.d("sam","screenWidth:"+SCREEN_WIDTH+", Height:"+SCREEN_HEIGHT);
 
         Intent intent1 = new Intent(StartActivity.this, TeamChooseActivity.class);
+        intent1.putExtra("battleInfo",0);
         startActivity(intent1);
         finish();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -203,12 +131,12 @@ public class StartActivity extends AppCompatActivity {
         toca.doppelImageName = "mini_100700_dd";
         toca.isLeader = false;
         toca.spriteName = "Satomi Touka";
-        toca.lv = 90;
+        toca.lv = 100;
         toca.star = 5;
-        toca.HP = 16689;
+        toca.HP = 21019;
         toca.realHP = toca.HP;
-        toca.ATK = 7756;
-        toca.DEF = 4832;
+        toca.ATK = 9803;
+        toca.DEF = 6072;
         toca.realMP = 0;
         toca.plateList = new int[]{ACCELE,ACCELE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         toca.mpAttackRatio = 1.2f;
@@ -302,7 +230,16 @@ public class StartActivity extends AppCompatActivity {
         characters[3] = characterList.get(1);
     }
 
+    public void initBattleInfoList(){
+        initMonsterList();
+
+        initBossList();
+    }
+
     public void initBossList(){
+        BattleInfo bi = new BattleInfo();
+        bi.isBossBattle = true;
+
         Character monster1 = new Character();
         monster1.element = "dark";
         monster1.spriteName = "monster_无名人工智能之谣";
@@ -318,10 +255,19 @@ public class StartActivity extends AppCompatActivity {
         monster1.initialEffectList.add(new Effect("攻击时给予状态雾",25,999,50,1));
         monster1.initialEffectList.add(new Effect("攻击时给予状态诅咒",15,999,40,1));
         monster1.initialEffectList.add(new Effect("回避",0,999,20,0));
-        monsterList.add(monster1);
+        bi.monsterList.add(monster1);
+
+        bi.monsterFormation[1][1] = monster1;
+        bi.monsterFormation[0][1] = monster1;
+        bi.monsterFormation[2][1] = monster1;
+        bi.monsterFormation[1][0] = monster1;
+        bi.monsterFormation[1][2] = monster1;
+        battleInfoList.add(bi);
     }
 
     public void initMonsterList(){
+        BattleInfo bi = new BattleInfo();
+        bi.isBossBattle = false;
         Character monster1 = new Character();
         monster1.element = "tree";
         monster1.spriteName = "monster_不幸猫头鹰之谣";
@@ -337,7 +283,8 @@ public class StartActivity extends AppCompatActivity {
         //monster1.initialEffectList.add(new Effect("攻击时给予状态雾",25,999,100,1));
         //monster1.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         monster1.initialEffectList.add(new Effect("回避",0,999,20,0));
-        monsterList.add(monster1);
+        bi.monsterList.add(monster1);
+        bi.monsterFormation[0][0] = monster1;
 
         Character monster2 = new Character();
         monster2.element = "fire";
@@ -353,7 +300,8 @@ public class StartActivity extends AppCompatActivity {
         monster2.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         monster2.initialEffectList.add(new Effect("攻击时给予状态烧伤",5,999,20,1));
         //monster2.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
-        monsterList.add(monster2);
+        bi.monsterList.add(monster2);
+        bi.monsterFormation[1][0] = monster2;
 
         Character monster3 = new Character();
         monster3.element = "water";
@@ -369,7 +317,8 @@ public class StartActivity extends AppCompatActivity {
         monster3.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         monster3.initialEffectList.add(new Effect("攻击时给予状态眩晕",0,999,20,2));
         //monster3.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
-        monsterList.add(monster3);
+        bi.monsterList.add(monster3);
+        bi.monsterFormation[1][2] = monster3;
 
         Character monster4 = new Character();
         monster4.element = "light";
@@ -385,7 +334,69 @@ public class StartActivity extends AppCompatActivity {
         monster4.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         monster4.initialEffectList.add(new Effect("攻击时给予状态幻惑",50,999,20,1));
         //monster4.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
-        monsterList.add(monster4);
+        bi.monsterList.add(monster4);
+        bi.monsterFormation[2][0] = monster4;
+        battleInfoList.add(bi);
+    }
+
+    public void initFormation(){
+        formationList.add(new Formation(new int[][]{{1,0,1},{0,2,0},{1,0,1}}, "英勇梯队"));
+        formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP",10,"自",0,100));
+        formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("防御力UP",10,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{1,0,0},{2,1,2},{1,0,0}}, "光明方阵"));
+        formationList.get(1).gridAllEffectList[1][0].add(new SkillEffect("防御力UP",10,"自",0,100));
+        formationList.get(1).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP",10,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{0,1,0},{2,1,2},{0,1,0}}, "强力十字"));
+        formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("防御力UP",10,"自",0,100));
+        formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("攻击力DOWN",10,"自",0,100));
+        formationList.get(2).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP",10,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·火"));
+        formationList.get(3).gridAllEffectList[0][2].add(new SkillEffect("火属性攻击力UP",15,"自",0,100));
+        formationList.get(3).gridAllEffectList[1][0].add(new SkillEffect("火属性攻击力UP",15,"自",0,100));
+        formationList.get(3).gridAllEffectList[2][2].add(new SkillEffect("火属性攻击力UP",15,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·水"));
+        formationList.get(4).gridAllEffectList[0][2].add(new SkillEffect("水属性攻击力UP",15,"自",0,100));
+        formationList.get(4).gridAllEffectList[1][0].add(new SkillEffect("水属性攻击力UP",15,"自",0,100));
+        formationList.get(4).gridAllEffectList[2][2].add(new SkillEffect("水属性攻击力UP",15,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·木"));
+        formationList.get(5).gridAllEffectList[0][2].add(new SkillEffect("木属性攻击力UP",15,"自",0,100));
+        formationList.get(5).gridAllEffectList[1][0].add(new SkillEffect("木属性攻击力UP",15,"自",0,100));
+        formationList.get(5).gridAllEffectList[2][2].add(new SkillEffect("木属性攻击力UP",15,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·光"));
+        formationList.get(6).gridAllEffectList[0][2].add(new SkillEffect("光属性攻击力UP",15,"自",0,100));
+        formationList.get(6).gridAllEffectList[1][0].add(new SkillEffect("光属性攻击力UP",15,"自",0,100));
+        formationList.get(6).gridAllEffectList[2][2].add(new SkillEffect("光属性攻击力UP",15,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{0,0,2},{2,1,1},{0,0,2}}, "属性方阵·暗"));
+        formationList.get(7).gridAllEffectList[0][2].add(new SkillEffect("暗属性攻击力UP",15,"自",0,100));
+        formationList.get(7).gridAllEffectList[1][0].add(new SkillEffect("暗属性攻击力UP",15,"自",0,100));
+        formationList.get(7).gridAllEffectList[2][2].add(new SkillEffect("暗属性攻击力UP",15,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{0,1,0},{1,2,1},{0,1,0}}, "英勇十字"));
+        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("防御力UP",15,"自",0,100));
+        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("异常状态耐性UP",10,"自",0,100));
+        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("Blast伤害UP",10,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{2,0,2},{0,1,0},{2,0,2}}, "守护之力"));
+        formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("HP自动回复",2,"自",0,100));
+        formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("防御力UP",10,"自",0,100));
+        formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("HP自动回复",2,"自",0,100));
+        formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("防御力UP",10,"自",0,100));
+        formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("HP自动回复",2,"自",0,100));
+        formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("防御力UP",10,"自",0,100));
+        formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("HP自动回复",2,"自",0,100));
+        formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("防御力UP",10,"自",0,100));
+
+        formationList.add(new Formation(new int[][]{{1,0,1},{0,2,0},{1,0,1}}, "强力梯队"));
+        formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP",10,"自",0,100));
+        formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("伤害削减",5,"自",0,100));
+
     }
 
     public void initMemoria(){
@@ -483,4 +494,9 @@ class Formation{
     }
 }
 
-
+class BattleInfo{
+    ArrayList<Character> monsterList = new ArrayList<>();
+    Character[][] monsterFormation = new Character[3][3];
+    boolean isBossBattle;
+    public BattleInfo(){}
+}

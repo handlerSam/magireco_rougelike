@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -54,6 +55,11 @@ public class BattleActivity extends AppCompatActivity {
     final public static int TEXT_RED = 0;
     final public static int TEXT_BLUE = 1;
     final public static int TEXT_GREEN = 2;
+
+    final public static int ACCELECOMBO = 0;
+    final public static int CHARGECOMBO = 1;
+    final public static int BLASTCOMBO = 2;
+    final public static int PUELLACOMBO = 3;
 
     public boolean isBossBattle = true;
 
@@ -972,6 +978,12 @@ public class BattleActivity extends AppCompatActivity {
     ImageView effectDetailHPBar;
     LinearLayout effectDetailEffectList;
 
+    ImageView acceleCombo;
+    ImageView chargeCombo;
+    ImageView blastCombo;
+    LinearLayout comboFrame;
+    TextView comboText;
+    StrokeTextView puellaCombo;
 
     ConstraintLayout backgroundLayout;
     ConstraintLayout skillDetailLayout;
@@ -1054,7 +1066,12 @@ public class BattleActivity extends AppCompatActivity {
         effectDetailHP = findViewById(R.id.effectDetailHP);
         effectDetailHPBar = findViewById(R.id.effectDetailHPBar);
         effectDetailEffectList = findViewById(R.id.effectDetailEffectList);
-
+        acceleCombo = findViewById(R.id.acceleCombo);
+        chargeCombo = findViewById(R.id.chargeCombo);
+        blastCombo = findViewById(R.id.blastCombo);
+        comboFrame = findViewById(R.id.comboFrame);
+        comboText = findViewById(R.id.comboText);
+        puellaCombo = findViewById(R.id.puellaCombo);
         connectConstraintLayout = findViewById(R.id.connectConstraintLayout);
         connectDetailText = findViewById(R.id.connectDetailText);
         charge_number_view = findViewById(R.id.charge_number_view);
@@ -1628,18 +1645,12 @@ public class BattleActivity extends AppCompatActivity {
 
     public void loadCharacter(){
         Formation formation = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
-        if(isBossBattle){
-            monsterFormation[1][1] = StartActivity.monsterList.get(0);
-            monsterFormation[0][1] = StartActivity.monsterList.get(0);
-            monsterFormation[2][1] = StartActivity.monsterList.get(0);
-            monsterFormation[1][0] = StartActivity.monsterList.get(0);
-            monsterFormation[1][2] = StartActivity.monsterList.get(0);
-        }else{
-            monsterFormation[0][0] = StartActivity.monsterList.get(0);
-            monsterFormation[1][0] = StartActivity.monsterList.get(1);
-            monsterFormation[1][2] = StartActivity.monsterList.get(2);
-            monsterFormation[2][0] = StartActivity.monsterList.get(3);
-        }
+
+        Intent receivedIntent = getIntent();
+        BattleInfo bi = StartActivity.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
+
+        monsterFormation = bi.monsterFormation;
+        isBossBattle = bi.isBossBattle;
 
 
         int count = 0;
@@ -2424,11 +2435,14 @@ public class BattleActivity extends AppCompatActivity {
             public void run() {
                 startRightAttack();
             }
-        }, 1000);
+        }, 1500);
 
-        //检查是否是charge\Charge三连
+        //检查是否是charge\charge三连
         boolean isChargeCombo = true;
         boolean isAcceleCombo = true;
+        boolean isBlastCombo = true;
+        boolean isPuella = true;
+        Character firstAttacker = null;
         for(int i = 0; i < 3; i++){
             if(smallPlateList[i] <= 4){
                 if(plateList[smallPlateList[i]].plate != CHARGE){
@@ -2437,9 +2451,34 @@ public class BattleActivity extends AppCompatActivity {
                 if(plateList[smallPlateList[i]].plate != ACCELE){
                     isAcceleCombo = false;
                 }
+                if(plateList[smallPlateList[i]].plate != BLAST_VERTICAL && plateList[smallPlateList[i]].plate != BLAST_HORIZONTAL){
+                    isBlastCombo = false;
+                }
+                if(smallPlateConnectToList[i] == null){
+                    //没有连携, 读取盘本来的人
+                    if(firstAttacker == null){
+                        firstAttacker = plateList[smallPlateList[i]].c;
+                    }else{
+                        if(firstAttacker != plateList[smallPlateList[i]].c){
+                            isPuella = false;
+                        }
+                    }
+                }else{
+                    //有连携, 读取连携的人
+                    if(firstAttacker == null){
+                        firstAttacker = smallPlateConnectToList[i];
+                    }else{
+                        if(firstAttacker != smallPlateConnectToList[i]){
+                            isPuella = false;
+                        }
+                    }
+                }
+
             }else{
                 isChargeCombo = false;
                 isAcceleCombo = false;
+                isBlastCombo = false;
+                isPuella = false;
                 break;
             }
         }
@@ -2449,8 +2488,8 @@ public class BattleActivity extends AppCompatActivity {
                 chargeNumber = 20;
             }
             updateChargeView();
-        }
-        if(isAcceleCombo){
+            showCombo(CHARGECOMBO);
+        }else if(isAcceleCombo){
             for(int i = 0; i < 3; i++){
                 for(int j = 0; j < 3; j++){
                     if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
@@ -2459,7 +2498,57 @@ public class BattleActivity extends AppCompatActivity {
                     }
                 }
             }
+            showCombo(ACCELE);
+        }else if(isBlastCombo){
+            showCombo(BLASTCOMBO);
+        }else if(isPuella){
+            showCombo(PUELLACOMBO);
         }
+    }
+
+    public void showCombo(int comboType){
+        View comboView = null;
+        switch(comboType){
+            case ACCELECOMBO:
+                comboView = acceleCombo;
+                comboText.setText("magia蓄能条增加");
+                break;
+            case CHARGECOMBO:
+                comboView = chargeCombo;
+                comboText.setText("charge数+2");
+                break;
+            case BLASTCOMBO:
+                comboView = blastCombo;
+                comboText.setText("伤害大幅提升");
+                break;
+            case PUELLACOMBO:
+                comboView = puellaCombo;
+                comboText.setText("伤害大幅提升");
+                break;
+        }
+        final View tempComboView = comboView;
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.combo_move);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                //connectArrowView[tempI].startAnimation(animation);
+                tempComboView.setVisibility(INVISIBLE);
+                comboFrame.setVisibility(INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        comboView.setVisibility(VISIBLE);
+        comboFrame.setVisibility(VISIBLE);
+        comboView.startAnimation(animation);
+        comboFrame.startAnimation(animation);
     }
 
     public void startRightAttack(){

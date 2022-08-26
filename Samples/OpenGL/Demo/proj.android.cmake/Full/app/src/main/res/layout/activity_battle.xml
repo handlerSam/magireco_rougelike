@@ -844,6 +844,81 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/acceleCombo"
+            android:background="@drawable/accele_combo"
+            android:visibility="invisible"
+            android:layout_width="782px"
+            android:layout_height="179px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/chargeCombo"
+            android:background="@drawable/charge_combo"
+            android:visibility="invisible"
+            android:layout_width="846px"
+            android:layout_height="219px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/blastCombo"
+            android:visibility="invisible"
+            android:background="@drawable/blast_combo"
+            android:layout_width="769px"
+            android:layout_height="216px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <com.live2d.rougelike.StrokeTextView
+            android:id="@+id/puellaCombo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5px"
+            android:layout_marginLeft="5px"
+            android:fontFamily="@font/plot"
+            android:text=" Puella Combo! "
+            android:textColor="@color/skillTextPink"
+            android:textSize="134px"
+            android:visibility="invisible"
+            app:backgroundColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:wide="15" />
+        <LinearLayout
+            android:id="@+id/comboFrame"
+            android:layout_width="606px"
+            android:layout_height="80px"
+            android:layout_marginStart="140px"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:background="@drawable/combo_frame"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/blastCombo">
+            <TextView
+                android:id="@+id/comboText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/info"
+                android:text="Charge数+2"
+                android:textColor="#FFFFFF"
+                android:textSize="43px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/effectDetailLayout"

@@ -190,7 +190,10 @@ public class TeamChooseActivity extends AppCompatActivity {
                             StartActivity.characters[i].realHP = characters[i].getRealMaxHP();
                         }
                     }
+                    Intent receivedIntent = getIntent();
+                    int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                     Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
+                    intent1.putExtra("battleInfo",battleId);
                     startActivity(intent1);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

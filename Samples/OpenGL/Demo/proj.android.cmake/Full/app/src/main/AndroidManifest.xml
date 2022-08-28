@@ -15,21 +15,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AdjustmentHouseActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".BattleActivity"
             android:exported="true"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".MapActivity"
             android:exported="true"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".FormationActivity"
             android:exported="true"
             android:screenOrientation="landscape" />
         <activity
             android:name=".StartActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,8 +49,8 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".DialogActivity"
-            android:exported="true"
             android:configChanges="orientation"
+            android:exported="true"
             android:screenOrientation="landscape" />
     </application>
 

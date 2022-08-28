@@ -67,10 +67,14 @@ public:
     void InitializeShader();
 
     /**
-    * @brief 更改背景
+    * @brief 更改pass背景图像
     */
     void ChangeBackground(std::string imageName);
 
+    /**
+    * @brief 更改画布尺寸
+    */
+    void ChangeBackgroundSize(int width, int height);
     /**
     * @brief 画像の初期化を行う。
     */

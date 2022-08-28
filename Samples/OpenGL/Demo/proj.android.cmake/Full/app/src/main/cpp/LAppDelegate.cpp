@@ -198,6 +198,10 @@ void LAppDelegate::ChangePassBackgroundName(string name){
     _view->ChangeBackground(name);
 }
 
+void LAppDelegate::ChangeScreenWidth(int width, int height){
+    _view->ChangeBackgroundSize(width, height);
+}
+
 GLuint LAppDelegate::CreateShader()
 {
     //バーテックスシェーダのコンパイル

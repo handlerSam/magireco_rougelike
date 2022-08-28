@@ -179,5 +179,10 @@ extern "C"
         LAppDelegate::GetInstance()->ChangePassBackgroundName(jstring2str(env, index));
     }
 
+JNIEXPORT void JNICALL
+Java_com_live2d_rougelike_JniBridgeJava_setScreenSize(JNIEnv *env, jclass type, jint width, jint height)
+{
+    LAppDelegate::GetInstance()->ChangeScreenWidth(width,height);
+}
 }
 

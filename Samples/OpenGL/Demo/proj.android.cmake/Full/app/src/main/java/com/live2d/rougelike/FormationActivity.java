@@ -46,7 +46,10 @@ public class FormationActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent receivedIntent = getIntent();
+                int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                 Intent intent1 = new Intent(FormationActivity.this, TeamChooseActivity.class);
+                intent1.putExtra("battleInfo",battleId);
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

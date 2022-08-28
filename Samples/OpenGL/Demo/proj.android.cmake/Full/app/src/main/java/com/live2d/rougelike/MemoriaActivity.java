@@ -289,7 +289,10 @@ public class MemoriaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 clearAllChoose();
+                Intent receivedIntent = getIntent();
+                int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                 Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
+                intent1.putExtra("battleInfo",battleId);
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -300,7 +303,10 @@ public class MemoriaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 clearAllChoose();
+                Intent receivedIntent = getIntent();
+                int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                 Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
+                intent1.putExtra("battleInfo",battleId);
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

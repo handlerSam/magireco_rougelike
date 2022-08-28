@@ -132,6 +132,11 @@ public:
     */
     void ChangePassBackgroundName(std::string name);
 
+    /**
+    * @brief 设置画布尺寸
+    */
+    void ChangeScreenWidth(int width, int height);
+
 private:
     /**
     * @brief   コンストラクタ

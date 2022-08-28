@@ -44,6 +44,18 @@ public class StartActivity extends AppCompatActivity {
 
     public static int SCREEN_HEIGHT = 0;
 
+    final public static int[] CHARACTER_BREAK_THROUGH_PRICE = new int[]{1,1,2};
+
+    final public static int CHARACTER_STAR_UP_PRICE = 5;
+
+    final public static int[] CHARACTER_CHANGE_PLATE_PRICE = new int[]{1,1,2,3,5,8};
+
+    public static int plate_change_time = 0;
+
+    public static int griefSeedNumber = 5;
+
+    public static int ccNumber = 40000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +71,16 @@ public class StartActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         SCREEN_HEIGHT = Math.min(metric.widthPixels,metric.heightPixels);  // 屏幕宽度（像素）
         SCREEN_WIDTH = Math.max(metric.widthPixels,metric.heightPixels);  // 屏幕高度（像素）
-
+        JniBridgeJava.setScreenSize(SCREEN_WIDTH,SCREEN_HEIGHT);
         Log.d("sam","screenWidth:"+SCREEN_WIDTH+", Height:"+SCREEN_HEIGHT);
 
-        Intent intent1 = new Intent(StartActivity.this, TeamChooseActivity.class);
-        intent1.putExtra("battleInfo",0);
+        //Intent intent1 = new Intent(StartActivity.this, TeamChooseActivity.class);
+        //intent1.putExtra("battleInfo",0);
+        //startActivity(intent1);
+        //finish();
+        //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+
+        Intent intent1 = new Intent(StartActivity.this, AdjustmentHouseActivity.class);
         startActivity(intent1);
         finish();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -71,9 +88,9 @@ public class StartActivity extends AppCompatActivity {
 
     public void initCharacterList(){
         Character remu = new Character();
-        remu.breakThrough = 3;
+        remu.breakThrough = 1;
         remu.element = "tree";
-        remu.name = "柊音梦";
+        remu.name = "柊 音梦";
         remu.choosingActivityImage = "team_choose_101400_1";
         remu.spriteName = "Hiiragi Nemu";
         remu.charIconImage = "card_10144_";
@@ -124,7 +141,7 @@ public class StartActivity extends AppCompatActivity {
         Character toca = new Character();
         toca.breakThrough = 4;
         toca.element = "fire";
-        toca.name = "里见灯花";
+        toca.name = "里见 灯花";
         toca.choosingActivityImage = "team_choose_100700_2";
         toca.charIconImage = "card_10074_";
         toca.magiaSkillIconName = "icon_skill_1014";
@@ -169,7 +186,7 @@ public class StartActivity extends AppCompatActivity {
         Character ui = new Character();
         ui.breakThrough = 3;
         ui.element = "dark";
-        ui.name = "环忧";
+        ui.name = "环 忧";
         ui.choosingActivityImage = "team_choose_101500_2";
         ui.charIconImage = "card_10154_";
         ui.magiaSkillIconName = "icon_skill_1014";
@@ -443,8 +460,8 @@ public class StartActivity extends AppCompatActivity {
 ////读取
 //        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
 //        String name = pref.getString("Name","tom");//后一个是如果没读到的默认值
-
     }
+
 }
 
 class Formation{

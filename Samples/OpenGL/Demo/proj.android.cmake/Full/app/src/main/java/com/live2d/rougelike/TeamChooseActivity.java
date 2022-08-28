@@ -131,7 +131,10 @@ public class TeamChooseActivity extends AppCompatActivity {
                         if(!isChangingToMemoria){
                             isChangingToMemoria = true;
                             MemoriaActivity.chooseCharacter = getCharacterIdInCharacterList(characters[temp]);
+                            Intent receivedIntent = getIntent();
+                            int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                             Intent intent1 = new Intent(TeamChooseActivity.this,MemoriaActivity.class);
+                            intent1.putExtra("battleInfo",battleId);
                             intent1.putExtra("touchMemoriaId",tempJ);
                             startActivity(intent1);
                             finish();
@@ -216,7 +219,10 @@ public class TeamChooseActivity extends AppCompatActivity {
         openFormation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent receivedIntent = getIntent();
+                int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                 Intent intent1 = new Intent(TeamChooseActivity.this, FormationActivity.class);
+                intent1.putExtra("battleInfo",battleId);
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

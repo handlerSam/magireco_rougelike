@@ -139,7 +139,7 @@ public class DialogActivity extends Activity {
                 }
             }
         };
-        live2dTimer.schedule(live2dTimerTask,100,50);
+        live2dTimer.schedule(live2dTimerTask,500,50);
 
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,8 +197,8 @@ public class DialogActivity extends Activity {
             }
         });
 
-        changeBackground(p.getBackgroundId());
 
+        JniBridgeJava.nativeOnStart();
         //getWindow().getDecorView().setSystemUiVisibility(
         //        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         //                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -212,34 +212,31 @@ public class DialogActivity extends Activity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        JniBridgeJava.nativeOnStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        _glSurfaceView.onResume();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
-        _glSurfaceView.onPause();
-        JniBridgeJava.nativeOnPause();
+        //_glSurfaceView.onPause();
+        //JniBridgeJava.nativeOnPause();
+        //JniBridgeJava.nativeOnStop();
+        //JniBridgeJava.nativeOnStart();
+        //_glSurfaceView.onResume();
+        //final Timer live2dTimer = new Timer();
+        //TimerTask live2dTimerTask = new TimerTask() {
+        //    @Override
+        //    public void run() {
+        //        setLive2d();
+        //        changeBackground(p.getBackgroundId());
+        //        live2dTimer.cancel();
+        //    }
+        //};
+        //live2dTimer.schedule(live2dTimerTask,500,50);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        JniBridgeJava.nativeOnStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        JniBridgeJava.nativeOnDestroy();
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!p.getBackgroundId().equals("")){
+            changeBackground(p.getBackgroundId());
+        }
     }
 
     @Override

@@ -51,6 +51,8 @@ public class JniBridgeJava {
 
     public static native void nativeChangeBackground(String name);
 
+    public static native void setScreenSize(int width, int height);
+
     // Java -----------------------------------------------------------------
 
     public static void SetContext(Context context) {

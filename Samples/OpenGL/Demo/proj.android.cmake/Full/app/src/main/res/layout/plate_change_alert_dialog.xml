@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/origin_plate"
+                android:layout_width="wrap_content"
+                android:layout_height="100px"
+                android:layout_marginHorizontal="10px"
+                android:adjustViewBounds="true"
+                android:src="@drawable/accele_small_plate" />
+
+            <ImageView
+                android:id="@+id/changeToArrow"
+                android:layout_width="51px"
+                android:layout_height="59px"
+                android:layout_marginStart="30px"
+                android:layout_marginEnd="30px"
+                android:background="@drawable/right_arrow" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/accele_plate_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:id="@+id/accele_plate_choose_arrow"
+                android:visibility="invisible"
+                android:layout_width="52px"
+                android:layout_height="38.5px"
+                android:layout_marginStart="30px"
+                android:layout_marginEnd="30px"
+                android:background="@drawable/character_chosen_plate" />
+            <ImageView
+                android:id="@+id/accele_plate"
+                android:layout_width="wrap_content"
+                android:layout_height="100px"
+                android:layout_marginHorizontal="10px"
+                android:adjustViewBounds="true"
+                android:src="@drawable/accele_small_plate" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/charge_plate_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:id="@+id/charge_plate_choose_arrow"
+                android:visibility="invisible"
+                android:layout_width="52px"
+                android:layout_height="38.5px"
+                android:layout_marginStart="30px"
+                android:layout_marginEnd="30px"
+                android:background="@drawable/character_chosen_plate" />
+            <ImageView
+                android:id="@+id/charge_plate"
+                android:layout_width="wrap_content"
+                android:layout_height="100px"
+                android:layout_marginHorizontal="10px"
+                android:adjustViewBounds="true"
+                android:src="@drawable/charge_small_plate" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/blast_vertical_plate_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:id="@+id/blast_vertical_plate_choose_arrow"
+                android:visibility="invisible"
+                android:layout_width="52px"
+                android:layout_height="38.5px"
+                android:layout_marginStart="30px"
+                android:layout_marginEnd="30px"
+                android:background="@drawable/character_chosen_plate" />
+            <ImageView
+                android:id="@+id/blast_vertical_plate"
+                android:layout_width="wrap_content"
+                android:layout_height="100px"
+                android:layout_marginHorizontal="10px"
+                android:adjustViewBounds="true"
+                android:src="@drawable/blast_vertical_small_plate" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/blast_horizontal_plate_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:id="@+id/blast_horizontal_plate_choose_arrow"
+                android:visibility="invisible"
+                android:layout_width="52px"
+                android:layout_height="38.5px"
+                android:layout_marginStart="30px"
+                android:layout_marginEnd="30px"
+                android:background="@drawable/character_chosen_plate" />
+            <ImageView
+                android:id="@+id/blast_horizontal_plate"
+                android:layout_width="wrap_content"
+                android:layout_height="100px"
+                android:layout_marginHorizontal="10px"
+                android:adjustViewBounds="true"
+                android:src="@drawable/blast_horizontal_small_plate" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

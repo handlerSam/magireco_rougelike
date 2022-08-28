@@ -38,7 +38,7 @@ public class CharacterIconAdapter extends RecyclerView.Adapter<CharacterIconAdap
             retreat = view.findViewById(R.id.retreat);
             starsLayout = view.findViewById(R.id.starsLayout);
             char_star = new ImageView[]{view.findViewById(R.id.char_star0),view.findViewById(R.id.char_star1),
-                    view.findViewById(R.id.char_star2),view.findViewById(R.id.char_star3),view.findViewById(R.id.char_star4),};
+                    view.findViewById(R.id.char_star2),view.findViewById(R.id.char_star3),view.findViewById(R.id.char_star4)};
         }
     }
 

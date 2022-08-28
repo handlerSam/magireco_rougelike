@@ -29,6 +29,9 @@ using namespace LAppDefine;
 string passBackgroundName = "";
 string nowBackgroundName = "";
 
+int screen_width = 800;
+int screen_height = 400;
+
 float LAppView::model_alpha;
 
 LAppView::LAppView():
@@ -121,6 +124,11 @@ void LAppView::ChangeBackground(string imageName){
     passBackgroundName = imageName;
 }
 
+void LAppView::ChangeBackgroundSize(int width, int height){
+    screen_height = height;
+    screen_width = width;
+}
+
 void LAppView::InitializeSprite()
 {
     int width = LAppDelegate::GetInstance()->GetWindowWidth();
@@ -130,12 +138,14 @@ void LAppView::InitializeSprite()
     const string resourcesPath = ResourcesPath;
 
     string imageName = BackImageName;
+    nowBackgroundName = BackImageName;
+    passBackgroundName = BackImageName;
     LAppTextureManager::TextureInfo* backgroundTexture = textureManager->CreateTextureFromPngFile(resourcesPath + imageName);
 
     float x = width * 0.5f;
     float y = height * 0.5f;
-    float fWidth = (backgroundTexture->width * 2.0f);
-    float fHeight = (height * 0.95f);
+    float fWidth = (screen_width);
+    float fHeight = (height);
 
     if(_back == NULL)
     {
@@ -208,7 +218,7 @@ void LAppView::Render()
 
         float x = width * 0.5f;
         float y = height * 0.5f;
-        float fWidth = (backgroundTexture->width * 2.2f);
+        float fWidth = (screen_width);
         float fHeight = (height);
         _back = new LAppSprite(x, y, fWidth, fHeight, backgroundTexture->id, _programId);
 

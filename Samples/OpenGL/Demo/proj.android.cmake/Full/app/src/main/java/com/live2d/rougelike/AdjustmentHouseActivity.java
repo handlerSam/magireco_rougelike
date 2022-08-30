@@ -3,6 +3,7 @@ package com.live2d.rougelike;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +30,8 @@ import static com.live2d.rougelike.CharacterPlateView.ACCELE;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_VERTICAL;
 import static com.live2d.rougelike.CharacterPlateView.CHARGE;
+import static com.live2d.rougelike.MemoriaActivity.isDesc;
+import static com.live2d.rougelike.MemoriaActivity.isOrderByLV;
 
 public class AdjustmentHouseActivity extends AppCompatActivity {
 
@@ -47,8 +52,16 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     RecyclerView cardsRecyclerView;
     ImageView back;
     LinearLayout memoria_list;
+    ImageView shop_trade;
+
+
 
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
+
+    TextView cc_number;
+    TextView grief_seed_number;
+
+    ShopMemoriaAdapter memoriaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +191,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                                             //正确逻辑
                                             StartActivity.griefSeedNumber -= StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1];
                                             c.breakThrough++;
+                                            updateCCAndGriefSeedView();
                                             character_breakthrough.performClick();
                                         }});
                                     dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -342,6 +356,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                                             StartActivity.griefSeedNumber -= price;
                                             StartActivity.plate_change_time++;
                                             c.plateList[tempJ] = changePlateTo;
+                                            updateCCAndGriefSeedView();
                                             character_plate_change.performClick();
                                         }});
                                 }else{
@@ -445,6 +460,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                                             //正确逻辑
                                             StartActivity.griefSeedNumber -= StartActivity.CHARACTER_STAR_UP_PRICE;
                                             c.star++;
+                                            updateCCAndGriefSeedView();
                                             character_star_up.performClick();
                                         }});
                                     dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -467,14 +483,48 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
             }
         });
 
-        ImageView memoria_breakthrough;
-        LinearLayout right_item_container;
-        TextView cardNumber;
-        ImageView order;
-        ImageView orderBy;
-        RecyclerView cardsRecyclerView;
-        LinearLayout memoria_list;
+        memoria_breakthrough.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                right_item_container.removeAllViews();
+                right_item_container.setVisibility(View.GONE);
+                memoria_list.setVisibility(View.VISIBLE);
 
+                memoriaAdapter = new ShopMemoriaAdapter(StartActivity.memoriaBag,AdjustmentHouseActivity.this);
+                cardsRecyclerView.setAdapter(memoriaAdapter);
+                StaggeredGridLayoutManager m = new StaggeredGridLayoutManager(6,StaggeredGridLayoutManager.VERTICAL);
+                cardsRecyclerView.setLayoutManager(m);
+
+                cardNumber.setText(""+StartActivity.memoriaBag.size()+"/400");
+
+                //初始化排序按钮及排序效果
+                orderBy.setImageResource(isOrderByLV? R.drawable.order2:R.drawable.order1);
+                updateSortedOutcome();
+                memoriaAdapter.notifyItemRangeChanged(0,StartActivity.memoriaBag.size());
+
+                orderBy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        isOrderByLV = !isOrderByLV;
+                        orderBy.setImageResource(isOrderByLV? R.drawable.order2:R.drawable.order1);
+                        updateSortedOutcome();
+                        memoriaAdapter.notifyItemRangeChanged(0,StartActivity.memoriaBag.size());
+                    }
+                });
+                order.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        isDesc = !isDesc;
+                        order.setImageResource(isDesc? R.drawable.desc:R.drawable.incr);
+                        updateSortedOutcome();
+                        memoriaAdapter.notifyItemRangeChanged(0,StartActivity.memoriaBag.size());
+                    }
+                });
+
+            }
+        });
+
+        updateCCAndGriefSeedView();
         character_breakthrough.performClick();
     }
 
@@ -507,6 +557,21 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         JniBridgeJava.nativeOnStart();
     }
 
+    public void updateSortedOutcome(){
+        Collections.sort(StartActivity.memoriaBag, new Comparator<Memoria>() {
+            @Override
+            public int compare(Memoria lhs, Memoria rhs) {
+                // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                int weight = 0;
+                if(isOrderByLV){
+                    return lhs.lvNow > rhs.lvNow ? (isDesc? -1:1) : (lhs.lvNow < rhs.lvNow ) ? (isDesc? 1:-1):(Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id)? -1:(Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1:0));
+                }else{
+                    return lhs.star > rhs.star ? (isDesc? -1:1) : (lhs.star < rhs.star ) ? (isDesc? 1:-1) :(Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id)? -1:(Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1:0));
+                }
+            }
+        });
+    }
+
     public void findView(){
         live2dContainer = findViewById(R.id.live2dContainer);
         character_breakthrough = findViewById(R.id.character_breakthrough);
@@ -520,6 +585,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         cardsRecyclerView = findViewById(R.id.cardsRecyclerView);
         back = findViewById(R.id.back);
         memoria_list = findViewById(R.id.memoria_list);
+        cc_number = findViewById(R.id.cc_number);
+        grief_seed_number = findViewById(R.id.grief_seed_number);
+        shop_trade = findViewById(R.id.shop_trade);
     }
 
     public void clearPlateChosen(View dialog_layout){
@@ -531,6 +599,11 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         blast_vertical_plate_choose_arrow.setVisibility(View.INVISIBLE);
         ImageView blast_horizontal_plate_choose_arrow = dialog_layout.findViewById(R.id.blast_horizontal_plate_choose_arrow);
         blast_horizontal_plate_choose_arrow.setVisibility(View.INVISIBLE);
+    }
+
+    void updateCCAndGriefSeedView(){
+        cc_number.setText(" "+StartActivity.ccNumber+" ");
+        grief_seed_number.setText(" "+StartActivity.griefSeedNumber+" ");
     }
 
     void changeBackground(String backgroundNumber){

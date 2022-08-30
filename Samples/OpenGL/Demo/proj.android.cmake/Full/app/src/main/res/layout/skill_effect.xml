@@ -14,7 +14,7 @@
             android:layout_marginStart="5px"
             android:layout_marginLeft="5px"
             android:fontFamily="@font/info"
-            android:text=" 变换 "
+            android:text=" 交易 "
             android:textColor="#FFFFFF"
             android:textSize="37px"
             android:visibility="visible"

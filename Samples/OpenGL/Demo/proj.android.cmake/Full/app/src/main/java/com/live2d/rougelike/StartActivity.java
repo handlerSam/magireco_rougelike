@@ -50,9 +50,11 @@ public class StartActivity extends AppCompatActivity {
 
     final public static int[] CHARACTER_CHANGE_PLATE_PRICE = new int[]{1,1,2,3,5,8};
 
+    final public static int[] MEMORIA_LV_UP_PRICE = new int[]{1,2,3};
+
     public static int plate_change_time = 0;
 
-    public static int griefSeedNumber = 5;
+    public static int griefSeedNumber = 15;
 
     public static int ccNumber = 40000;
 
@@ -431,8 +433,8 @@ public class StartActivity extends AppCompatActivity {
         for(int i = 0; i < USEDMEMORIA.length; i++){
             for(int j = 0; j < USEDMEMORIA[i].size(); j++){
                 Memoria m = new Memoria(""+USEDMEMORIA[i].get(j),StartActivity.this);
-                m.setBreakthrough(4);
-                m.setLv(m.lvMax);
+                m.setBreakthrough(0);
+                m.setLv(m.lvNow);
                 memoriaBag.add(m);
             }
         }

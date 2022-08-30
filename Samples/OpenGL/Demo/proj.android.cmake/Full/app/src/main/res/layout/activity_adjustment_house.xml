@@ -83,6 +83,16 @@
             android:background="@drawable/memoria_breakthrough"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/character_star_up" />
+
+        <ImageView
+            android:id="@+id/shop_trade"
+            android:layout_width="243px"
+            android:layout_height="365px"
+            android:layout_marginTop="200px"
+            android:layout_marginEnd="150px"
+            android:background="@drawable/shop_trade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/memoria_breakthrough" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -170,5 +180,62 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15px"
+        android:layout_marginEnd="150px"
+        android:layout_marginRight="150px"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/cc_frame"
+            android:layout_marginEnd="50px"
+            android:layout_width="241px"
+            android:layout_height="63px">
+
+            <TextView
+                android:id="@+id/cc_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32px"
+                android:fontFamily="@font/info"
+                android:text=" 55000 "
+                android:textColor="@color/itemTextYellow"
+                android:textSize="28px"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="01"
+                android:shadowColor="#000000"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/grief_seed_frame"
+            android:layout_width="264px"
+            android:layout_height="135px">
+            <TextView
+                android:id="@+id/grief_seed_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32px"
+                android:fontFamily="@font/info"
+                android:text=" 15 "
+                android:textColor="@color/itemTextYellow"
+                android:textSize="28px"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="01"
+                android:shadowColor="#000000"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

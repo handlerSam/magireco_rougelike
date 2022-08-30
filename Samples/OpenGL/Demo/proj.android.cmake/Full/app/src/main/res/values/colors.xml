@@ -21,4 +21,5 @@
     <color name="black">#000000</color>
     <color name="chargeYellow">#f0a321</color>
     <color name="infoLayoutBrown">#b28750</color>
+    <color name="itemTextYellow">#ffe290</color>
 </resources>

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ public class CardView extends ConstraintLayout {
     ImageView equippingView;
     StrokeTextView lvView;
     LinearLayout unableToEquipView;
+    TextView unable_text_view;
     View v;
     Context context;
     int nowLv = 1;
@@ -65,6 +67,7 @@ public class CardView extends ConstraintLayout {
         equippingView = v.findViewById(R.id.equippingView);
         lvView = v.findViewById(R.id.lvView);
         unableToEquipView = v.findViewById(R.id.unableToEquip);
+        unable_text_view = v.findViewById(R.id.unable_text_view);
     }
 
     public void setMemoria(String id){
@@ -101,6 +104,10 @@ public class CardView extends ConstraintLayout {
         lvView.setVisibility(INVISIBLE);
         equippingView.setVisibility(INVISIBLE);
         memoriaView.setImageResource(R.drawable.empty_card);
+    }
+
+    public void setUnableTextView(String text){
+        unable_text_view.setText(text);
     }
 
     public void setEquippingResource(boolean isEquippedByOthers){

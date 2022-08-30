@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/skill_origin_attr"
+                android:layout_width="400px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/skillTextPink"
+                android:textSize="30px"
+                android:layout_marginBottom="15px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/skill_origin_description"
+                android:layout_width="400px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorShader"
+                android:textSize="30px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.live2d.rougelike.CardView
+                android:id="@+id/left_memoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/empty_break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/empty_break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/empty_break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/empty_break_through" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/changeToArrow"
+            android:layout_width="51px"
+            android:layout_height="59px"
+            android:layout_marginStart="30px"
+            android:layout_marginEnd="30px"
+            android:background="@drawable/right_arrow" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.live2d.rougelike.CardView
+                android:id="@+id/right_memoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/skill_after_attr"
+                android:layout_width="400px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/skillTextPink"
+                android:textSize="30px"
+                android:layout_marginBottom="15px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/skill_after_description"
+                android:layout_width="400px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorShader"
+                android:textSize="30px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

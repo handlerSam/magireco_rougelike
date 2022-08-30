@@ -568,6 +568,17 @@ class Memoria{
         return allEffect;
     }
 
+    public String getEffectDescription(boolean isAfter){
+        String allEffect = "";
+        for(int j = 0; j < (isAfter? effectAfterList.size():effectOriginList.size()); j++){
+            if(j != 0){
+                allEffect += "\n";
+            }
+            allEffect += (isAfter? effectAfterList:effectOriginList).get(j).getEffectDescription();
+        }
+        return allEffect;
+    }
+
     public int getRealHP(){
         return (int)((HPAfter - HPOrigin) * 1.0f * (lvNow - 1) / lvMax) + HPOrigin;
     }
@@ -609,7 +620,7 @@ class SkillEffect{
         if(valueTime != 0){
             allEffect += "(" + valueTime + "T)";
         }
-        if(probability == 100){
+        if(probability == 100 || !hasProbability(name)){
             if(value > 0 && hasValue(name)){
                 allEffect += "[" + value + "%]";
             }
@@ -617,11 +628,11 @@ class SkillEffect{
             if(value > 0 && hasValue(name)){
                 allEffect += "(" + value + "%)";
             }
-            allEffect += "[发动率: "+ probability + "%]";
+            allEffect += "[发动率:"+ probability + "%]";
         }
         if(!target.equals("")){
             allEffect += "(" + target;
-            if(time != 0){
+            if(time != 0 && hasTime(name)){
                 allEffect += "/" + time + "T";
             }
             allEffect += ")";
@@ -635,6 +646,8 @@ class SkillEffect{
             case "回避无效": case "反击无效":
             case "毒无效":case "挑拨无效": case "诅咒无效":
             case "雾无效": case "忍耐":
+            case "挑拨":case "追击":case "反击":case "回避":
+            case "暴击":case "保护同伴":
             case "烧伤无效":case "黑暗无效":case "技能封印无效":
             case "魅惑无效": case "DEBUFF无效":
             case "无视防御力": case "伤害削减无效":
@@ -653,6 +666,53 @@ class SkillEffect{
             case "给予状态拘束":case "给予状态雾":case "给予状态MP回复禁止":
             case "给予状态黑暗":case "Magia封印": case "技能封印":
                 return false;
+        }
+        return true;
+    }
+
+    public boolean hasProbability(String efName){
+        switch(efName){
+            case "攻击时给予状态雾": case "攻击时给予状态黑暗": case "攻击时给予状态幻惑":
+            case "攻击时给予状态毒":case "攻击时给予状态烧伤": case "攻击时给予状态诅咒":
+            case "挑拨":case "追击":case "反击":case "回避":
+            case "暴击":case "保护同伴": case "Magia封印无效":
+            case "回避无效": case "反击无效":
+            case "毒无效":case "挑拨无效": case "诅咒无效":
+            case "雾无效": case "忍耐":
+            case "烧伤无效":case "黑暗无效":case "技能封印无效":
+            case "魅惑无效": case "DEBUFF无效":
+            case "无视防御力": case "伤害削减无效":
+            case "眩晕无效": case "技能冷却加速":
+            case "拘束无效": case "幻惑无效":
+            case "攻击时给予状态魅惑":case "攻击时给予状态眩晕": case "攻击时给予状态拘束":
+            case "攻击时给予状态Magia封印":case "攻击时给予状态技能封印":
+            case "攻击时给予状态HP回复禁止":case "攻击时给予状态MP回复禁止":
+            case "BUFF解除":  case "DEBUFF解除": case "异常状态解除":
+            case "MP伤害":case "MP回复":
+            case "给予状态黑暗":case "给予状态雾":case "给予状态幻惑":
+            case "给予状态毒": case "给予状态烧伤":case "给予状态诅咒":
+            case "给予状态技能封印":case "给予状态魅惑":case "给予状态眩晕":
+            case "给予状态拘束":case "给予状态MP回复禁止":case "给予状态HP回复禁止":
+            case "Magia封印": case "技能封印":
+                return true;
+        }
+        return false;
+    }
+
+    public boolean hasTime(String efName){
+        switch(efName){
+            case "HP最大时防御力UP":
+            case "Blast攻击时MP获得":
+            case "HP最大时攻击力UP":
+            case "战斗不能时获得防御力UP": case "战斗不能时获得攻击力UP":
+            case "状态异常1回无效":
+            case "重抽为Accele的Disc":
+            case "重抽为Blast的Disc":case "重抽Disc":
+            case "重抽为同属性的Disc":case "重抽为Charge的Disc":
+            case "BUFF解除":  case "DEBUFF解除": case "异常状态解除":
+            case "重抽为自己的Disc":
+            case "MP伤害":case "MP回复": case "以MP积累状态开始战斗":case "HP回复":
+            return false;
         }
         return true;
     }

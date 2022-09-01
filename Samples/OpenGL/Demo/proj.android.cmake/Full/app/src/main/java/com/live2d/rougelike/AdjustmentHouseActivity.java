@@ -53,11 +53,12 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     ImageView back;
     LinearLayout memoria_list;
     ImageView shop_trade;
-
-
-
+    ConstraintLayout shop_frame;
+    LinearLayout shop_list_first_row;
+    LinearLayout shop_list_second_row;
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
 
+    Collection[][] shopCollectionList = new Collection[2][3];
     TextView cc_number;
     TextView grief_seed_number;
 
@@ -124,6 +125,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 right_item_container.removeAllViews();
                 right_item_container.setVisibility(View.VISIBLE);
                 memoria_list.setVisibility(View.GONE);
+                shop_frame.setVisibility(View.GONE);
                 for(int i = 0; i < StartActivity.characterList.size(); i++){
                     final Character c = StartActivity.characterList.get(i);
                     View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_break_through_item, right_item_container, false);
@@ -229,6 +231,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 right_item_container.removeAllViews();
                 right_item_container.setVisibility(View.VISIBLE);
                 memoria_list.setVisibility(View.GONE);
+                shop_frame.setVisibility(View.GONE);
                 for(int i = 0; i < StartActivity.characterList.size(); i++){
                     final Character c = StartActivity.characterList.get(i);
                     View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_plate_change_item, right_item_container, false);
@@ -383,6 +386,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 right_item_container.removeAllViews();
                 right_item_container.setVisibility(View.VISIBLE);
                 memoria_list.setVisibility(View.GONE);
+                shop_frame.setVisibility(View.GONE);
                 for(int i = 0; i < StartActivity.characterList.size(); i++){
                     final Character c = StartActivity.characterList.get(i);
                     View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_star_up_item, right_item_container, false);
@@ -489,6 +493,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 right_item_container.removeAllViews();
                 right_item_container.setVisibility(View.GONE);
                 memoria_list.setVisibility(View.VISIBLE);
+                shop_frame.setVisibility(View.GONE);
 
                 memoriaAdapter = new ShopMemoriaAdapter(StartActivity.memoriaBag,AdjustmentHouseActivity.this);
                 cardsRecyclerView.setAdapter(memoriaAdapter);
@@ -520,6 +525,96 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                         memoriaAdapter.notifyItemRangeChanged(0,StartActivity.memoriaBag.size());
                     }
                 });
+
+            }
+        });
+
+        //设置商店的商品
+        //暂时读取collectionList前六个商品,后续需要修改
+        for(int i = 0; i < 6; i++){
+            Collection c = StartActivity.collectionList.get(i);
+            if(i < 3){
+                shopCollectionList[0][i] = c;
+            }else{
+                shopCollectionList[1][i-3] = c;
+            }
+        }
+
+        shop_trade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                right_item_container.setVisibility(View.GONE);
+                memoria_list.setVisibility(View.GONE);
+                shop_frame.setVisibility(View.VISIBLE);
+                shop_list_first_row.removeAllViews();
+                shop_list_second_row.removeAllViews();
+                for(int i = 0; i < 2; i++){
+                    for(int j = 0; j < 3; j++){
+                        final Collection c = shopCollectionList[i][j];
+                        View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.shop_item, i == 0? shop_list_first_row:shop_list_second_row, false);
+                        ImageView shop_item_image = item.findViewById(R.id.shop_item_image);
+                        TextView shop_item_name = item.findViewById(R.id.shop_item_name);
+                        TextView shop_item_price = item.findViewById(R.id.shop_item_price);
+                        ImageView cc_icon = item.findViewById(R.id.cc_icon);
+                        shop_item_image.setBackgroundResource(getResourceByString(c.icon));
+                        shop_item_name.setText(c.name);
+                        if(c.isOwn){
+                            shop_item_price.setText("-售罄-");
+                            cc_icon.setVisibility(View.GONE);
+                            item.setAlpha(0.5f);
+                        }else{
+                            shop_item_price.setText(""+c.price);
+                            cc_icon.setVisibility(View.VISIBLE);
+                            item.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    final View dialog_layout = getLayoutInflater().inflate(R.layout.shop_item_alert_dialog,null,false);
+                                    ImageView shop_item_image = dialog_layout.findViewById(R.id.shop_item_image);
+                                    TextView shop_item_name = dialog_layout.findViewById(R.id.shop_item_name);
+                                    TextView shop_item_effect_description = dialog_layout.findViewById(R.id.shop_item_effect_description);
+                                    TextView shop_item_description = dialog_layout.findViewById(R.id.shop_item_description);
+
+                                    shop_item_image.setBackgroundResource(getResourceByString(c.icon));
+                                    shop_item_name.setText(c.name);
+                                    shop_item_effect_description.setText(c.effectDescription);
+                                    shop_item_description.setText(c.description);
+
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(AdjustmentHouseActivity.this);
+                                    //dialog.setTitle("购买");//标题
+                                    if(StartActivity.ccNumber >= c.price){
+                                        dialog.setMessage("将花费 "+ c.price + "cc 购买以下商品:");//正文
+                                        dialog.setView(dialog_layout);
+                                        dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
+                                        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //正确逻辑
+                                                StartActivity.ccNumber -= c.price;
+                                                c.isOwn = true;
+                                                updateCCAndGriefSeedView();
+                                                shop_trade.performClick();
+                                            }});
+                                    }else{
+                                        dialog.setMessage("购买商品需要 "+ c.price + "cc , cc不足.");//正文
+                                        dialog.setView(dialog_layout);
+                                    }
+                                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            //错误逻辑
+                                        }});
+                                    dialog.show();
+                                }
+                            });
+
+                        }
+                        if(i == 0){
+                            shop_list_first_row.addView(item);
+                        }else{
+                            shop_list_second_row.addView(item);
+                        }
+                    }
+                }
 
             }
         });
@@ -588,6 +683,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         cc_number = findViewById(R.id.cc_number);
         grief_seed_number = findViewById(R.id.grief_seed_number);
         shop_trade = findViewById(R.id.shop_trade);
+        shop_frame = findViewById(R.id.shop_frame);
+        shop_list_first_row = findViewById(R.id.shop_list_first_row);
+        shop_list_second_row = findViewById(R.id.shop_list_second_row);
     }
 
     public void clearPlateChosen(View dialog_layout){
@@ -600,6 +698,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         ImageView blast_horizontal_plate_choose_arrow = dialog_layout.findViewById(R.id.blast_horizontal_plate_choose_arrow);
         blast_horizontal_plate_choose_arrow.setVisibility(View.INVISIBLE);
     }
+
+
 
     void updateCCAndGriefSeedView(){
         cc_number.setText(" "+StartActivity.ccNumber+" ");

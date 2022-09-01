@@ -3665,7 +3665,7 @@ public class BattleActivity extends AppCompatActivity {
                                     if(rightCharList[tempI][tempJ].c.realHP > 0){
                                         rightCharList[tempI][tempJ].spriteName = "damage";
                                         changeSprite(tempI, tempJ,true);
-                                        rightCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                        //rightCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
                                     }
                                     sendEffect(e,tempI,tempJ,true,false);
                                 }
@@ -3710,7 +3710,7 @@ public class BattleActivity extends AppCompatActivity {
                                         if(leftCharList[tempI][tempJ].c.realHP > 0){
                                             leftCharList[tempI][tempJ].spriteName = "damage";
                                             changeSprite(tempI, tempJ,false);
-                                            leftCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
+                                            //leftCharList[tempI][tempJ].webView.loadUrl("javascript:setAnimationIndex(" + 6 + ")");
                                         }
                                         sendEffect(e,tempI,tempJ,false,false);
                                     }

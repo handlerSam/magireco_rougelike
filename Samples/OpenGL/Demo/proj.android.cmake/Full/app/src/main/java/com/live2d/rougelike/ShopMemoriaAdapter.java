@@ -76,16 +76,16 @@ public class ShopMemoriaAdapter extends RecyclerView.Adapter<ShopMemoriaAdapter.
 
                     final int price = StartActivity.MEMORIA_LV_UP_PRICE[m.star-2];
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    dialog.setTitle("记忆升级: "+m.name);//标题
+                    //dialog.setTitle("记忆升级: "+m.name);//标题
                     dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
                     dialog.setView(dialog_layout);
-                    if(price <= StartActivity.griefSeedNumber){
-                        dialog.setMessage("将花费 "+ price +" 个悲叹之种对记忆进行升级: ");//正文
+                    if(price <= StartActivity.ccNumber){
+                        dialog.setMessage("将花费 "+ price +" cc对记忆进行升级: ");//正文
                         dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //正确逻辑
-                                StartActivity.griefSeedNumber -= price;
+                                StartActivity.ccNumber -= price;
                                 m.setBreakthrough(4);
                                 m.setLv(m.lvMax);
                                 ((AdjustmentHouseActivity)context).updateCCAndGriefSeedView();

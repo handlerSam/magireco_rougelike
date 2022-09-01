@@ -59,7 +59,7 @@
             android:layout_width="243px"
             android:layout_height="365px"
             android:layout_marginStart="150px"
-            android:layout_marginTop="200px"
+            android:layout_marginTop="180px"
             android:background="@drawable/character_plate_change"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -68,7 +68,7 @@
             android:id="@+id/character_star_up"
             android:layout_width="243px"
             android:layout_height="365px"
-            android:layout_marginTop="200px"
+            android:layout_marginTop="180px"
             android:layout_marginEnd="150px"
             android:background="@drawable/character_star_up"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
             android:layout_width="243px"
             android:layout_height="365px"
             android:layout_marginStart="150px"
-            android:layout_marginTop="200px"
+            android:layout_marginTop="180px"
             android:background="@drawable/memoria_breakthrough"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/character_star_up" />
@@ -88,7 +88,7 @@
             android:id="@+id/shop_trade"
             android:layout_width="243px"
             android:layout_height="365px"
-            android:layout_marginTop="200px"
+            android:layout_marginTop="180px"
             android:layout_marginEnd="150px"
             android:background="@drawable/shop_trade"
             app:layout_constraintEnd_toEndOf="parent"
@@ -179,6 +179,70 @@
                 android:layout_marginBottom="15px" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/shop_frame"
+        android:layout_width="1290px"
+        android:layout_height="875.15px"
+        android:layout_marginTop="50px"
+        android:background="@drawable/shop_item_list_frame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.live2d.rougelike.StrokeTextView
+            android:id="@+id/strokeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35px"
+            android:layout_marginTop="12px"
+            android:fontFamily="@font/info"
+            android:text=" 交易 "
+            android:textColor="#FFFFFF"
+            android:textSize="40px"
+            android:visibility="visible"
+            app:backgroundColor="@color/skillTextPink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:wide="7" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/strokeTextView">
+
+            <LinearLayout
+                android:id="@+id/shop_list_first_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/strokeTextView">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shop_list_second_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32px"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shop_list_first_row">
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"

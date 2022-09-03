@@ -2,6 +2,7 @@ package com.live2d.rougelike;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.customview.widget.ViewDragHelper;
 
 import android.graphics.Matrix;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public class MapActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -21,6 +23,9 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     private float mapX = 0;
     private float mapY = 0;
     private ConstraintLayout kamihamaMap;
+
+    private SpriteViewer leader;
+
     //private ViewDragHelper mDragHelper;
 //    private float scale = 1;
 
@@ -37,8 +42,8 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        kamihamaMap = findViewById(R.id.kamihamaMap);
-        kamihamaMap.setOnTouchListener(this);
+        findView();
+        initView();
         //mDragHelper = ViewDragHelper.create((ViewGroup)(findViewById(R.id.rootActivity)),1.0f, callback);
     }
 
@@ -135,45 +140,38 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 //        super.onBackPressed();
     }
 
-//    private ViewDragHelper.Callback callback = new ViewDragHelper.Callback() {
-//        /**
-//         * 用于判断是否捕获当前child的触摸事件
-//         *
-//         * @param child
-//         *            当前触摸的子view
-//         * @param pointerId
-//         * @return true就捕获并解析；false不捕获
-//         */
-//        @Override
-//        public boolean tryCaptureView(View child, int pointerId) {
-//            return true;
-//        }
-//
-//        /**
-//         * 控制水平方向上的位置
-//         */
-//        @Override
-//        public int clampViewPositionHorizontal(View child, int left, int dx) {
-//            Log.d("Sam", "Horizontal Move");
-////            if (left < (screenWidth - screenWidth * scaleMultiple) / 2){
-////                left = (int) (screenWidth - screenWidth * scaleMultiple) / 2;// 限制mainView可向左移动到的位置
-////            }
-////            if (left > (screenWidth * scaleMultiple - screenWidth) / 2){
-////                left = (int) (screenWidth * scaleMultiple - screenWidth) / 2;// 限制mainView可向右移动到的位置
-////            }
-//            return left;
-//        }
-//
-//        public int clampViewPositionVertical(View child, int top, int dy) {
-////            if (top < (screenHeight - screenHeight * scaleMultiple) / 2) {
-////                top = (int) (screenHeight - screenHeight * scaleMultiple) / 2;// 限制mainView可向上移动到的位置
-////            }
-////            if (top > (screenHeight * scaleMultiple - screenHeight) / 2) {
-////                top = (int) (screenHeight * scaleMultiple - screenHeight) / 2;// 限制mainView可向上移动到的位置
-////            }
-//            return top;
-//        }
-//
-//    };
+    public void findView(){
+        kamihamaMap = findViewById(R.id.kamihamaMap);
+//        leader = findViewById(R.id.leader);
+    }
 
+    public void initView(){
+        kamihamaMap.setOnTouchListener(this);
+
+
+        //初始化角色小人
+//        Log.d("Sam","initLeader");
+//        Character temp = null;
+//        for(int i = 0; i < StartActivity.characters.length; i++){
+//            if(StartActivity.characters[i] != null && StartActivity.characters[i].isLeader){
+//                temp = StartActivity.characters[i];
+//                break;
+//            }
+//        }
+//        leader.charName = temp.spriteName;
+//        leader.spriteName = "wait";
+//        leader.prefix = "mini_";
+//        leader.canvasWidth = 500;
+//        //leader.webView.loadUrl("javascript:setCanvasWidth("+ leader.canvasWidth +")");
+//        //leader.webView.loadUrl("javascript:changeCharacter()");
+//
+//        ConstraintSet sampleSet = new ConstraintSet();
+//        sampleSet.clone(kamihamaMap);
+//        sampleSet.connect(leader.getId(),ConstraintSet.START,kamihamaMap.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/2-150);
+//        sampleSet.connect(leader.getId(),ConstraintSet.TOP,kamihamaMap.getId(),ConstraintSet.TOP,StartActivity.SCREEN_HEIGHT/2-150);
+//        sampleSet.applyTo(kamihamaMap);
+//        leader.setVisibility(View.VISIBLE);
+//        //leader.resetCharacter();
+//        //leader.webView.loadUrl("javascript:changeSprite()");
+    }
 }

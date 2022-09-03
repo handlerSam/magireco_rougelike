@@ -85,6 +85,7 @@ var SpriteLayer = cc.Layer.extend({
         Handler_armature.y = (size.height / 2) - offset;
         this.addChild(Handler_armature);
 
+
         // var stringAnimations = "";
         // for (var i in armature.getAnimation()._animationData.movementNames){
         //     if (armature.getAnimation()._animationData.movementNames[i] == "wait" ||

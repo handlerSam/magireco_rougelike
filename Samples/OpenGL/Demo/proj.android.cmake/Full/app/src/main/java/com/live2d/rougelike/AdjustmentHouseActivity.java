@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Timer;
@@ -113,7 +114,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(AdjustmentHouseActivity.this, TeamChooseActivity.class);
-                intent1.putExtra("battleInfo",0);
+                intent1.putExtra("battleInfo",1);
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -530,9 +531,17 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         });
 
         //设置商店的商品
-        //暂时读取collectionList前六个商品,后续需要修改
+        //随机取六个商品
+        ArrayList<Collection> tempShopItemList = new ArrayList<>();
+        while(tempShopItemList.size() < 6){
+            int id = (int)(Math.random()*StartActivity.collectionList.size());
+            Collection c = StartActivity.collectionList.get(id);
+            if(!tempShopItemList.contains(c)){
+                tempShopItemList.add(c);
+            }
+        }
         for(int i = 0; i < 6; i++){
-            Collection c = StartActivity.collectionList.get(i);
+            Collection c = tempShopItemList.get(i);
             if(i < 3){
                 shopCollectionList[0][i] = c;
             }else{

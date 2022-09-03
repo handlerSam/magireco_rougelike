@@ -4,4 +4,7 @@
         <attr name="backgroundColor" format="color"></attr>
         <attr name="wide" format="integer"></attr>
     </declare-styleable>
+    <declare-styleable name="SpriteViewer">
+        <attr name="canvasWide" format="integer"></attr>
+    </declare-styleable>
 </resources>

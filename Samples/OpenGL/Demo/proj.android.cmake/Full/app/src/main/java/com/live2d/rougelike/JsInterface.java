@@ -12,6 +12,10 @@ class JsInterface{
         this.battleActivity = battleActivity;
     }
 
+    public JsInterface(SpriteViewer spriteViewer){
+        this.spriteViewer = spriteViewer;
+    }
+
     @JavascriptInterface
     public void hideView(){
         Message msg = Message.obtain();

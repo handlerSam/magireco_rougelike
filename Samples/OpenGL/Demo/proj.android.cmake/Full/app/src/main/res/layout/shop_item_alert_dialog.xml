@@ -27,7 +27,7 @@
             android:fontFamily="@font/info"
             android:text="火之宝石"
             android:textColor="@color/colorShader"
-            android:textSize="32px"
+            android:textSize="38px"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
             android:fontFamily="@font/info"
             android:text="用于强化角色的宝石"
             android:textColor="@color/colorShader"
-            android:textSize="28px"
+            android:textSize="32px"
             android:visibility="visible" />
         <TextView
             android:id="@+id/shop_item_description"
@@ -58,7 +58,7 @@
             android:textColor="@color/colorShader"
             android:layout_marginTop="5px"
             android:alpha="0.8"
-            android:textSize="28px"
+            android:textSize="32px"
             android:visibility="visible" />
     </LinearLayout>
 </LinearLayout>

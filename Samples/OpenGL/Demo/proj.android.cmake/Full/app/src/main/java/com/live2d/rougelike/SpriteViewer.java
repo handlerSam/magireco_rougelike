@@ -3,6 +3,7 @@ package com.live2d.rougelike;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.http.SslError;
 import android.os.Build;
@@ -47,38 +48,45 @@ public class SpriteViewer extends ConstraintLayout {
 
     public Character c; //此character为只读！
 
+    public boolean isBattle = false;
+
     public String charName = "street_day"; // resources.js中角色的name字段
     public String spriteName = "all_f_f"; //example: wait,留空就可以在log看到所有的动作名字
                                     // all_f_f all_n_f all_g_f
     public String prefix = "bg_quest_"; //对于背景:bg_quest_  对于人物:mini_
 
     public int canvasWidth = 1200;//恒定为1200，不改变
+
+    TypedArray ta;
+
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message message) {
-            switch (message.what){
-                case 0:
-                    webView.setVisibility(View.VISIBLE);
-                    ((BattleActivity)context).loadedSpriteNumber++;
-                    if(((BattleActivity)context).loadedSpriteNumber == ((BattleActivity)context).totalSpriteNumber){
-                        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((BattleActivity)context).tipLayout, "alpha", 1f, 0);
-                        fadeOut.setDuration(1000);
-                        fadeOut.start();
-                        if(!((BattleActivity)context).randomChoosePlates()){
-                            //说明没有可行动角色
-                            ((BattleActivity)context).startLeftAttack();
-                        }else{
-                            ((BattleActivity)context).showPlate();
-                        }
+            if(isBattle){
+                switch (message.what){
+                    case 0:
+                        webView.setVisibility(View.VISIBLE);
+                        ((BattleActivity)context).loadedSpriteNumber++;
+                        if(((BattleActivity)context).loadedSpriteNumber == ((BattleActivity)context).totalSpriteNumber){
+                            ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((BattleActivity)context).tipLayout, "alpha", 1f, 0);
+                            fadeOut.setDuration(1000);
+                            fadeOut.start();
+                            if(!((BattleActivity)context).randomChoosePlates()){
+                                //说明没有可行动角色
+                                ((BattleActivity)context).startLeftAttack();
+                            }else{
+                                ((BattleActivity)context).showPlate();
+                            }
 
-                    }else{
-                        ((BattleActivity)context).tipLayout.setVisibility(VISIBLE);
-                    }
-                    break;
-                case 1:
-                    webView.setVisibility(View.GONE);
-                    break;
-                default:
+                        }else{
+                            ((BattleActivity)context).tipLayout.setVisibility(VISIBLE);
+                        }
+                        break;
+                    case 1:
+                        webView.setVisibility(View.GONE);
+                        break;
+                    default:
+                }
             }
             return true;
         }
@@ -87,7 +95,13 @@ public class SpriteViewer extends ConstraintLayout {
     @SuppressLint("JavascriptInterface")
     public SpriteViewer(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        isBattle = false;
         this.context = context;
+
+        //load canvasWide from attrs
+        ta = context.obtainStyledAttributes(attrs,R.styleable.SpriteViewer);
+        canvasWidth = ta.getInt(R.styleable.SpriteViewer_canvasWide,1200);
+
         View v = LayoutInflater.from(context).inflate(R.layout.sprite_viewer_layout, SpriteViewer.this);
         webView = v.findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -143,13 +157,13 @@ public class SpriteViewer extends ConstraintLayout {
         });
         webView.setBackgroundColor(Color.parseColor("#00000000"));
 
-        webView.addJavascriptInterface(new JsInterface(this, (BattleActivity)context),"AndroidMethod");
-        webView.setVisibility(GONE);
+        webView.addJavascriptInterface(new JsInterface(this),"AndroidMethod");
     }
 
     @SuppressLint("JavascriptInterface")
     public SpriteViewer(@NonNull Context context, boolean isEmpty) {
         super(context);
+        isBattle = true;
         if(!isEmpty){
             this.context = context;
             View v = LayoutInflater.from(context).inflate(R.layout.sprite_viewer_layout, SpriteViewer.this);

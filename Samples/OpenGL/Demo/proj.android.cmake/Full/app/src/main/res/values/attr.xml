@@ -6,5 +6,7 @@
     </declare-styleable>
     <declare-styleable name="SpriteViewer">
         <attr name="canvasWide" format="integer"></attr>
+        <attr name="scale" format="float"></attr>
+        <attr name="offset" format="integer"></attr>
     </declare-styleable>
 </resources>

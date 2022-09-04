@@ -4124,6 +4124,15 @@ public class BattleActivity extends AppCompatActivity {
             }
         }
         Toast.makeText(this,"胜利",Toast.LENGTH_LONG).show();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent1 = new Intent(BattleActivity.this, MapActivity.class);
+                startActivity(intent1);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+            }
+        },5000);
     }
 
     public void lose(){

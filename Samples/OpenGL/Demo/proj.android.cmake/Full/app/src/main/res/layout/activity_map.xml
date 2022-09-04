@@ -15,14 +15,85 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<!--        <com.live2d.rougelike.SpriteViewer-->
-<!--            android:id="@+id/leader"-->
-<!--            android:layout_width="500px"-->
-<!--            android:layout_height="500px"-->
-<!--            app:canvasWide="300"-->
+<!--        <ImageView-->
+<!--            android:layout_width="50px"-->
+<!--            android:layout_height="63px"-->
+<!--            android:layout_marginStart="2048px"-->
+<!--            android:layout_marginTop="1024px"-->
+<!--            android:background="@drawable/map_mark_battle"-->
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <com.live2d.rougelike.SpriteViewer
+            android:id="@+id/leader"
+            android:layout_width="80px"
+            android:layout_height="110px"
+            app:canvasWide="600"
+            app:scale="0.5"
+            app:offset="145"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/events_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15px"
+        android:layout_marginEnd="150px"
+        android:layout_marginRight="150px"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/cc_frame"
+            android:layout_marginEnd="50px"
+            android:layout_width="241px"
+            android:layout_height="63px">
 
+            <TextView
+                android:id="@+id/cc_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32px"
+                android:fontFamily="@font/info"
+                android:text=" 55000 "
+                android:textColor="@color/itemTextYellow"
+                android:textSize="28px"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="01"
+                android:shadowColor="#000000"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/grief_seed_frame"
+            android:layout_width="264px"
+            android:layout_height="135px">
+            <TextView
+                android:id="@+id/grief_seed_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32px"
+                android:fontFamily="@font/info"
+                android:text=" 15 "
+                android:textColor="@color/itemTextYellow"
+                android:textSize="28px"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="01"
+                android:shadowColor="#000000"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

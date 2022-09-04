@@ -49,6 +49,8 @@ public class StartActivity extends AppCompatActivity {
 
     public static ArrayList<BattleInfo> battleInfoList = new ArrayList<>();
 
+    public static int[][] mapRandomPoint;
+
     public static int SCREEN_WIDTH = 0;
 
     public static int SCREEN_HEIGHT = 0;
@@ -71,14 +73,6 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        initMemoria();
-        initCollection();
-        initCharacterList();
-
-        initBattleInfoList();
-
-        initFormation();
-
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         SCREEN_HEIGHT = Math.min(metric.widthPixels,metric.heightPixels);  // 屏幕宽度（像素）
@@ -86,13 +80,22 @@ public class StartActivity extends AppCompatActivity {
         JniBridgeJava.setScreenSize(SCREEN_WIDTH,SCREEN_HEIGHT);
         Log.d("sam","screenWidth:"+SCREEN_WIDTH+", Height:"+SCREEN_HEIGHT);
 
+        initMemoria();
+        initCollection();
+        initMapRandomPoint();
+        initCharacterList();
+
+        initBattleInfoList();
+
+        initFormation();
+
         //Intent intent1 = new Intent(StartActivity.this, TeamChooseActivity.class);
         //intent1.putExtra("battleInfo",0);
         //startActivity(intent1);
         //finish();
         //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 
-        Intent intent1 = new Intent(StartActivity.this, AdjustmentHouseActivity.class);
+        Intent intent1 = new Intent(StartActivity.this, MapActivity.class);
         startActivity(intent1);
         finish();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -244,7 +247,7 @@ public class StartActivity extends AppCompatActivity {
         characterList.add(toca);
         characterList.add(ui);
 
-        characterList.get(2).isLeader = true;
+        characterList.get(1).isLeader = true;
 
         characterList.get(0).setMemoria(0,memoriaBag.get(0));
         characterList.get(0).setMemoria(1,memoriaBag.get(1));
@@ -484,6 +487,36 @@ public class StartActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    public void initMapRandomPoint(){
+        JSONObject textList = null;
+        InputStream stream = getResources().openRawResource(R.raw.map_random_points);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuffer sb = new StringBuffer();
+        String line = "";
+        try{
+            while((line = reader.readLine()) != null){
+                sb.append(line);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        try{
+            textList = new JSONObject(sb.toString());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            JSONArray efList = textList.getJSONArray("mapPoints");
+            mapRandomPoint = new int[efList.length()][2];
+            for(int i = 0; i < efList.length(); i++){
+                mapRandomPoint[i][0] = efList.getJSONArray(i).getInt(0);
+                mapRandomPoint[i][1] = efList.getJSONArray(i).getInt(1);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void clearCharBattleInfo(){

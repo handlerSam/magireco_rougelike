@@ -16,6 +16,10 @@ var Handler_context;
 
 var Handler_armature;
 
+var Handler_scale;
+
+var Handler_offset;
+
 var Handler_animation_index = 0;
 //用于标识此次动画是做什么的
 //0不做任何事 1我方攻击进入动画 2我方攻击结束动画 3敌方攻击进入动画 4敌方攻击结束动画 5动画结束后自动切换为wait
@@ -28,15 +32,16 @@ var SpriteLayer = cc.Layer.extend({
 
         active = this;
         var size = cc.winSize;
-     
+        console.log("winSize:",size.width,size.height);
         var bgLayer = new cc.LayerColor(bg_color);
         this.addChild(bgLayer, 0);
 
         ccs.armatureDataManager.addArmatureFileInfo(resource);
 
         var name = resource.replace(base_url, "").replace(".ExportJson","");
-        var scale = 1;
-        var offset = 150;
+        var scale = Handler_scale;
+        console.log("scale:",Handler_scale);
+        var offset = Handler_offset;
 
         if (name.slice(-4) == "_m_r" || name.slice(-4) == "_d_r"){
             scale = 0.5;
@@ -81,8 +86,13 @@ var SpriteLayer = cc.Layer.extend({
         });
         
         Handler_armature.scale = scale;
-        Handler_armature.x = size.width / 2;
-        Handler_armature.y = (size.height / 2) - offset;
+        if(scale == 1){
+            Handler_armature.x = size.width / 2;
+            Handler_armature.y = (size.height / 2) - offset;
+        }else{
+            Handler_armature.x = 50;
+            Handler_armature.y = size.height - offset;
+        }
         this.addChild(Handler_armature);
 
 

@@ -101,7 +101,8 @@ public class SpriteViewer extends ConstraintLayout {
         //load canvasWide from attrs
         ta = context.obtainStyledAttributes(attrs,R.styleable.SpriteViewer);
         canvasWidth = ta.getInt(R.styleable.SpriteViewer_canvasWide,1200);
-
+        final float scale = ta.getFloat(R.styleable.SpriteViewer_scale,1f);
+        final int offset = ta.getInteger(R.styleable.SpriteViewer_offset,150);
         View v = LayoutInflater.from(context).inflate(R.layout.sprite_viewer_layout, SpriteViewer.this);
         webView = v.findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -119,6 +120,7 @@ public class SpriteViewer extends ConstraintLayout {
         webView.setHorizontalScrollBarEnabled(false);//水平不显示
         webView.setVerticalScrollBarEnabled(false); //垂直不显示
         webView.loadUrl("file:///android_asset/html/sprite_viewer.htm");
+
 //        webView.loadUrl("https://kyu.gay/");
         WebView.setWebContentsDebuggingEnabled(true);
         webView.setWebChromeClient(new WebChromeClient(){
@@ -127,10 +129,11 @@ public class SpriteViewer extends ConstraintLayout {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if(newProgress == 100){
-                    Log.d("HTMLAndroid",newProgress+"");
+                    Log.d("HTMLAndroid","loadProgress:"+newProgress+"%");
                     webView.loadUrl("javascript:setCharacterNameAndSprite(\""+ charName +"\",\""+ spriteName +"\")");
                     webView.loadUrl("javascript:setCanvasWidth(" + canvasWidth + ")");
                     webView.loadUrl("javascript:setPrefix(\"" + prefix + "\")");
+                    webView.loadUrl("javascript:setScaleAndOffset(" + scale + "," + offset +")");
                 }
                 super.onProgressChanged(view, newProgress);
             }
@@ -195,6 +198,7 @@ public class SpriteViewer extends ConstraintLayout {
                         webView.loadUrl("javascript:setCharacterNameAndSprite(\""+ charName +"\",\""+ spriteName +"\")");
                         webView.loadUrl("javascript:setCanvasWidth(" + canvasWidth + ")");
                         webView.loadUrl("javascript:setPrefix(\"" + prefix + "\")");
+                        webView.loadUrl("javascript:setScaleAndOffset(" + 1 + "," + 150 +")");
                     }
                     super.onProgressChanged(view, newProgress);
                 }

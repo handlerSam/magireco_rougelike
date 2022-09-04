@@ -39,7 +39,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     int changePlateTo = -1;
 
     GLSurfaceView _glSurfaceView;
-
+    GLRenderer _glRenderer;
     LinearLayout live2dContainer;
 
     ImageView character_breakthrough;
@@ -68,36 +68,14 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Sam","adjustmentHouseActivityCreate");
         setContentView(R.layout.activity_adjustment_house);
         findView();
         initLive2d();
         initView();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("Sam","onPause");
-//        _glSurfaceView.onPause();
-//        JniBridgeJava.nativeOnPause();
-//        JniBridgeJava.nativeOnStop();
-//        JniBridgeJava.nativeOnStart();
-//        _glSurfaceView.onResume();
-//        final Timer live2dTimer = new Timer();
-//        TimerTask live2dTimerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                JniBridgeJava.nativeSetCharacter(
-//                        "101700","001","011",
-//                        "","","",
-////                        "101700","100","010",
-//                        "","",""
-//                );
-//                live2dTimer.cancel();
-//            }
-//        };
-//        live2dTimer.schedule(live2dTimerTask,500,50);
-    }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -113,8 +91,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(AdjustmentHouseActivity.this, TeamChooseActivity.class);
-                intent1.putExtra("battleInfo",1);
+                Intent intent1 = new Intent(AdjustmentHouseActivity.this, MapActivity.class);
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -636,7 +613,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         JniBridgeJava.SetActivityInstance(this);
         JniBridgeJava.SetContext(this);
 
-        GLRenderer _glRenderer = new GLRenderer();
+        _glRenderer = new GLRenderer();
         _glSurfaceView = new GLSurfaceView(this);
         _glSurfaceView.setEGLContextClientVersion(2);
         _glSurfaceView.setRenderer(_glRenderer);
@@ -657,8 +634,30 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 live2dTimer.cancel();
             }
         };
-        live2dTimer.schedule(live2dTimerTask,100,50);
+        live2dTimer.schedule(live2dTimerTask,500,50);
         JniBridgeJava.nativeOnStart();
+    }
+
+
+    //@Override
+    //protected void onPause() {
+    //    super.onPause();
+    //    Log.d("SGY","onPause");
+    //    _glSurfaceView.onPause();
+    //    JniBridgeJava.nativeOnPause();
+    //    JniBridgeJava.nativeOnStop();
+    //    JniBridgeJava.nativeOnStart();
+    //    _glSurfaceView.onResume();
+//
+    //    //JniBridgeJava.nativeOnPause();
+    //}
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        JniBridgeJava.nativeOnPause();
+        JniBridgeJava.nativeOnStop();
+        JniBridgeJava.nativeOnDestroy();
     }
 
     public void updateSortedOutcome(){

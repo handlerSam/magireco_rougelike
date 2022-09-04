@@ -13,6 +13,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 /*
@@ -211,24 +213,25 @@ public class DialogActivity extends Activity {
         //);
     }
 
+    //@Override
+    //protected void onPause() {
+    //    super.onPause();
+    //    Log.d("SGY","onPause");
+    //    _glSurfaceView.onPause();
+    //    JniBridgeJava.nativeOnPause();
+    //    JniBridgeJava.nativeOnStop();
+    //    JniBridgeJava.nativeOnStart();
+    //    _glSurfaceView.onResume();
+//
+    //    //JniBridgeJava.nativeOnPause();
+    //}
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        //_glSurfaceView.onPause();
-        //JniBridgeJava.nativeOnPause();
-        //JniBridgeJava.nativeOnStop();
-        //JniBridgeJava.nativeOnStart();
-        //_glSurfaceView.onResume();
-        //final Timer live2dTimer = new Timer();
-        //TimerTask live2dTimerTask = new TimerTask() {
-        //    @Override
-        //    public void run() {
-        //        setLive2d();
-        //        changeBackground(p.getBackgroundId());
-        //        live2dTimer.cancel();
-        //    }
-        //};
-        //live2dTimer.schedule(live2dTimerTask,500,50);
+    protected void onDestroy() {
+        super.onDestroy();
+        JniBridgeJava.nativeOnPause();
+        JniBridgeJava.nativeOnStop();
+        JniBridgeJava.nativeOnDestroy();
     }
 
     @Override
@@ -499,7 +502,7 @@ public class DialogActivity extends Activity {
     }
 
     void jumpToNextActivity(){
-        Intent intent1 = new Intent(DialogActivity.this,TeamChooseActivity.class);
+        Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
         canTouchNext = false;
         startActivity(intent1);
         finish();

@@ -104,7 +104,7 @@ public class BattleActivity extends AppCompatActivity {
     int monsterAttackerX = -1;
     int monsterAttackerY = -1;
 
-    int chargeNumber = 0;
+    static int chargeNumber = 0;
     int enemyChargeNumber = 0;
 
 
@@ -1652,7 +1652,6 @@ public class BattleActivity extends AppCompatActivity {
         monsterFormation = bi.monsterFormation;
         isBossBattle = bi.isBossBattle;
 
-
         int count = 0;
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
@@ -1703,8 +1702,9 @@ public class BattleActivity extends AppCompatActivity {
                     }
                     count++;
                 }
-                if(monsterFormation[i][j] != null && monsterFormation[i][j].realHP > 0){
 
+                if(monsterFormation[i][j] != null){
+                    monsterFormation[i][j].realHP = monsterFormation[i][j].getRealMaxHP();
                     createNewSprite(i,j, false, !monsterFormation[i][j].spriteName.startsWith("monster"));
                     leftCharList[i][j].charName = monsterFormation[i][j].spriteName;
                     leftCharList[i][j].spriteName = "wait";
@@ -3390,12 +3390,12 @@ public class BattleActivity extends AppCompatActivity {
         StateBar sb = isRight? rightStateBarList[c.formationX][c.formationY]:leftStateBarList[c.formationX][c.formationY];
         if(sb != null){
             sb.updateHp(c.getRealMaxHP(),c.realHP);
-            if(c.realHP == 0){
-//            Log.d("Sam","characterDead");
-                SpriteViewer sv = isRight? rightCharList[c.formationX][c.formationY]:leftCharList[c.formationX][c.formationY];
-                sv.spriteName = "dead";
-                changeSprite(c.formationX, c.formationY, isRight);
-            }
+        }
+        if(c.realHP <= 0){
+            SpriteViewer sv = isRight? rightCharList[c.formationX][c.formationY]:leftCharList[c.formationX][c.formationY];
+            sv.spriteName = "dead";
+            changeSprite(c.formationX, c.formationY, isRight);
+            c.realMP = 0;
         }
 
     }
@@ -4120,6 +4120,11 @@ public class BattleActivity extends AppCompatActivity {
                 if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                     rightCharList[i][j].spriteName = "reaction";
                     changeSprite(i,j,true);
+                }
+                if(rightCharList[i][j] != null){
+                    if(rightCharList[i][j].c.realHP <= 1){
+                        rightCharList[i][j].c.realHP = 1;
+                    }
                 }
             }
         }

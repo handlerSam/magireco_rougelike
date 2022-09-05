@@ -7,6 +7,7 @@
 
 package com.live2d.rougelike;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
@@ -52,7 +53,7 @@ public class DialogActivity extends Activity {
     TextView middle_name;
     TextView text;
     ConstraintLayout dialog;
-
+    ConstraintLayout black_mask;
     LinearLayout choiceLinearLayout;
     LinearLayout[] choiceLayout = {null,null,null};
     TextView[] choiceText = {null,null,null};
@@ -74,10 +75,15 @@ public class DialogActivity extends Activity {
     int stringCurrentLength = 0;
 
     Timer dialogTimer = null;
-    private Handler handler = new Handler(){
+    Handler handler = new Handler(new Handler.Callback() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch(msg.what){
+        public boolean handleMessage(@NonNull Message message) {
+            switch(message.what){
+                case 0:
+                    ObjectAnimator fadeOut = ObjectAnimator.ofFloat(black_mask, "alpha", 1f, 0);
+                    fadeOut.setDuration(500);
+                    fadeOut.start();
+                    break;
                 case 1:
                     String str = p.getText();
                     text.setText(str.substring(0,stringCurrentLength));
@@ -96,8 +102,10 @@ public class DialogActivity extends Activity {
                     break;
                 default:
             }
+            return true;
         }
-    };
+    });
+
 
     @Override
     public void onBackPressed() {
@@ -138,7 +146,11 @@ public class DialogActivity extends Activity {
                     handler.sendMessage(m);
                     live2dTimer.cancel();
                     canTouchNext = true;
+                    m = new Message();
+                    m.what = 0;
+                    handler.sendMessage(m);
                 }
+
             }
         };
         live2dTimer.schedule(live2dTimerTask,500,50);
@@ -345,6 +357,7 @@ public class DialogActivity extends Activity {
         choiceText = new TextView[]{findViewById(R.id.choice0Text),findViewById(R.id.choice1Text),findViewById(R.id.choice2Text)};
         skip = findViewById(R.id.skip);
         blackMask = findViewById(R.id.blackMask);
+        black_mask = findViewById(R.id.black_mask);
     }
 
 

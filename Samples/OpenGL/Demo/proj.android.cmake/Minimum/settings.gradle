@@ -1,2 +1,0 @@
-include ':Demo'
-project(':Demo').projectDir = new File(settingsDir, 'app')

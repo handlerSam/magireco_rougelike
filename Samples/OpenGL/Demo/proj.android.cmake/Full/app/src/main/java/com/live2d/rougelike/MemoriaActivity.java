@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
@@ -291,6 +292,13 @@ public class MemoriaActivity extends AppCompatActivity {
                 clearAllChoose();
                 Intent receivedIntent = getIntent();
                 int battleId = receivedIntent.getIntExtra("battleInfo",-1);
+                // 按照百分比增加血量
+                float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
+                characterList.get(chooseCharacter).realHP = (int)(1.0f*characterList.get(chooseCharacter).getRealMaxHP()*HPRatio);
+                //Log.d("Sam","realMaxHp:"+characterList.get(chooseCharacter).getRealMaxHP());
+                if(characterList.get(chooseCharacter).realHP <= 1){
+                    characterList.get(chooseCharacter).realHP = 1;
+                }
                 Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
                 intent1.putExtra("battleInfo",battleId);
                 startActivity(intent1);
@@ -305,6 +313,13 @@ public class MemoriaActivity extends AppCompatActivity {
                 clearAllChoose();
                 Intent receivedIntent = getIntent();
                 int battleId = receivedIntent.getIntExtra("battleInfo",-1);
+                // 按照百分比增加血量
+                float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
+                characterList.get(chooseCharacter).realHP = (int)(1.0f*characterList.get(chooseCharacter).getRealMaxHP()*HPRatio);
+                //Log.d("Sam","realMaxHp:"+characterList.get(chooseCharacter).getRealMaxHP());
+                if(characterList.get(chooseCharacter).realHP <= 1){
+                    characterList.get(chooseCharacter).realHP = 1;
+                }
                 Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
                 intent1.putExtra("battleInfo",battleId);
                 startActivity(intent1);

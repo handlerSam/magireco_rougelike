@@ -105,7 +105,7 @@ public class StartActivity extends AppCompatActivity {
         Character remu = new Character();
         remu.breakThrough = 1;
         remu.element = "tree";
-        remu.name = "柊 音梦";
+        remu.name = "柊音梦";
         remu.choosingActivityImage = "team_choose_101400_1";
         remu.spriteName = "Hiiragi Nemu";
         remu.charIconImage = "card_10144_";
@@ -156,7 +156,7 @@ public class StartActivity extends AppCompatActivity {
         Character toca = new Character();
         toca.breakThrough = 4;
         toca.element = "fire";
-        toca.name = "里见 灯花";
+        toca.name = "里见灯花";
         toca.choosingActivityImage = "team_choose_100700_2";
         toca.charIconImage = "card_10074_";
         toca.magiaSkillIconName = "icon_skill_1014";
@@ -201,7 +201,7 @@ public class StartActivity extends AppCompatActivity {
         Character ui = new Character();
         ui.breakThrough = 3;
         ui.element = "dark";
-        ui.name = "环 忧";
+        ui.name = "环忧";
         ui.choosingActivityImage = "team_choose_101500_2";
         ui.charIconImage = "card_10154_";
         ui.magiaSkillIconName = "icon_skill_1014";
@@ -249,13 +249,13 @@ public class StartActivity extends AppCompatActivity {
 
         characterList.get(1).isLeader = true;
 
-        characterList.get(0).setMemoria(0,memoriaBag.get(0));
-        characterList.get(0).setMemoria(1,memoriaBag.get(1));
-        characterList.get(1).setMemoria(0,memoriaBag.get(2));
+//        characterList.get(0).setMemoria(0,memoriaBag.get(0));
+//        characterList.get(0).setMemoria(1,memoriaBag.get(1));
+//        characterList.get(1).setMemoria(0,memoriaBag.get(2));
 
-        memoriaBag.get(0).setCarrier(0);
-        memoriaBag.get(1).setCarrier(0);
-        memoriaBag.get(2).setCarrier(1);
+//        memoriaBag.get(0).setCarrier(0);
+//        memoriaBag.get(1).setCarrier(0);
+//        memoriaBag.get(2).setCarrier(1);
 
         characters[1] = characterList.get(0);
         characters[2] = characterList.get(2);
@@ -450,6 +450,12 @@ public class StartActivity extends AppCompatActivity {
                 m.setLv(m.lvNow);
                 memoriaBag.add(m);
             }
+        }
+
+        //随机删除记忆
+        while(memoriaBag.size() >= 16){
+            int tempId = (int)(Math.random()*memoriaBag.size());
+            memoriaBag.remove(tempId);
         }
     }
 

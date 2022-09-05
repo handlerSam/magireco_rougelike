@@ -128,7 +128,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                 charCard[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!isChangingToMemoria){
+                        if(!isChangingToMemoria && characters[temp].breakThrough >= tempJ + 1){
                             isChangingToMemoria = true;
                             MemoriaActivity.chooseCharacter = getCharacterIdInCharacterList(characters[temp]);
                             Intent receivedIntent = getIntent();
@@ -136,6 +136,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                             Intent intent1 = new Intent(TeamChooseActivity.this,MemoriaActivity.class);
                             intent1.putExtra("battleInfo",battleId);
                             intent1.putExtra("touchMemoriaId",tempJ);
+                            intent1.putExtra("HPRatio",1.0f*characters[temp].realHP/characters[temp].getRealMaxHP());
                             startActivity(intent1);
                             finish();
                             overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -188,11 +189,11 @@ public class TeamChooseActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     // 后续需要更改HP提升时候的realHP更新逻辑
-                    for(int i = 0; i < 5; i++){
-                        if(StartActivity.characters[i] != null){
-                            StartActivity.characters[i].realHP = characters[i].getRealMaxHP();
-                        }
-                    }
+//                    for(int i = 0; i < 5; i++){
+//                        if(StartActivity.characters[i] != null){
+//                            StartActivity.characters[i].realHP = characters[i].getRealMaxHP();
+//                        }
+//                    }
                     Intent receivedIntent = getIntent();
                     int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                     Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
@@ -250,7 +251,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                             char_star[i][j].setVisibility(View.GONE);
                         }
                     }
-                    charHP[i].setText(""+characters[i].getRealMaxHP());
+                    charHP[i].setText(characters[i].realHP+"/"+characters[i].getRealMaxHP());
                     charATK[i].setText(""+characters[i].getRealATK());
                     charDEF[i].setText(""+characters[i].getRealDEF());
                     if(characters[i].getRealMaxHP() == characters[i].HP){

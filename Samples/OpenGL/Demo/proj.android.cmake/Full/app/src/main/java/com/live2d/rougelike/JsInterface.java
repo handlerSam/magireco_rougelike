@@ -6,14 +6,16 @@ import android.webkit.JavascriptInterface;
 class JsInterface{
     SpriteViewer spriteViewer;
     BattleActivity battleActivity;
+    MapActivity mapActivity;
 
     public JsInterface(SpriteViewer spriteViewer, BattleActivity battleActivity){
         this.spriteViewer = spriteViewer;
         this.battleActivity = battleActivity;
     }
 
-    public JsInterface(SpriteViewer spriteViewer){
+    public JsInterface(SpriteViewer spriteViewer, MapActivity mapActivity){
         this.spriteViewer = spriteViewer;
+        this.mapActivity = mapActivity;
     }
 
     @JavascriptInterface

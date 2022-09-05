@@ -1,10 +1,12 @@
 package com.live2d.rougelike;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +15,8 @@ import android.graphics.ColorMatrixColorFilter;
 import android.media.Image;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,16 +63,33 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     LinearLayout shop_list_second_row;
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
 
+
     Collection[][] shopCollectionList = new Collection[2][3];
     TextView cc_number;
     TextView grief_seed_number;
 
     ShopMemoriaAdapter memoriaAdapter;
 
+    ConstraintLayout black_mask_adjustment_house;
+
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message message) {
+            switch (message.what){
+                case 0:
+                    ObjectAnimator fadeOut = ObjectAnimator.ofFloat(black_mask_adjustment_house, "alpha", 1f, 0);
+                    fadeOut.setDuration(500);
+                    fadeOut.start();
+                    break; default:
+            }
+            return true;
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Sam","adjustmentHouseActivityCreate");
+//        Log.d("Sam","adjustmentHouseActivityCreate");
         setContentView(R.layout.activity_adjustment_house);
         findView();
         initLive2d();
@@ -632,6 +653,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 );
                 changeBackground("11061");
                 live2dTimer.cancel();
+                Message m = new Message();
+                m.what = 0;
+                handler.sendMessage(m);
             }
         };
         live2dTimer.schedule(live2dTimerTask,500,50);
@@ -694,6 +718,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         shop_frame = findViewById(R.id.shop_frame);
         shop_list_first_row = findViewById(R.id.shop_list_first_row);
         shop_list_second_row = findViewById(R.id.shop_list_second_row);
+        black_mask_adjustment_house = findViewById(R.id.black_mask_adjustment_house);
     }
 
     public void clearPlateChosen(View dialog_layout){

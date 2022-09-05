@@ -32,6 +32,9 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
     private ConstraintLayout kamihamaMap;
     private ConstraintLayout events_layout;
+
+    ConstraintLayout black_mask;
+
     TextView cc_number;
     TextView grief_seed_number;
 
@@ -61,7 +64,6 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         findView();
-
         //mDragHelper = ViewDragHelper.create((ViewGroup)(findViewById(R.id.rootActivity)),1.0f, callback);
     }
 
@@ -170,6 +172,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         events_layout = findViewById(R.id.events_layout);
         cc_number = findViewById(R.id.cc_number);
         grief_seed_number = findViewById(R.id.grief_seed_number);
+        black_mask = findViewById(R.id.black_mask);
     }
 
     public void initView(){
@@ -178,7 +181,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
         updateCCAndGriefSeedView();
 
-
+        black_mask.setVisibility(View.VISIBLE);
 
         if(!isMapSizeTransferred){
             for(int i = 0; i <StartActivity.mapRandomPoint.length; i++){
@@ -200,7 +203,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         //为角色小人一定范围内选择事件
         initSurrendingEvents();
 
-        //切换地图到以人物为中心
+        //切换地图到为中心
         ViewHelper.setX(kamihamaMap, mapX);
         ViewHelper.setY(kamihamaMap, mapY);
         ViewHelper.setScaleX(kamihamaMap, scaleMultiple);// x方向上缩放
@@ -306,7 +309,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         Intent intent1 = new Intent(MapActivity.this, DialogActivity.class);
                         startActivity(intent1);
                         finish();
-                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                        overridePendingTransition(0,android.R.anim.fade_out);
                     }
                 });
             }else if(i == 1){
@@ -344,10 +347,14 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);
                         startActivity(intent1);
                         finish();
-                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                        overridePendingTransition(0,android.R.anim.fade_out);
                     }
                 });
             }
         }
+    }
+
+    public void eliminateMask(){
+
     }
 }

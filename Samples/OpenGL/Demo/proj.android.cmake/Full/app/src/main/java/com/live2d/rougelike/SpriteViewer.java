@@ -69,7 +69,7 @@ public class SpriteViewer extends ConstraintLayout {
                         ((BattleActivity)context).loadedSpriteNumber++;
                         if(((BattleActivity)context).loadedSpriteNumber == ((BattleActivity)context).totalSpriteNumber){
                             ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((BattleActivity)context).tipLayout, "alpha", 1f, 0);
-                            fadeOut.setDuration(1000);
+                            fadeOut.setDuration(500);
                             fadeOut.start();
                             if(!((BattleActivity)context).randomChoosePlates()){
                                 //说明没有可行动角色
@@ -84,6 +84,17 @@ public class SpriteViewer extends ConstraintLayout {
                         break;
                     case 1:
                         webView.setVisibility(View.GONE);
+                        break;
+                    default:
+                }
+            }else{
+                //map activity
+                switch (message.what){
+                    case 0:
+                        webView.setVisibility(View.VISIBLE);
+                        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((MapActivity)context).black_mask, "alpha", 1f, 0);
+                        fadeOut.setDuration(500);
+                        fadeOut.start();
                         break;
                     default:
                 }
@@ -160,7 +171,7 @@ public class SpriteViewer extends ConstraintLayout {
         });
         webView.setBackgroundColor(Color.parseColor("#00000000"));
 
-        webView.addJavascriptInterface(new JsInterface(this),"AndroidMethod");
+        webView.addJavascriptInterface(new JsInterface(this,(MapActivity)(context)),"AndroidMethod");
     }
 
     @SuppressLint("JavascriptInterface")

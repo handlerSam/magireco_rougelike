@@ -70,10 +70,18 @@ public class ShopMemoriaAdapter extends RecyclerView.Adapter<ShopMemoriaAdapter.
                     skill_after_description.setText(m.getEffectDescription(true));
 
                     TextView skill_origin_attr = dialog_layout.findViewById(R.id.skill_origin_attr);
-                    skill_origin_attr.setText("HP:"+m.HPOrigin+" ATK:"+m.ATKOrigin+" DEF:"+m.DEFOrigin);
+                    if(m.DEFOrigin != 0){
+                        skill_origin_attr.setText("HP:"+m.HPOrigin+" ATK:"+m.ATKOrigin+" DEF:"+m.DEFOrigin+" CD:"+m.CDOrigin);
+                    }else{
+                        skill_origin_attr.setText("HP:"+m.HPOrigin+" ATK:"+m.ATKOrigin+" DEF:"+m.DEFOrigin);
+                    }
                     TextView skill_after_attr = dialog_layout.findViewById(R.id.skill_after_attr);
-                    skill_after_attr.setText("HP:"+m.HPAfter+" ATK:"+m.ATKAfter+" DEF:"+m.DEFAfter);
 
+                    if(m.DEFOrigin != 0){
+                        skill_after_attr.setText("HP:"+m.HPAfter+" ATK:"+m.ATKAfter+" DEF:"+m.DEFAfter+" CD:"+m.CDAfter);
+                    }else{
+                        skill_after_attr.setText("HP:"+m.HPAfter+" ATK:"+m.ATKAfter+" DEF:"+m.DEFAfter);
+                    }
                     final int price = StartActivity.MEMORIA_LV_UP_PRICE[m.star-2];
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                     //dialog.setTitle("记忆升级: "+m.name);//标题

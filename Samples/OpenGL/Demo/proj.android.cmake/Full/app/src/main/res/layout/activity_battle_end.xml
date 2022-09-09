@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BattleEndActivity">
+    <ImageView
+        android:id="@+id/underlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/underlay_street"
+        android:scaleType="fitStart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/backgroundLeft"
+            android:layout_width="2328px"
+            android:layout_height="wrap_content"
+            android:scaleType="fitEnd"
+            android:src="@drawable/background_street"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/backgroundRight"
+            android:layout_width="2328px"
+            android:layout_height="wrap_content"
+            android:scaleType="fitEnd"
+            android:src="@drawable/background_street"
+            app:layout_constraintStart_toEndOf="@id/backgroundLeft"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/memoria_choose_frame"
+        android:visibility="gone"
+        android:background="@color/shader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/memoria_choose_clear"
+            android:layout_width="410px"
+            android:layout_height="79px"
+            android:layout_marginTop="50px"
+            android:background="@drawable/clear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="633px"
+            android:layout_height="752px"
+            android:layout_marginEnd="0px"
+            android:background="@drawable/frame2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/memoria_choose_clear">
+
+            <com.live2d.rougelike.CardView
+                android:id="@+id/showingMemoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="84px"
+                android:layout_marginLeft="84px"
+                android:layout_marginTop="140px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/showingMemoriaName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50px"
+                android:layout_marginTop="66px"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:textSize="38px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="420px"
+                android:layout_marginLeft="250px"
+                android:layout_marginTop="144px"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/HPShowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/info"
+                    android:text=""
+                    android:textColor="@color/colorShader"
+                    android:textSize="36px"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/ATKShowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/info"
+                    android:text=""
+                    android:textColor="@color/colorShader"
+                    android:textSize="36px"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/DEFShowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/info"
+                    android:text=""
+                    android:textColor="@color/colorShader"
+                    android:textSize="36px"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/break_throughLinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="290px"
+                android:layout_marginLeft="290px"
+                android:layout_marginTop="294px"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+
+                <ImageView
+                    android:layout_width="39px"
+                    android:layout_height="39px"
+                    android:src="@drawable/break_through" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/coolTimeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="282px"
+                android:layout_marginTop="345px"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorBrown"
+                android:textSize="26px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/skillName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="82px"
+                android:layout_marginLeft="82px"
+                android:layout_marginTop="390px"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorPurple"
+                android:textSize="30px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/skillIcon"
+                android:layout_width="100px"
+                android:layout_height="100px"
+                android:layout_marginEnd="4px"
+                android:layout_marginRight="4px"
+                android:layout_marginBottom="312px"
+                android:src="@drawable/icon_skill_1012"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/skillDescription"
+                android:layout_width="480px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="82px"
+                android:layout_marginLeft="82px"
+                android:layout_marginTop="450px"
+                android:fontFamily="@font/info"
+                android:text=""
+                android:textColor="@color/colorShader"
+                android:textSize="30px"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/purchase_button"
+                android:layout_width="335px"
+                android:layout_height="126px"
+                android:layout_marginEnd="130px"
+                android:layout_marginRight="130px"
+                android:layout_marginBottom="26px"
+                android:background="@drawable/empty_button"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/purchase_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/info"
+                    android:text="购买"
+                    android:textColor="#FFFFFF"
+                    android:textSize="40px"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/memoria_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/info"
+                        android:text="1600"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28px"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/memoria_cc_icon"
+                        android:layout_width="28.75px"
+                        android:layout_height="28.75px"
+                        android:layout_marginStart="10px"
+                        android:layout_marginTop="1px"
+                        android:background="@drawable/cc"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/shop_item_price" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/memoria_choose_clear">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frame3"
+                android:layout_width="1294px"
+                android:layout_height="86px"
+                android:background="@drawable/frame3_without_carry_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/cardNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80px"
+                    android:fontFamily="@font/info"
+                    android:text="14/400"
+                    android:textColor="#FFFFFF"
+                    android:textSize="40px"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="1211px"
+                android:layout_height="713px"
+                android:background="@drawable/frame4"
+                app:layout_constraintEnd_toEndOf="@id/frame3"
+                app:layout_constraintStart_toStartOf="@id/frame3"
+                app:layout_constraintTop_toBottomOf="@id/frame3">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="30px"
+                    android:layout_marginTop="5px"
+                    android:layout_marginBottom="15px">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/star_4_memoria_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/bar_4_star"
+                            android:layout_width="707px"
+                            android:layout_height="32px"
+                            android:background="@drawable/bar"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/star_4_memoria_list" />
+
+                        <LinearLayout
+                            android:id="@+id/star_3_memoria_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5px"
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toBottomOf="@id/bar_4_star">
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/bar_3_star"
+                            android:layout_width="707px"
+                            android:layout_height="32px"
+                            android:background="@drawable/bar"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/star_3_memoria_list" />
+
+                        <LinearLayout
+                            android:id="@+id/star_2_memoria_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5px"
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toBottomOf="@id/bar_3_star"></LinearLayout>
+                    </LinearLayout>
+
+                </ScrollView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_frame"
+        android:visibility="visible"
+        android:background="@color/shader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/clear"
+            android:layout_width="410px"
+            android:layout_height="79px"
+            android:layout_marginTop="50px"
+            android:background="@drawable/clear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/extra_mission_frame"
+            android:layout_width="411px"
+            android:layout_height="208px"
+            android:layout_marginTop="5px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clear">
+
+            <ImageView
+                android:id="@+id/extra_mission_background"
+                android:src="@drawable/battle_end_star_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/extra_mission_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100px"
+                android:fontFamily="@font/info"
+                android:text="3回合内结束战斗"
+                android:maxLines="1"
+                android:gravity="center"
+                android:autoSizeMaxTextSize="36px"
+                android:autoSizeMinTextSize="24px"
+                android:autoSizeTextType="uniform"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/extra_mission_add_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="62px"
+                android:layout_marginBottom="14px"
+                android:fontFamily="@font/info"
+                android:text="+1600"
+                android:textColor="#FFFFFF"
+                android:textSize="32px"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/extra_mission_cc_icon"
+                android:layout_width="32px"
+                android:layout_height="32px"
+                android:layout_marginStart="10.35px"
+                android:layout_marginBottom="16px"
+                android:visibility="invisible"
+                android:adjustViewBounds="true"
+                android:src="@drawable/cc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/extra_mission_add_number" />
+            <ImageView
+                android:id="@+id/extra_mission_grief_seed_icon"
+                android:layout_width="35.1px"
+                android:layout_height="50.6px"
+                android:layout_marginStart="2px"
+                android:layout_marginBottom="16px"
+                android:visibility="visible"
+                android:adjustViewBounds="true"
+                android:src="@drawable/grief_seed"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/extra_mission_add_number" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_bonus_frame"
+            android:layout_width="1541px"
+            android:layout_height="667px"
+            android:layout_marginTop="24px"
+            android:background="@drawable/battle_end_frame_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/extra_mission_frame">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="360px"
+                android:layout_marginTop="110px"
+                android:orientation="horizontal"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="32px"
+                    android:layout_height="32px"
+                    android:background="@drawable/cc"
+                    android:visibility="visible"/>
+                <TextView
+                    android:id="@+id/add_cc_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16px"
+                    android:layout_marginEnd="62px"
+                    android:fontFamily="@font/info"
+                    android:text="+1600"
+                    android:textColor="@color/colorShader"
+                    android:textSize="32px"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:layout_width="35.1px"
+                    android:layout_height="50.6px"
+                    android:background="@drawable/grief_seed"
+                    android:visibility="visible"/>
+                <TextView
+                    android:id="@+id/add_grief_seed_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16px"
+                    android:fontFamily="@font/info"
+                    android:text="+1600"
+                    android:textColor="@color/colorShader"
+                    android:textSize="32px"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/character_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="170px"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/item_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16px"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/character_list">
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.live2d.rougelike.StrokeTextView
+            android:id="@+id/touch_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/info"
+            android:text=" - TOUCH SCREEN TO CONTINUE - "
+            android:textColor="#FFFFFF"
+            android:textSize="48px"
+            android:visibility="visible"
+            app:backgroundColor="@color/skillTextPink"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_bonus_frame"
+            app:wide="5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15px"
+        android:layout_marginEnd="50px"
+        android:layout_marginRight="150px"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/cc_frame"
+            android:layout_marginEnd="50px"
+            android:layout_width="241px"
+            android:layout_height="63px">
+
+            <TextView
+                android:id="@+id/cc_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32px"
+                android:fontFamily="@font/info"
+                android:text=" 55000 "
+                android:textColor="@color/itemTextYellow"
+                android:textSize="28px"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="01"
+                android:shadowColor="#000000"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/grief_seed_frame"
+            android:layout_width="264px"
+            android:layout_height="135px">
+            <TextView
+                android:id="@+id/grief_seed_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32px"
+                android:fontFamily="@font/info"
+                android:text=" 15 "
+                android:textColor="@color/itemTextYellow"
+                android:textSize="28px"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="01"
+                android:shadowColor="#000000"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

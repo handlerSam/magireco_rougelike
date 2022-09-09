@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10px"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <ImageView
+            android:id="@+id/charImage"
+            android:layout_width="159px"
+            android:layout_height="163px"
+            android:background="@drawable/bg_fire"
+            android:src="@drawable/card_10144_d"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/charFrame"
+            android:layout_width="159px"
+            android:layout_height="163px"
+            android:background="@drawable/frame_rank_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/charAttr"
+                android:layout_width="45px"
+                android:layout_height="46px"
+                android:layout_marginStart="6px"
+                android:layout_marginTop="6px"
+                android:background="@drawable/tree"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/retreat"
+                android:layout_width="156px"
+                android:layout_height="46px"
+                android:src="@drawable/retreat"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/starsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/char_star0"
+                    android:layout_width="25px"
+                    android:layout_height="28px"
+                    android:src="@drawable/char_star" />
+
+                <ImageView
+                    android:id="@+id/char_star1"
+                    android:layout_width="25px"
+                    android:layout_height="28px"
+                    android:src="@drawable/char_star" />
+
+                <ImageView
+                    android:id="@+id/char_star2"
+                    android:layout_width="25px"
+                    android:layout_height="28px"
+                    android:src="@drawable/char_star" />
+
+                <ImageView
+                    android:id="@+id/char_star3"
+                    android:layout_width="25px"
+                    android:layout_height="28px"
+                    android:src="@drawable/char_star" />
+
+                <ImageView
+                    android:id="@+id/char_star4"
+                    android:layout_width="25px"
+                    android:layout_height="28px"
+                    android:src="@drawable/char_star" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/lv_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/charFrame">
+
+            <ImageView
+                android:id="@+id/lv_view"
+                android:layout_width="74px"
+                android:layout_height="38px"
+                android:background="@drawable/battle_end_lv" />
+
+            <TextView
+                android:id="@+id/lv_origin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5px"
+                android:fontFamily="@font/info"
+                android:text="80"
+                android:textColor="@color/colorShader"
+                android:textSize="32px"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/right_arrow"
+                android:layout_width="25.5px"
+                android:layout_height="29.5px"
+                android:layout_marginHorizontal="5px"
+                android:background="@drawable/right_arrow" />
+
+            <TextView
+                android:id="@+id/lv_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/info"
+                android:text="90"
+                android:textColor="@color/colorShader"
+                android:textSize="32px"
+                android:visibility="visible" />
+        </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

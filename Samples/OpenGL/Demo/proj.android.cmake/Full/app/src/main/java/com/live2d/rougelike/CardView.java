@@ -24,6 +24,7 @@ public class CardView extends ConstraintLayout {
     Context context;
     int nowLv = 1;
     int maxLv = 50;
+    String memoriaId;
 
     public CardView(@NonNull Context context) {
         super(context);
@@ -72,6 +73,7 @@ public class CardView extends ConstraintLayout {
 
     public void setMemoria(String id){
         memoriaView.setImageResource(getResource("memoria_" + id + "_s"));
+        memoriaId = id;
         setLv(-1,-1);
     }
 

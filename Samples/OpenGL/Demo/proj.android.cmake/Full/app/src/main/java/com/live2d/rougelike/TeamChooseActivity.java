@@ -197,7 +197,8 @@ public class TeamChooseActivity extends AppCompatActivity {
                     Intent receivedIntent = getIntent();
                     int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                     Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
-                    intent1.putExtra("battleInfo",battleId);
+                    intent1.putExtra("battleInfo", battleId);
+                    intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
                     startActivity(intent1);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

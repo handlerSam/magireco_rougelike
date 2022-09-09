@@ -770,11 +770,25 @@ class Character{
     float mpDefendRatio = 1.0f;
     int lv = 80;
     int star = 4;
-    int HP = 35920;//基础HP，真实的HP上限用getRealMaxHP()
-    int ATK = 11402;
-    int DEF = 9014;
-    int realHP;
-    int realMP;
+    int HP = 0;//基础HP上限，真实的HP上限用getRealMaxHP()
+    int ATK = 0;
+    int DEF = 0;
+    int realHP = 0;
+    int realMP = 0;
+
+    int fourStarMinHP;
+    int fourStarMaxHP;
+    int fourStarMinATK;
+    int fourStarMaxATK;
+    int fourStarMinDEF;
+    int fourStarMaxDEF;
+
+    int fiveStarMinHP;
+    int fiveStarMaxHP;
+    int fiveStarMinATK;
+    int fiveStarMaxATK;
+    int fiveStarMinDEF;
+    int fiveStarMaxDEF;
 
     ArrayList<Effect> initialEffectList = new ArrayList<>();
     public Character(){
@@ -841,6 +855,24 @@ class Character{
             }
         }
         return output;
+    }
+
+    public int getMaxLv(){
+        return star < 5? 80:100;
+    }
+
+    public void updateAttributionBasedOnLv(){
+        int damagedHP = getRealMaxHP() - realHP;
+        if(star == 4){
+            HP = fourStarMinHP + (int)(1.0f * (fourStarMaxHP - fourStarMinHP) / (getMaxLv()-1) * (lv - 1));
+            ATK = fourStarMinATK + (int)(1.0f * (fourStarMaxATK - fourStarMinATK) / (getMaxLv()-1) * (lv - 1));
+            DEF = fourStarMinDEF + (int)(1.0f * (fourStarMaxDEF - fourStarMinDEF) / (getMaxLv()-1) * (lv - 1));
+        }else{
+            HP = fiveStarMinHP + (int)(1.0f * (fiveStarMaxHP - fiveStarMinHP) / (getMaxLv()-1) * (lv - 1));
+            ATK = fiveStarMinATK + (int)(1.0f * (fiveStarMaxATK - fiveStarMinATK) / (getMaxLv()-1) * (lv - 1));
+            DEF = fiveStarMinDEF + (int)(1.0f * (fiveStarMaxDEF - fiveStarMinDEF) / (getMaxLv()-1) * (lv - 1));
+        }
+        realHP = getRealMaxHP() - damagedHP;
     }
 }
 

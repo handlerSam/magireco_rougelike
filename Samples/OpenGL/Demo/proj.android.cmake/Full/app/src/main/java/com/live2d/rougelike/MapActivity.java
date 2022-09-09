@@ -320,6 +320,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                     public void onClick(View v) {
                         Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                         intent1.putExtra("battleInfo",0);
+                        intent1.putExtra("extraMissionId", (int)(Math.random()*StartActivity.extraMissionList.size()));
                         startActivity(intent1);
                         finish();
                         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -333,6 +334,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                     public void onClick(View v) {
                         Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                         intent1.putExtra("battleInfo",1);
+                        intent1.putExtra("extraMission", (int)(Math.random()*StartActivity.extraMissionList.size()));
                         startActivity(intent1);
                         finish();
                         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -354,7 +356,4 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         }
     }
 
-    public void eliminateMask(){
-
-    }
 }

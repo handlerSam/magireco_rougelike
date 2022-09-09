@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/item_background"
+        android:layout_width="110px"
+        android:layout_height="110px"
+        android:background="@drawable/item_frame_3"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="83px"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/red_box" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_name_layout"
+        android:layout_width="236px"
+        android:layout_height="46px"
+        android:background="@drawable/battle_end_item_name_frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_background">
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/info"
+
+            android:maxLines="1"
+            android:gravity="center"
+            android:autoSizeMaxTextSize="36px"
+            android:autoSizeMinTextSize="24px"
+            android:autoSizeTextType="uniform"
+
+            android:text="日本刀的拓片"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="236px"
+        android:layout_height="wrap_content"
+        android:minHeight="90px"
+        android:background="@drawable/battle_end_item_effect_frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_name_layout">
+
+        <TextView
+            android:id="@+id/item_effect"
+            android:layout_width="180px"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/info"
+            android:text="所有我方角色伤害+15%"
+            android:textColor="@color/colorShader"
+            android:textSize="24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

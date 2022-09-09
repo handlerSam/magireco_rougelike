@@ -1118,7 +1118,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
 <LinearLayout
     android:id="@+id/tipLayout"
     android:background="@drawable/loading_tip"

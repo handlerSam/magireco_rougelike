@@ -107,6 +107,11 @@ public class BattleActivity extends AppCompatActivity {
     static int chargeNumber = 0;
     int enemyChargeNumber = 0;
 
+    int extraMissionId;
+    boolean achieveExtraMission = false;
+
+    int consumeChargeNumber = 0;
+
 
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
     public Handler handler = new Handler(new Handler.Callback() {
@@ -237,6 +242,7 @@ public class BattleActivity extends AppCompatActivity {
                                             }
                                         }
                                         if(temp.plate == ACCELE){
+                                            consumeChargeNumber += chargeNumber;
                                             chargeNumber = 0;
                                             updateChargeView();
                                         }
@@ -393,6 +399,7 @@ public class BattleActivity extends AppCompatActivity {
                                             }
                                         }
                                         setMpOnCharacter(c,c.realMP,true);
+                                        consumeChargeNumber += chargeNumber;
                                         chargeNumber = 0;
                                         updateChargeView();
                                     }
@@ -540,6 +547,12 @@ public class BattleActivity extends AppCompatActivity {
                                     }
                                 }
                             },waitTime+DELTA_BETWEEN_EFFECT_SHOW);
+
+                            //判断额外任务
+                            ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+                            if(em.name.equals("释放一次Magia")){
+                                achieveExtraMission = true;
+                            }
                         }
                     }
                     break;
@@ -1111,6 +1124,9 @@ public class BattleActivity extends AppCompatActivity {
 //        background_effect.spriteName = "all_f_f";
 //        background_effect.prefix = "bg_quest_"; //对于背景:bg_quest_  对于人物:mini_
 //        background_effect.canvasWidth = 1200;
+
+        //加载额外任务
+        extraMissionId = getIntent().getIntExtra("extraMissionId",0);
 
         ColorMatrix cm = new ColorMatrix();
         cm.setSaturation(0); // 设置饱和度
@@ -2489,6 +2505,10 @@ public class BattleActivity extends AppCompatActivity {
             }
             updateChargeView();
             showCombo(CHARGECOMBO);
+            ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+            if(em.name.equals("发动一次3CCombo")){
+                achieveExtraMission = true;
+            }
         }else if(isAcceleCombo){
             for(int i = 0; i < 3; i++){
                 for(int j = 0; j < 3; j++){
@@ -2501,6 +2521,10 @@ public class BattleActivity extends AppCompatActivity {
             showCombo(ACCELE);
         }else if(isBlastCombo){
             showCombo(BLASTCOMBO);
+            ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+            if(em.name.equals("发动一次3BCombo")){
+                achieveExtraMission = true;
+            }
         }else if(isPuella){
             showCombo(PUELLACOMBO);
         }
@@ -4128,16 +4152,65 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
-        Toast.makeText(this,"胜利",Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"胜利",Toast.LENGTH_LONG).show();
+
+        //判断部分额外任务条件
+        ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+        if(em.name.equals("3回合内通关")){
+            achieveExtraMission = turn <= 3;
+        }else if(em.name.equals("5回合内通关")){
+            achieveExtraMission = turn <= 5;
+        }else if(em.name.equals("至少一人血量大于80%")){
+            achieveExtraMission = false;
+            for(int i = 0; i < StartActivity.characters.length; i++){
+                if(StartActivity.characters[i] != null){
+                    Character c = StartActivity.characters[i];
+                    if(1.0f * c.realHP / c.getRealMaxHP() >= 0.8f){
+                        achieveExtraMission = true;
+                        break;
+                    }
+                }
+            }
+        }else if(em.name.equals("至少一人血量大于60%")){
+            achieveExtraMission = false;
+            for(int i = 0; i < StartActivity.characters.length; i++){
+                if(StartActivity.characters[i] != null){
+                    Character c = StartActivity.characters[i];
+                    if(1.0f * c.realHP / c.getRealMaxHP() >= 0.6f){
+                        achieveExtraMission = true;
+                        break;
+                    }
+                }
+            }
+        }else if(em.name.equals("全员血量大于60%")){
+            achieveExtraMission = true;
+            for(int i = 0; i < StartActivity.characters.length; i++){
+                if(StartActivity.characters[i] != null){
+                    Character c = StartActivity.characters[i];
+                    if(1.0f * c.realHP / c.getRealMaxHP() < 0.6f){
+                        achieveExtraMission = false;
+                        break;
+                    }
+                }
+            }
+        }else if(em.name.equals("消耗10个charge")){
+            achieveExtraMission = consumeChargeNumber >= 10;
+        }
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent1 = new Intent(BattleActivity.this, MapActivity.class);
+                Intent receivedIntent = getIntent();
+                int bi = receivedIntent.getIntExtra("battleInfo",0);
+                Intent intent1 = new Intent(BattleActivity.this, BattleEndActivity.class);
+                intent1.putExtra("battleInfo", bi);
+                intent1.putExtra("achieveExtraMission",achieveExtraMission);
+                intent1.putExtra("extraMissionId", extraMissionId);
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
-        },5000);
+        },2000);
     }
 
     public void lose(){

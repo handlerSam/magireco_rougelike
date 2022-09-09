@@ -49,6 +49,8 @@ public class StartActivity extends AppCompatActivity {
 
     public static ArrayList<BattleInfo> battleInfoList = new ArrayList<>();
 
+    public static ArrayList<ExtraMission> extraMissionList = new ArrayList<>();
+
     public static int[][] mapRandomPoint;
 
     public static int SCREEN_WIDTH = 0;
@@ -63,11 +65,15 @@ public class StartActivity extends AppCompatActivity {
 
     final public static int[] MEMORIA_LV_UP_PRICE = new int[]{1000,2000,4000};
 
+    final public static int[] MEMORIA_PURCHASE_PRICE = new int[]{0,3000,6000};
+
     public static int plate_change_time = 0;
 
     public static int griefSeedNumber = 15;
 
     public static int ccNumber = 40000;
+
+    public static float gameTime = 7.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +94,8 @@ public class StartActivity extends AppCompatActivity {
         initBattleInfoList();
 
         initFormation();
+
+        initExtraMissionList();
 
         //Intent intent1 = new Intent(StartActivity.this, TeamChooseActivity.class);
         //intent1.putExtra("battleInfo",0);
@@ -114,14 +122,24 @@ public class StartActivity extends AppCompatActivity {
         remu.isLeader = false;
         remu.lv = 80;
         remu.star = 4;
-        remu.HP = 23007;
-        remu.realHP = remu.HP;
-        remu.ATK = 6385;
-        remu.DEF = 6129;
         remu.realMP = 0;
         remu.plateList = new int[]{ACCELE,ACCELE,ACCELE,BLAST_VERTICAL,CHARGE};
         remu.mpAttackRatio = 1.2f;
         remu.mpDefendRatio = 1.0f;
+
+        remu.fourStarMinHP = 6300;
+        remu.fourStarMaxHP = 23007;
+        remu.fourStarMinATK = 1761;
+        remu.fourStarMaxATK = 6385;
+        remu.fourStarMinDEF = 1715;
+        remu.fourStarMaxDEF = 6129;
+        remu.fiveStarMinHP = 7147;
+        remu.fiveStarMaxHP = 29016;
+        remu.fiveStarMinATK = 1999;
+        remu.fiveStarMaxATK = 8055;
+        remu.fiveStarMinDEF = 1946;
+        remu.fiveStarMaxDEF = 7725;
+
         remu.connectOriginEffectList.add(new SkillEffect("攻击力UP",35,"自",1,100));
         remu.connectOriginEffectList.add(new SkillEffect("HP回复",37,"自",1,100));
         remu.connectOriginEffectList.add(new SkillEffect("攻击时给予状态幻惑",65,"自",1,50,1));
@@ -150,7 +168,8 @@ public class StartActivity extends AppCompatActivity {
         remu.doppelEffectList.add(new SkillEffect("给予状态黑暗",35,"敌单",1,100));
         remu.doppelEffectList.add(new SkillEffect("BUFF解除",0,"敌单",1,100));
         remu.doppelEffectList.add(new SkillEffect("攻击力UP",30,"己全",3,100));
-        
+
+        remu.updateAttributionBasedOnLv();
         //remu.initialEffectList.add(new Effect("眩晕",0,1,100,0));
 
         Character toca = new Character();
@@ -165,14 +184,24 @@ public class StartActivity extends AppCompatActivity {
         toca.spriteName = "Satomi Touka";
         toca.lv = 100;
         toca.star = 5;
-        toca.HP = 21019;
-        toca.realHP = toca.HP;
-        toca.ATK = 9803;
-        toca.DEF = 6072;
         toca.realMP = 0;
         toca.plateList = new int[]{ACCELE,ACCELE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         toca.mpAttackRatio = 1.2f;
         toca.mpDefendRatio = 1.2f;
+
+        toca.fourStarMinHP = 4704;
+        toca.fourStarMaxHP = 16689;
+        toca.fourStarMinATK = 2109;
+        toca.fourStarMaxATK = 7756;
+        toca.fourStarMinDEF = 1372;
+        toca.fourStarMaxDEF = 4832;
+        toca.fiveStarMinHP = 5335;
+        toca.fiveStarMaxHP = 21019;
+        toca.fiveStarMinATK = 2397;
+        toca.fiveStarMaxATK = 9803;
+        toca.fiveStarMinDEF = 1553;
+        toca.fiveStarMaxDEF = 6072;
+
         toca.connectOriginEffectList.add(new SkillEffect("攻击力UP",35,"自",1,100));
         toca.connectOriginEffectList.add(new SkillEffect("MP回复",20,"自",1,100));
         toca.connectOriginEffectList.add(new SkillEffect("攻击时给予状态Magia封印",0,"自",1,60,1));
@@ -196,6 +225,7 @@ public class StartActivity extends AppCompatActivity {
         toca.doppelEffectList.add(new SkillEffect("防御力UP",47,"自",3,100));
         toca.doppelEffectList.add(new SkillEffect("Magia伤害UP",35,"自",5,100));
 
+        toca.updateAttributionBasedOnLv();
        // toca.initialEffectList.add(new Effect("眩晕",0,1,100,0));
         
         Character ui = new Character();
@@ -210,14 +240,24 @@ public class StartActivity extends AppCompatActivity {
         ui.spriteName = "Tamaki Ui";
         ui.lv = 80;
         ui.star = 5;
-        ui.HP = 21658;
-        ui.realHP = ui.HP;
-        ui.ATK = 6729;
-        ui.DEF = 7048;
         ui.realMP = 0;
         ui.plateList = new int[]{ACCELE,ACCELE,BLAST_HORIZONTAL,CHARGE,CHARGE};
         ui.mpAttackRatio = 0.9f;
         ui.mpDefendRatio = 0.9f;
+
+        ui.fourStarMinHP = 5973;
+        ui.fourStarMaxHP = 21658;
+        ui.fourStarMinATK = 1883;
+        ui.fourStarMaxATK = 6729;
+        ui.fourStarMinDEF = 1930;
+        ui.fourStarMaxDEF = 7048;
+        ui.fiveStarMinHP = 6775;
+        ui.fiveStarMaxHP = 27303;
+        ui.fiveStarMinATK = 2136;
+        ui.fiveStarMaxATK = 8479;
+        ui.fiveStarMinDEF = 2189;
+        ui.fiveStarMaxDEF = 8887;
+
         ui.connectOriginEffectList.add(new SkillEffect("攻击力UP",35,"自",1,100));
         ui.connectOriginEffectList.add(new SkillEffect("伤害削减无效",100,"自",1,100));
         ui.connectOriginEffectList.add(new SkillEffect("攻击时给予状态诅咒",15,"自",1,65,1));
@@ -241,6 +281,7 @@ public class StartActivity extends AppCompatActivity {
         ui.doppelEffectList.add(new SkillEffect("给予状态诅咒",15,"敌全",1,100));
         ui.doppelEffectList.add(new SkillEffect("MP回复",34,"自",1,100));
 
+        ui.updateAttributionBasedOnLv();
         //ui.initialEffectList.add(new Effect("眩晕",0,1,100,0));
         
         characterList.add(remu);
@@ -305,7 +346,7 @@ public class StartActivity extends AppCompatActivity {
         monster1.spriteName = "monster_不幸猫头鹰之谣";
         monster1.name = "不幸猫头鹰之谣";
         monster1.lv = 80;
-        monster1.HP = 90000;
+        monster1.HP = 900;
         monster1.realHP = monster1.HP;
         monster1.ATK = 10000;
         monster1.DEF = 3000;
@@ -323,7 +364,7 @@ public class StartActivity extends AppCompatActivity {
         monster2.spriteName = "monster_工熊之谣(蓝)";
         monster2.name = "工熊之谣";
         monster2.lv = 80;
-        monster2.HP = 100000;
+        monster2.HP = 1000;
         monster2.realHP = monster2.HP;
         monster2.ATK = 9000;
         monster2.DEF = 4200;
@@ -340,7 +381,7 @@ public class StartActivity extends AppCompatActivity {
         monster3.spriteName = "monster_流浪的魔女的手下";
         monster3.name = "流浪的魔女的手下";
         monster3.lv = 80;
-        monster3.HP = 80000;
+        monster3.HP = 800;
         monster3.realHP = monster3.HP;
         monster3.ATK = 9000;
         monster3.DEF = 4500;
@@ -357,7 +398,7 @@ public class StartActivity extends AppCompatActivity {
         monster4.spriteName = "monster_螯合吉祥物之谣";
         monster4.name = "螯合吉祥物之谣";
         monster4.lv = 80;
-        monster4.HP = 150000;
+        monster4.HP = 1500;
         monster4.realHP = monster4.HP;
         monster4.ATK = 10000;
         monster4.DEF = 3000;
@@ -487,6 +528,7 @@ public class StartActivity extends AppCompatActivity {
                 c.effectDescription = temp.optString("effectDescription");
                 c.icon = temp.optString("icon");
                 c.price = temp.optInt("price");
+                c.background = temp.optString("background");
                 collectionList.add(c);
             }
         }catch(Exception e){
@@ -523,6 +565,53 @@ public class StartActivity extends AppCompatActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void initExtraMissionList(){
+        ExtraMission em = new ExtraMission("3回合内通关", new Bonus(1500,0));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("3回合内通关", new Bonus(0,1));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("5回合内通关", new Bonus(500,0));
+        extraMissionList.add(em);
+
+        //em = new ExtraMission("某次攻击对两名以上敌人造成伤害", new Bonus(1000,0));
+        //extraMissionList.add(em);
+
+        em = new ExtraMission("释放一次Magia", new Bonus(1000,0));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("释放一次Magia", new Bonus(0,1));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("发动一次3BCombo", new Bonus(1000,0));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("发动一次3BCombo", new Bonus(0,1));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("发动一次3CCombo", new Bonus(1500,0));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("发动一次3CCombo", new Bonus(0,1));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("消耗10个charge", new Bonus(1500,0));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("消耗10个charge", new Bonus(0,1));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("至少一人血量大于80%", new Bonus(2000,0));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("至少一人血量大于60%", new Bonus(1000,0));
+        extraMissionList.add(em);
+
+        em = new ExtraMission("全员血量大于60%", new Bonus(2000,0));
+        extraMissionList.add(em);
     }
 
     public static void clearCharBattleInfo(){
@@ -610,16 +699,36 @@ class Collection{
     public String description;
     public String effectDescription;
     public String icon;
+    public String background = "item_frame_3";
     public int price;
     public boolean isOwn = false;
-    public Collection(String name, String description, String effectDescription, String icon, int price){
+    public Collection(String name, String description, String effectDescription, String icon, int price, String background){
         this.name = name;
         this.description = description;
         this.effectDescription = effectDescription;
         this.icon = icon;
         this.price = price;
+        this.background = background;
     }
     public Collection(){
 
+    }
+}
+
+class ExtraMission{
+    String name;
+    Bonus bonus;
+    ExtraMission(String name, Bonus bonus){
+        this.name = name;
+        this.bonus = bonus;
+    }
+}
+
+class Bonus{
+    int cc;
+    int griefSeed;
+    Bonus(int cc, int griefSeed){
+        this.cc = cc;
+        this.griefSeed = griefSeed;
     }
 }

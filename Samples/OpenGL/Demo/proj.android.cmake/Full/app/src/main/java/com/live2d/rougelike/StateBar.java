@@ -109,10 +109,10 @@ public class StateBar extends ConstraintLayout {
             }
 
             if(realMp > 1000){
-                if(((int)((realMp - 1000) * 0.08)) > 0){
+                if(((int)(1.0f * (realMp - 1000) * 80 / (BattleActivity.DOPPEL_NEED_MP - 1000))) > 0){
                     dpBar.setVisibility(VISIBLE);
                     ConstraintLayout.LayoutParams p2 = (ConstraintLayout.LayoutParams) dpBar.getLayoutParams();
-                    p2.width = (int)((realMp - 1000) * 0.08);
+                    p2.width = (int)(1.0f * (realMp - 1000) * 80 / (BattleActivity.DOPPEL_NEED_MP - 1000));
                     dpBar.setLayoutParams(p2);
                 }else{
                     dpBar.setVisibility(INVISIBLE);

@@ -72,6 +72,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
 
     ConstraintLayout black_mask_adjustment_house;
 
+    float live2dAlpha = 0.0f;
+
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message message) {
@@ -645,17 +647,18 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         TimerTask live2dTimerTask = new TimerTask() {
             @Override
             public void run() {
-                JniBridgeJava.nativeSetCharacter(
-                        "101700","001","011",
-                        "","","",
+                    JniBridgeJava.nativeSetCharacter(
+                            "101700","001","011",
+                            "","","",
 //                        "101700","100","010",
-                        "","",""
-                );
-                changeBackground("11061");
-                live2dTimer.cancel();
-                Message m = new Message();
-                m.what = 0;
-                handler.sendMessage(m);
+                            "","",""
+                    );
+                    changeBackground("11061");
+                    Message m = new Message();
+                    m.what = 0;
+                    handler.sendMessage(m);
+                    live2dTimer.cancel();
+
             }
         };
         live2dTimer.schedule(live2dTimerTask,500,50);

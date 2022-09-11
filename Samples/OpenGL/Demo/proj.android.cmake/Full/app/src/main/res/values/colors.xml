@@ -12,6 +12,7 @@
     <color name="skillTextPink">#e74979</color>
     <color name="skillTextBlue">#1d80a9</color>
     <color name="white">#FFFFFF</color>
+    <color name="halfWhite">#9FFFFFFF</color>
     <color name="chargeNumberWhite">#e0dee1</color>
     <color name="skillTextGreen">#49b761</color>
     <color name="textPurple">#5a3070</color>

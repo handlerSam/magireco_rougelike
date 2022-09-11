@@ -58,8 +58,6 @@ public class BattleEndActivity extends AppCompatActivity {
     TextView cc_number;
     TextView grief_seed_number;
 
-
-    ArrayList<CardView> allMemoriaCardViewList = new ArrayList<>();
     CardView chooseCardView = null;
 
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
@@ -201,6 +199,7 @@ public class BattleEndActivity extends AppCompatActivity {
         if(isReceivedCollection()){
             int collectionId = (int)(Math.random()*StartActivity.collectionList.size());
             StartActivity.collectionList.get(collectionId).isOwn = true;
+
             Collection c = StartActivity.collectionList.get(collectionId);
             View view = LayoutInflater.from(BattleEndActivity.this).inflate(R.layout.battle_end_item_item, item_list,false);
             LinearLayout item_background = view.findViewById(R.id.item_background);
@@ -266,7 +265,6 @@ public class BattleEndActivity extends AppCompatActivity {
                         }else if(j == 2){
                             star_4_memoria_list.addView(cd);
                         }
-                        allMemoriaCardViewList.add(cd);
                         cd.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -279,6 +277,7 @@ public class BattleEndActivity extends AppCompatActivity {
                                         chooseCardView.setChoose(false);
                                     }
                                     chooseCardView = cd;
+                                    chooseCardView.setChoose(true);
                                     updateChooseMemoria();
                                 }
                             }
@@ -376,14 +375,14 @@ public class BattleEndActivity extends AppCompatActivity {
         BattleInfo bi = StartActivity.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
         if(!bi.isBossBattle){
             if(StartActivity.gameTime < 14.01f){
-                //说明是游戏前期, 1-2悲叹之种，2000-4000CC
+                //说明是游戏前期, 1-2悲叹之种，2000-3000CC
                 int randomGF = (int)(Math.random()*2)+1;
-                int randomCC = ((int)(Math.random()*5))*500+2000;
+                int randomCC = ((int)(Math.random()*3))*500+2000;
                 return new Bonus(randomCC,randomGF);
             }else{
-                //说明是游戏后期, 1-2悲叹之种，3000-5000CC
+                //说明是游戏后期, 1-2悲叹之种，3000-4000CC
                 int randomGF = (int)(Math.random()*2)+1;
-                int randomCC = ((int)(Math.random()*5))*500+3000;
+                int randomCC = ((int)(Math.random()*3))*500+3000;
                 return new Bonus(randomCC,randomGF);
             }
         }else{

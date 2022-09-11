@@ -305,6 +305,7 @@
         android:id="@+id/black_mask_adjustment_house"
         android:background="@color/black"
         android:alpha="1"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

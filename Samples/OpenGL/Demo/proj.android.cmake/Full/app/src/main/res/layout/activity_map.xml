@@ -32,13 +32,18 @@
             app:offset="145"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/events_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="44dp">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,8 +102,78 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/shop_button"
+        android:layout_width="187px"
+        android:layout_height="188px"
+        android:layout_marginStart="15px"
+        android:layout_marginBottom="15px"
+        android:background="@drawable/shop_button"
+        app:layout_constraintBottom_toTopOf="@id/team_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/team_button"
+        android:layout_width="187px"
+        android:layout_height="189px"
+        android:layout_marginStart="15px"
+        android:layout_marginBottom="15px"
+        android:background="@drawable/team_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/item_button"
+        android:layout_width="187px"
+        android:layout_height="187px"
+        android:layout_marginEnd="15px"
+        android:layout_marginBottom="15px"
+        android:background="@drawable/item_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/collection_list_background"
+        android:background="@color/shader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/collection_recycler_view"
+            android:layout_marginTop="75px"
+            android:layout_marginHorizontal="200px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/no_item_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/info"
+            android:visibility="gone"
+            android:text="暂无道具"
+            android:gravity="center"
+            android:textColor="@color/halfWhite"
+            android:textSize="96px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/cancel_button"
+            android:layout_marginTop="15px"
+            android:layout_marginLeft="30px"
+            android:layout_marginStart="30px"
+            android:layout_width="82px"
+            android:layout_height="83px"
+            android:background="@drawable/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/black_mask"
+        android:visibility="gone"
         android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

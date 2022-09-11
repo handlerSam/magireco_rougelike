@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
     <alpha
-        android:fromAlpha="1.0"
+        android:fromAlpha="3"
         android:toAlpha="0.2"
-        android:startOffset="0"
+        android:startOffset="200"
         android:duration="1000"/>
     <alpha
         android:fromAlpha="0.2"
-        android:toAlpha="1.0"
-        android:startOffset="1000"
+        android:toAlpha="3"
+        android:startOffset="1200"
         android:duration="1000"/>
 </set>

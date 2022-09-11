@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/item_name"
-            android:layout_width="wrap_content"
+            android:layout_width="190px"
             android:layout_height="wrap_content"
             android:fontFamily="@font/info"
 
@@ -68,6 +68,13 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/info"
             android:text="所有我方角色伤害+15%"
+
+            android:gravity="center_vertical"
+            android:maxLines="3"
+            android:autoSizeMaxTextSize="24px"
+            android:autoSizeMinTextSize="12px"
+            android:autoSizeTextType="uniform"
+
             android:textColor="@color/colorShader"
             android:textSize="24px"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -75,6 +75,12 @@ public class StartActivity extends AppCompatActivity {
 
     public static float gameTime = 7.0f;
 
+    public static int PLAYER_ON_MAP_X = 760;// 改动后要调用MapActivity.eventX.clear();MapActivity.eventY.clear();，地图才会更新
+
+    public static int PLAYER_ON_MAP_Y = 471;
+
+    public static int COST_FOR_SUMMON_ADJUSTMENT_HOUSE = 2000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +91,7 @@ public class StartActivity extends AppCompatActivity {
         SCREEN_WIDTH = Math.max(metric.widthPixels,metric.heightPixels);  // 屏幕高度（像素）
         JniBridgeJava.setScreenSize(SCREEN_WIDTH,SCREEN_HEIGHT);
         Log.d("sam","screenWidth:"+SCREEN_WIDTH+", Height:"+SCREEN_HEIGHT);
+
 
         initMemoria();
         initCollection();
@@ -288,7 +295,7 @@ public class StartActivity extends AppCompatActivity {
         characterList.add(toca);
         characterList.add(ui);
 
-        characterList.get(1).isLeader = true;
+        characterList.get(0).isLeader = true;
 
 //        characterList.get(0).setMemoria(0,memoriaBag.get(0));
 //        characterList.get(0).setMemoria(1,memoriaBag.get(1));
@@ -354,7 +361,7 @@ public class StartActivity extends AppCompatActivity {
         monster1.mpDefendRatio = 0f;
         monster1.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         //monster1.initialEffectList.add(new Effect("攻击时给予状态雾",25,999,100,1));
-        //monster1.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
+        monster1.initialEffectList.add(new Effect("攻击时给予状态Magia封印",0,999,100,2));
         monster1.initialEffectList.add(new Effect("回避",0,999,20,0));
         bi.monsterList.add(monster1);
         bi.monsterFormation[0][0] = monster1;
@@ -371,7 +378,7 @@ public class StartActivity extends AppCompatActivity {
         monster2.mpAttackRatio = 0f;
         monster2.mpDefendRatio = 0f;
         monster2.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster2.initialEffectList.add(new Effect("攻击时给予状态烧伤",5,999,20,1));
+        monster2.initialEffectList.add(new Effect("攻击时给予状态Magia封印",5,999,20,2));
         //monster2.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         bi.monsterList.add(monster2);
         bi.monsterFormation[1][0] = monster2;
@@ -388,7 +395,7 @@ public class StartActivity extends AppCompatActivity {
         monster3.mpAttackRatio = 0f;
         monster3.mpDefendRatio = 0f;
         monster3.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster3.initialEffectList.add(new Effect("攻击时给予状态眩晕",0,999,20,2));
+        monster3.initialEffectList.add(new Effect("攻击时给予状态Magia封印",0,999,20,2));
         //monster3.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         bi.monsterList.add(monster3);
         bi.monsterFormation[1][2] = monster3;
@@ -405,7 +412,7 @@ public class StartActivity extends AppCompatActivity {
         monster4.mpAttackRatio = 0f;
         monster4.mpDefendRatio = 0f;
         monster4.plateList = new int[]{CHARGE,CHARGE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
-        monster4.initialEffectList.add(new Effect("攻击时给予状态幻惑",50,999,20,1));
+        monster4.initialEffectList.add(new Effect("攻击时给予状态Magia封印",50,999,20,2));
         //monster4.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         bi.monsterList.add(monster4);
         bi.monsterFormation[2][0] = monster4;

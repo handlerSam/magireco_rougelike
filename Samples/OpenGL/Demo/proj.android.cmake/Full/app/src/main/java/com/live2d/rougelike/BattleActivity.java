@@ -490,7 +490,7 @@ public class BattleActivity extends AppCompatActivity {
                             }
                             if(StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP >= DOPPEL_NEED_MP){
                                 //说明是Dp
-                                StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP = 0;
+                                StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= DOPPEL_NEED_MP;
                             }else{
                                 StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
                             }
@@ -1481,7 +1481,12 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         });
+        skillDetailLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
         //初始化下方技能黑幕
         skill_launch_layout.setVisibility(GONE);
@@ -1908,11 +1913,6 @@ public class BattleActivity extends AppCompatActivity {
         }
     }
 
-    public int getIdByString(String name){
-        Resources res = getResources();
-        return res.getIdentifier(name,"id",getPackageName());
-    }
- 
     public void createNewSprite(int x, int y, boolean isRight, boolean needScaleX){
         if(isRight || !isBossBattle || (x == 1 && y == 1)){
             totalSpriteNumber++;
@@ -4210,7 +4210,7 @@ public class BattleActivity extends AppCompatActivity {
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
-        },2000);
+        },2500);
     }
 
     public void lose(){
@@ -4233,6 +4233,11 @@ public class BattleActivity extends AppCompatActivity {
             default:
         }
         return 0;
+    }
+
+    public int getIdByString(String name){
+        Resources res = getResources();
+        return res.getIdentifier(name,"id",getPackageName());
     }
 
     public int getImageByString(String name){

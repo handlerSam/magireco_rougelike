@@ -8,6 +8,17 @@
     android:background="@drawable/bag_background"
     tools:context=".TeamChooseActivity">
 
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="167px"
+        android:layout_height="76px"
+        android:layout_marginTop="15px"
+        android:layout_marginLeft="30px"
+        android:layout_marginStart="30px"
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/teamNameLayout"
         android:layout_width="603px"

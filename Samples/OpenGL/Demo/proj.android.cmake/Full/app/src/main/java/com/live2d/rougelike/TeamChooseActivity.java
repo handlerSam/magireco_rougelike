@@ -51,6 +51,7 @@ public class TeamChooseActivity extends AppCompatActivity {
     RecyclerView charRecyclerView;
     ConstraintLayout[] char_largestFrame = new ConstraintLayout[5];
     ImageView[] chooseChar = new ImageView[5];
+    ImageView back;
 
 
     @Override
@@ -100,7 +101,7 @@ public class TeamChooseActivity extends AppCompatActivity {
         startBattle = findViewById(R.id.startBattle);
         charRecyclerLayout = findViewById(R.id.charRecyclerLayout);
         charRecyclerView = findViewById(R.id.charRecyclerView);
-
+        back = findViewById(R.id.back);
     }
 
     public void init(){
@@ -185,25 +186,38 @@ public class TeamChooseActivity extends AppCompatActivity {
                     updateCheckingViews();
                 }
             });
-            startBattle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 后续需要更改HP提升时候的realHP更新逻辑
+
+            //开始战斗按钮设置
+            final Intent receivedIntent = getIntent();
+            final int battleId = receivedIntent.getIntExtra("battleInfo",-1);
+            if(battleId == -1){
+                startBattle.setVisibility(View.GONE);
+            }else{
+                startBattle.setVisibility(View.VISIBLE);
+                startBattle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 后续需要更改HP提升时候的realHP更新逻辑
 //                    for(int i = 0; i < 5; i++){
 //                        if(StartActivity.characters[i] != null){
 //                            StartActivity.characters[i].realHP = characters[i].getRealMaxHP();
 //                        }
 //                    }
-                    Intent receivedIntent = getIntent();
-                    int battleId = receivedIntent.getIntExtra("battleInfo",-1);
-                    Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
-                    intent1.putExtra("battleInfo", battleId);
-                    intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
-                    startActivity(intent1);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                }
-            });
+                        StartActivity.PLAYER_ON_MAP_X = receivedIntent.getIntExtra("eventX", -1);
+                        StartActivity.PLAYER_ON_MAP_Y = receivedIntent.getIntExtra("eventY", -1);
+                        MapActivity.eventX.clear();
+                        MapActivity.eventY.clear();
+
+                        Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
+                        intent1.putExtra("battleInfo", battleId);
+                        intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
+                        startActivity(intent1);
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    }
+                });
+            }
+
         }
 
         //初始化最下方的角色栏
@@ -230,6 +244,18 @@ public class TeamChooseActivity extends AppCompatActivity {
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
+
+        //初始化返回键
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(TeamChooseActivity.this, MapActivity.class);
+                startActivity(intent1);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+            }
+        });
+
         updateCheckingViews();
     }
 

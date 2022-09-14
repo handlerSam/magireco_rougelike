@@ -74,6 +74,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
 
     float live2dAlpha = 0.0f;
 
+    boolean isIntentSend = false;
+
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message message) {
@@ -114,10 +116,13 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(AdjustmentHouseActivity.this, MapActivity.class);
-                startActivity(intent1);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                if(!isIntentSend){
+                    Intent intent1 = new Intent(AdjustmentHouseActivity.this, MapActivity.class);
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    isIntentSend = true;
+                }
             }
         });
         character_breakthrough.setOnClickListener(new View.OnClickListener() {

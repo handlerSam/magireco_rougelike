@@ -74,6 +74,8 @@ public class DialogActivity extends Activity {
 
     int stringCurrentLength = 0;
 
+    boolean isIntentSend = false;
+
     Timer dialogTimer = null;
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -515,11 +517,15 @@ public class DialogActivity extends Activity {
     }
 
     void jumpToNextActivity(){
-        Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
-        canTouchNext = false;
-        startActivity(intent1);
-        finish();
-        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+        if(!isIntentSend){
+            Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+            canTouchNext = false;
+            startActivity(intent1);
+            finish();
+            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+            isIntentSend = true;
+        }
+
     }
 
     void changeBackground(String backgroundNumber){

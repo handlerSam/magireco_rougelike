@@ -62,6 +62,8 @@ public class BattleEndActivity extends AppCompatActivity {
 
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
 
+    boolean isIntentSend = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -327,10 +329,15 @@ public class BattleEndActivity extends AppCompatActivity {
             purchase_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
-                    startActivity(intent1);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    if(!isIntentSend){
+                        MapActivity.mpEvent.clear();
+                        StartActivity.gameTime += 0.5f;
+                        Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
+                        startActivity(intent1);
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                        isIntentSend = true;
+                    }
                 }
             });
         }else{
@@ -357,10 +364,15 @@ public class BattleEndActivity extends AppCompatActivity {
                         Toast.makeText(BattleEndActivity.this, "购买成功", Toast.LENGTH_SHORT).show();
                         StartActivity.memoriaBag.add(new Memoria(chooseCardView.memoriaId,BattleEndActivity.this));
                         StartActivity.ccNumber -= StartActivity.MEMORIA_PURCHASE_PRICE[m.star-2];
-                        Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
-                        startActivity(intent1);
-                        finish();
-                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                        if(!isIntentSend){
+                            MapActivity.mpEvent.clear();
+                            StartActivity.gameTime += 0.5f;
+                            Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
+                            startActivity(intent1);
+                            finish();
+                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                            isIntentSend = true;
+                        }
                     }
                 });
             }else{

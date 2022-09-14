@@ -113,10 +113,10 @@
 },{
     "name":"巧克力戒指",
     "description":"散发着金属般光泽，造型高级优雅，宛如珠宝一般的巧克力。制作者以100%的告白成功率为目标来制作它，可是连告白的对象是谁都不知道的制作者又怎么可能实现她的目标呢?",
-    "effectDescription":"立即获得5000CC",
+    "effectDescription":"角色周围4格内每有一名我方角色，则该角色防御力+25%",
     "icon":"blue_box",
  	"background":"item_frame_3",
-    "price": 5000
+    "price": 4000
 },{
     "name":"三个黄铜戒指",
     "description":"尽管制作者是第一次做戒指，但是做工上无可挑剔。小小的戒指见证着三人的友谊。",
@@ -232,7 +232,7 @@
 },{
     "name":"小型的收藏盒",
     "description":"装满各式小东西的收藏品盒子。盒子的主人有着四处捡东西的习惯，尽管有时候会捡回比如虫子尸体这样让人不舒服的东西，她的两位监护人姐姐倒是仍旧宠溺着她的行为。",
-    "effectDescription":"立即获得2500CC",
+    "effectDescription":"每释放一次magia，所有角色基础攻击力+100",
     "icon":"blue_box",
  	"background":"item_frame_1",
     "price": 2500

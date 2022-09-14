@@ -76,6 +76,8 @@ public class MemoriaActivity extends AppCompatActivity {
     MemoriaAdapter memoriaAdapter;
     ImageView back;
 
+    boolean isIntentSend = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -292,6 +294,8 @@ public class MemoriaActivity extends AppCompatActivity {
                 clearAllChoose();
                 Intent receivedIntent = getIntent();
                 int battleId = receivedIntent.getIntExtra("battleInfo",-1);
+                boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
+
                 // 按照百分比增加血量
                 float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
                 characterList.get(chooseCharacter).realHP = (int)(1.0f*characterList.get(chooseCharacter).getRealMaxHP()*HPRatio);
@@ -299,11 +303,16 @@ public class MemoriaActivity extends AppCompatActivity {
                 if(characterList.get(chooseCharacter).realHP <= 1){
                     characterList.get(chooseCharacter).realHP = 1;
                 }
-                Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
-                intent1.putExtra("battleInfo",battleId);
-                startActivity(intent1);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                if(!isIntentSend){
+                    Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
+                    intent1.putExtra("battleInfo",battleId);
+                    intent1.putExtra("isRandomBattle", isRandomBattle);
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    isIntentSend = true;
+                }
+
             }
         });
 
@@ -313,6 +322,7 @@ public class MemoriaActivity extends AppCompatActivity {
                 clearAllChoose();
                 Intent receivedIntent = getIntent();
                 int battleId = receivedIntent.getIntExtra("battleInfo",-1);
+                boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
                 // 按照百分比增加血量
                 float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
                 characterList.get(chooseCharacter).realHP = (int)(1.0f*characterList.get(chooseCharacter).getRealMaxHP()*HPRatio);
@@ -320,11 +330,16 @@ public class MemoriaActivity extends AppCompatActivity {
                 if(characterList.get(chooseCharacter).realHP <= 1){
                     characterList.get(chooseCharacter).realHP = 1;
                 }
-                Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
-                intent1.putExtra("battleInfo",battleId);
-                startActivity(intent1);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                if(!isIntentSend){
+                    Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
+                    intent1.putExtra("battleInfo",battleId);
+                    intent1.putExtra("isRandomBattle", isRandomBattle);
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    isIntentSend = true;
+                }
+
             }
         });
 

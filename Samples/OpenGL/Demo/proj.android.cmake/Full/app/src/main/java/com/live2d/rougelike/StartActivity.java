@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.widget.ImageView;
@@ -21,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Map;
 
 import static com.live2d.rougelike.CharacterPlateView.ACCELE;
@@ -69,9 +72,9 @@ public class StartActivity extends AppCompatActivity {
 
     public static int plate_change_time = 0;
 
-    public static int griefSeedNumber = 15;
+    public static int griefSeedNumber = 3;
 
-    public static int ccNumber = 40000;
+    public static int ccNumber = 3000;
 
     public static float gameTime = 7.0f;
 
@@ -80,6 +83,8 @@ public class StartActivity extends AppCompatActivity {
     public static int PLAYER_ON_MAP_Y = 471;
 
     public static int COST_FOR_SUMMON_ADJUSTMENT_HOUSE = 2000;
+
+    public static Dictionary<Integer, ArrayList<Integer>> ENEMY_RANDOM_BUFF_DICT = new Hashtable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +109,8 @@ public class StartActivity extends AppCompatActivity {
 
         initExtraMissionList();
 
+        initRandomBuff();
+
         //Intent intent1 = new Intent(StartActivity.this, TeamChooseActivity.class);
         //intent1.putExtra("battleInfo",0);
         //startActivity(intent1);
@@ -127,7 +134,7 @@ public class StartActivity extends AppCompatActivity {
         remu.magiaSkillIconName = "icon_skill_1012";
         remu.doppelImageName = "mini_101400_dd";
         remu.isLeader = false;
-        remu.lv = 80;
+        remu.lv = 1;
         remu.star = 4;
         remu.realMP = 0;
         remu.plateList = new int[]{ACCELE,ACCELE,ACCELE,BLAST_VERTICAL,CHARGE};
@@ -180,7 +187,7 @@ public class StartActivity extends AppCompatActivity {
         //remu.initialEffectList.add(new Effect("眩晕",0,1,100,0));
 
         Character toca = new Character();
-        toca.breakThrough = 4;
+        toca.breakThrough = 1;
         toca.element = "fire";
         toca.name = "里见灯花";
         toca.choosingActivityImage = "team_choose_100700_2";
@@ -189,8 +196,8 @@ public class StartActivity extends AppCompatActivity {
         toca.doppelImageName = "mini_100700_dd";
         toca.isLeader = false;
         toca.spriteName = "Satomi Touka";
-        toca.lv = 100;
-        toca.star = 5;
+        toca.lv = 1;
+        toca.star = 4;
         toca.realMP = 0;
         toca.plateList = new int[]{ACCELE,ACCELE,BLAST_HORIZONTAL,BLAST_VERTICAL,CHARGE};
         toca.mpAttackRatio = 1.2f;
@@ -236,7 +243,7 @@ public class StartActivity extends AppCompatActivity {
        // toca.initialEffectList.add(new Effect("眩晕",0,1,100,0));
         
         Character ui = new Character();
-        ui.breakThrough = 3;
+        ui.breakThrough = 1;
         ui.element = "dark";
         ui.name = "环忧";
         ui.choosingActivityImage = "team_choose_101500_2";
@@ -245,8 +252,8 @@ public class StartActivity extends AppCompatActivity {
         ui.doppelImageName = "mini_101500_dd";
         ui.isLeader = false;
         ui.spriteName = "Tamaki Ui";
-        ui.lv = 80;
-        ui.star = 5;
+        ui.lv = 1;
+        ui.star = 4;
         ui.realMP = 0;
         ui.plateList = new int[]{ACCELE,ACCELE,BLAST_HORIZONTAL,CHARGE,CHARGE};
         ui.mpAttackRatio = 0.9f;
@@ -312,7 +319,6 @@ public class StartActivity extends AppCompatActivity {
 
     public void initBattleInfoList(){
         initMonsterList();
-
         initBossList();
     }
 
@@ -490,21 +496,20 @@ public class StartActivity extends AppCompatActivity {
             USEDMEMORIA[m.star-2].add(id);
         }
 
-        //把所有记忆都加载到背包中
-        for(int i = 0; i < USEDMEMORIA.length; i++){
-            for(int j = 0; j < USEDMEMORIA[i].size(); j++){
-                Memoria m = new Memoria(""+USEDMEMORIA[i].get(j),StartActivity.this);
-                m.setBreakthrough(0);
-                m.setLv(m.lvNow);
-                memoriaBag.add(m);
-            }
-        }
-
-        //随机删除记忆
-        while(memoriaBag.size() >= 16){
-            int tempId = (int)(Math.random()*memoriaBag.size());
-            memoriaBag.remove(tempId);
-        }
+         ////把所有记忆都加载到背包中
+         //for(int i = 0; i < USEDMEMORIA.length; i++){
+         //    for(int j = 0; j < USEDMEMORIA[i].size(); j++){
+         //        Memoria m = new Memoria(""+USEDMEMORIA[i].get(j),StartActivity.this);
+         //        m.setBreakthrough(0);
+         //        m.setLv(m.lvNow);
+         //        memoriaBag.add(m);
+         //    }
+         //}
+         ////随机删除记忆
+         //while(memoriaBag.size() >= 16){
+         //    int tempId = (int)(Math.random()*memoriaBag.size());
+         //    memoriaBag.remove(tempId);
+         //}
     }
 
     public void initCollection(){
@@ -537,6 +542,39 @@ public class StartActivity extends AppCompatActivity {
                 c.price = temp.optInt("price");
                 c.background = temp.optString("background");
                 collectionList.add(c);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void initRandomBuff(){
+        JSONObject textList = null;
+        InputStream stream = getResources().openRawResource(R.raw.random_buff);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuffer sb = new StringBuffer();
+        String line = "";
+        try{
+            while((line = reader.readLine()) != null){
+                sb.append(line);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        try{
+            textList = new JSONObject(sb.toString());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            for(int i = 2; i <= 16; i++){
+                JSONArray efList = textList.getJSONArray(""+i);
+                ArrayList<Integer> buffIdList = new ArrayList<>();
+                for(int j = 0; j < efList.length(); j++){
+                    buffIdList.add(Integer.valueOf(efList.optInt(j)));
+                }
+                ENEMY_RANDOM_BUFF_DICT.put(i, buffIdList);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -698,6 +736,11 @@ class BattleInfo{
     ArrayList<Character> monsterList = new ArrayList<>();
     Character[][] monsterFormation = new Character[3][3];
     boolean isBossBattle;
+    String battleName = "";
+    String battleDescription = "";
+    int monsterNumber = 1;
+    ArrayList<Pair<Effect,Integer>> useEffect = new ArrayList<>();
+    int extraMissionId = -1;
     public BattleInfo(){}
 }
 

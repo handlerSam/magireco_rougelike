@@ -1124,9 +1124,20 @@ public class BattleActivity extends AppCompatActivity {
 //        background_effect.spriteName = "all_f_f";
 //        background_effect.prefix = "bg_quest_"; //对于背景:bg_quest_  对于人物:mini_
 //        background_effect.canvasWidth = 1200;
+        //设置战斗背景
+        int backgroundId = (int)(Math.random()*14) + 1;
+        underlay.setImageResource(R.drawable.background_junction1_up);
+        backgroundLeft.setImageResource(getImageByString("background_junction"+backgroundId+"_down"));
+        backgroundRight.setImageResource(getImageByString("background_junction"+backgroundId+"_down"));
 
         //加载额外任务
-        extraMissionId = getIntent().getIntExtra("extraMissionId",0);
+        boolean isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
+        if(isRandomBattle){
+            extraMissionId = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi.extraMissionId;
+        }else{
+            extraMissionId = (int)(Math.random()*StartActivity.extraMissionList.size());
+        }
+
 
         ColorMatrix cm = new ColorMatrix();
         cm.setSaturation(0); // 设置饱和度
@@ -1666,9 +1677,14 @@ public class BattleActivity extends AppCompatActivity {
 
     public void loadCharacter(){
         Formation formation = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
-
+        BattleInfo bi;
         Intent receivedIntent = getIntent();
-        BattleInfo bi = StartActivity.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
+        boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",false);
+        if(isRandomBattle){
+            bi = MapActivity.mpEvent.get(receivedIntent.getIntExtra("battleInfo",-1)).bi;
+        }else{
+            bi = StartActivity.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
+        }
 
         monsterFormation = bi.monsterFormation;
         isBossBattle = bi.isBossBattle;
@@ -4202,9 +4218,11 @@ public class BattleActivity extends AppCompatActivity {
             public void run() {
                 Intent receivedIntent = getIntent();
                 int bi = receivedIntent.getIntExtra("battleInfo",0);
+                boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",false);
                 Intent intent1 = new Intent(BattleActivity.this, BattleEndActivity.class);
                 intent1.putExtra("battleInfo", bi);
-                intent1.putExtra("achieveExtraMission",achieveExtraMission);
+                intent1.putExtra("achieveExtraMission", achieveExtraMission);
+                intent1.putExtra("isRandomBattle", isRandomBattle);
                 intent1.putExtra("extraMissionId", extraMissionId);
                 startActivity(intent1);
                 finish();
@@ -4279,6 +4297,14 @@ class Effect{
         this.time = time;
         this.probability = probability;
         this.valueTime = valueTime;
+    }
+
+    Effect(Effect copy){
+        this.name = copy.name;
+        this.value = copy.value;
+        this.time = copy.time;
+        this.probability = copy.probability;
+        this.valueTime = copy.valueTime;
     }
 
     public String getDescription(){

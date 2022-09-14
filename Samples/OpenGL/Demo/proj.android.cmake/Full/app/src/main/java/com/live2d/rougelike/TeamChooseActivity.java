@@ -53,6 +53,7 @@ public class TeamChooseActivity extends AppCompatActivity {
     ImageView[] chooseChar = new ImageView[5];
     ImageView back;
 
+    boolean isIntentSend = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,13 +135,19 @@ public class TeamChooseActivity extends AppCompatActivity {
                             MemoriaActivity.chooseCharacter = getCharacterIdInCharacterList(characters[temp]);
                             Intent receivedIntent = getIntent();
                             int battleId = receivedIntent.getIntExtra("battleInfo",-1);
-                            Intent intent1 = new Intent(TeamChooseActivity.this,MemoriaActivity.class);
-                            intent1.putExtra("battleInfo",battleId);
-                            intent1.putExtra("touchMemoriaId",tempJ);
-                            intent1.putExtra("HPRatio",1.0f*characters[temp].realHP/characters[temp].getRealMaxHP());
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                            boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
+                            if(!isIntentSend){
+                                Intent intent1 = new Intent(TeamChooseActivity.this,MemoriaActivity.class);
+                                intent1.putExtra("battleInfo",battleId);
+                                intent1.putExtra("isRandomBattle", isRandomBattle);
+                                intent1.putExtra("touchMemoriaId",tempJ);
+                                intent1.putExtra("HPRatio",1.0f*characters[temp].realHP/characters[temp].getRealMaxHP());
+                                startActivity(intent1);
+                                finish();
+                                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                isIntentSend = true;
+                            }
+
                         }
                     }
                 });
@@ -205,15 +212,18 @@ public class TeamChooseActivity extends AppCompatActivity {
 //                    }
                         StartActivity.PLAYER_ON_MAP_X = receivedIntent.getIntExtra("eventX", -1);
                         StartActivity.PLAYER_ON_MAP_Y = receivedIntent.getIntExtra("eventY", -1);
-                        MapActivity.eventX.clear();
-                        MapActivity.eventY.clear();
+                        if(!isIntentSend){
+                            boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
+                            Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
+                            intent1.putExtra("isRandomBattle", isRandomBattle);
+                            intent1.putExtra("battleInfo", battleId);
+                            intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
+                            startActivity(intent1);
+                            finish();
+                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                            isIntentSend = true;
+                        }
 
-                        Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
-                        intent1.putExtra("battleInfo", battleId);
-                        intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
-                        startActivity(intent1);
-                        finish();
-                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                     }
                 });
             }
@@ -235,13 +245,19 @@ public class TeamChooseActivity extends AppCompatActivity {
         openFormation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent receivedIntent = getIntent();
-                int battleId = receivedIntent.getIntExtra("battleInfo",-1);
-                Intent intent1 = new Intent(TeamChooseActivity.this, FormationActivity.class);
-                intent1.putExtra("battleInfo",battleId);
-                startActivity(intent1);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                if(!isIntentSend){
+                    Intent receivedIntent = getIntent();
+                    int battleId = receivedIntent.getIntExtra("battleInfo",-1);
+                    boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
+                    Intent intent1 = new Intent(TeamChooseActivity.this, FormationActivity.class);
+                    intent1.putExtra("battleInfo",battleId);
+                    intent1.putExtra("isRandomBattle", isRandomBattle);
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    isIntentSend = true;
+                }
+
             }
         });
 
@@ -249,10 +265,14 @@ public class TeamChooseActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(TeamChooseActivity.this, MapActivity.class);
-                startActivity(intent1);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                if(!isIntentSend){
+                    Intent intent1 = new Intent(TeamChooseActivity.this, MapActivity.class);
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    isIntentSend = true;
+                }
+
             }
         });
 

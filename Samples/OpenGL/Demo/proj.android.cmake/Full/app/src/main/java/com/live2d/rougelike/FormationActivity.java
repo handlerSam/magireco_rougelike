@@ -18,6 +18,8 @@ public class FormationActivity extends AppCompatActivity {
     RecyclerView formationRecyclerView;
     public Formation choseFormation = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
 
+    boolean isIntentSend = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +50,17 @@ public class FormationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent receivedIntent = getIntent();
                 int battleId = receivedIntent.getIntExtra("battleInfo",-1);
-                Intent intent1 = new Intent(FormationActivity.this, TeamChooseActivity.class);
-                intent1.putExtra("battleInfo",battleId);
-                startActivity(intent1);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
+                if(!isIntentSend){
+                    Intent intent1 = new Intent(FormationActivity.this, TeamChooseActivity.class);
+                    intent1.putExtra("battleInfo",battleId);
+                    intent1.putExtra("isRandomBattle", isRandomBattle);
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    isIntentSend = true;
+                }
+
             }
         });
 

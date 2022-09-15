@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -141,6 +142,8 @@ public class TeamChooseActivity extends AppCompatActivity {
                                 intent1.putExtra("battleInfo",battleId);
                                 intent1.putExtra("isRandomBattle", isRandomBattle);
                                 intent1.putExtra("touchMemoriaId",tempJ);
+                                intent1.putExtra("eventX", getIntent().getIntExtra("eventX",-1));
+                                intent1.putExtra("eventY", getIntent().getIntExtra("eventY",-1));
                                 intent1.putExtra("HPRatio",1.0f*characters[temp].realHP/characters[temp].getRealMaxHP());
                                 startActivity(intent1);
                                 finish();
@@ -212,11 +215,14 @@ public class TeamChooseActivity extends AppCompatActivity {
 //                    }
                         StartActivity.PLAYER_ON_MAP_X = receivedIntent.getIntExtra("eventX", -1);
                         StartActivity.PLAYER_ON_MAP_Y = receivedIntent.getIntExtra("eventY", -1);
+                        Log.d("Sam","PlayerX:"+StartActivity.PLAYER_ON_MAP_X+", PlayerY:"+StartActivity.PLAYER_ON_MAP_Y);
                         if(!isIntentSend){
                             boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
                             Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
                             intent1.putExtra("isRandomBattle", isRandomBattle);
                             intent1.putExtra("battleInfo", battleId);
+                            intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                            intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                             intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
                             startActivity(intent1);
                             finish();
@@ -251,6 +257,8 @@ public class TeamChooseActivity extends AppCompatActivity {
                     boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
                     Intent intent1 = new Intent(TeamChooseActivity.this, FormationActivity.class);
                     intent1.putExtra("battleInfo",battleId);
+                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                     intent1.putExtra("isRandomBattle", isRandomBattle);
                     startActivity(intent1);
                     finish();

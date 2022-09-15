@@ -84,7 +84,7 @@ public class StartActivity extends AppCompatActivity {
 
     public static int COST_FOR_SUMMON_ADJUSTMENT_HOUSE = 2000;
 
-    public static Dictionary<Integer, ArrayList<Integer>> ENEMY_RANDOM_BUFF_DICT = new Hashtable();
+    public static Dictionary<Integer, ArrayList<String>> ENEMY_RANDOM_BUFF_DICT = new Hashtable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +133,7 @@ public class StartActivity extends AppCompatActivity {
         remu.charIconImage = "card_10144_";
         remu.magiaSkillIconName = "icon_skill_1012";
         remu.doppelImageName = "mini_101400_dd";
+        remu.miniImage = "mini_remu";
         remu.isLeader = false;
         remu.lv = 1;
         remu.star = 4;
@@ -194,6 +195,7 @@ public class StartActivity extends AppCompatActivity {
         toca.charIconImage = "card_10074_";
         toca.magiaSkillIconName = "icon_skill_1014";
         toca.doppelImageName = "mini_100700_dd";
+        toca.miniImage = "mini_toca";
         toca.isLeader = false;
         toca.spriteName = "Satomi Touka";
         toca.lv = 1;
@@ -250,6 +252,7 @@ public class StartActivity extends AppCompatActivity {
         ui.charIconImage = "card_10154_";
         ui.magiaSkillIconName = "icon_skill_1014";
         ui.doppelImageName = "mini_101500_dd";
+        ui.miniImage = "mini_ui";
         ui.isLeader = false;
         ui.spriteName = "Tamaki Ui";
         ui.lv = 1;
@@ -570,9 +573,9 @@ public class StartActivity extends AppCompatActivity {
         try{
             for(int i = 2; i <= 16; i++){
                 JSONArray efList = textList.getJSONArray(""+i);
-                ArrayList<Integer> buffIdList = new ArrayList<>();
+                ArrayList<String> buffIdList = new ArrayList<>();
                 for(int j = 0; j < efList.length(); j++){
-                    buffIdList.add(Integer.valueOf(efList.optInt(j)));
+                    buffIdList.add(efList.optString(j));
                 }
                 ENEMY_RANDOM_BUFF_DICT.put(i, buffIdList);
             }
@@ -741,6 +744,7 @@ class BattleInfo{
     int monsterNumber = 1;
     ArrayList<Pair<Effect,Integer>> useEffect = new ArrayList<>();
     int extraMissionId = -1;
+    String recommendLV = "??";
     public BattleInfo(){}
 }
 

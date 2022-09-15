@@ -92,9 +92,9 @@ public class SpriteViewer extends ConstraintLayout {
                 switch (message.what){
                     case 0:
                         webView.setVisibility(View.VISIBLE);
-                        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((MapActivity)context).black_mask, "alpha", 1f, 0);
-                        fadeOut.setDuration(500);
-                        fadeOut.start();
+                        Message m = new Message();
+                        m.what = 0;
+                        ((MapActivity)context).handler.sendMessage(m);
                         break;
                     default:
                 }

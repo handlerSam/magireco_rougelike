@@ -64,6 +64,8 @@ public class BattleEndActivity extends AppCompatActivity {
 
     boolean isIntentSend = false;
 
+    boolean isOpenMemoriaChooseFrame = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,71 +224,75 @@ public class BattleEndActivity extends AppCompatActivity {
         main_frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation mainAnimation = new AlphaAnimation(1f,0f);
-                mainAnimation.setDuration(1000);
-                mainAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        memoria_choose_frame.setVisibility(View.VISIBLE);
-                        updateCCAndGriefSeedView();
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        main_frame.setVisibility(View.GONE);
-                        touch_screen.getAnimation().setAnimationListener(null);
-                        touch_screen.clearAnimation();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                main_frame.startAnimation(mainAnimation);
-
-                Animation memoriaChooseAnimation = new AlphaAnimation(0f,1f);
-                memoriaChooseAnimation.setDuration(1000);
-                memoria_choose_frame.startAnimation(memoriaChooseAnimation);
-
-                //boolean isChooseSkillMemoria = Math.random() > 0.5f;
-                cardNumber.setText("请选择一张记忆结晶: ");
-                for(int i = 0; i < 6; i++){
-                    for(int j = 0; j < 3; j++){
-                        //随机记忆
-                        int randomId = (int)(Math.random()*StartActivity.USEDMEMORIA[j].size());
-                        Memoria m = new Memoria(""+StartActivity.USEDMEMORIA[j].get(randomId),BattleEndActivity.this);
-                        final CardView cd = new CardView(BattleEndActivity.this);
-                        cd.setMemoria(m.id);
-                        cd.setLv(m.lvNow,m.lvMax);
-                        cd.setChoose(false);
-                        if(j == 0){
-                            star_2_memoria_list.addView(cd);
-                        }else if(j == 1){
-                            star_3_memoria_list.addView(cd);
-                        }else if(j == 2){
-                            star_4_memoria_list.addView(cd);
+                if(!isOpenMemoriaChooseFrame){
+                    Animation mainAnimation = new AlphaAnimation(1f,0f);
+                    mainAnimation.setDuration(1000);
+                    mainAnimation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            memoria_choose_frame.setVisibility(View.VISIBLE);
+                            updateCCAndGriefSeedView();
                         }
-                        cd.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(chooseCardView == cd){
-                                    chooseCardView.setChoose(false);
-                                    chooseCardView = null;
-                                    updateChooseMemoria();
-                                }else{
-                                    if(chooseCardView != null){
-                                        chooseCardView.setChoose(false);
-                                    }
-                                    chooseCardView = cd;
-                                    chooseCardView.setChoose(true);
-                                    updateChooseMemoria();
-                                }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            main_frame.setVisibility(View.GONE);
+                            touch_screen.getAnimation().setAnimationListener(null);
+                            touch_screen.clearAnimation();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    main_frame.startAnimation(mainAnimation);
+
+                    Animation memoriaChooseAnimation = new AlphaAnimation(0f,1f);
+                    memoriaChooseAnimation.setDuration(1000);
+                    memoria_choose_frame.startAnimation(memoriaChooseAnimation);
+
+                    //boolean isChooseSkillMemoria = Math.random() > 0.5f;
+                    cardNumber.setText("请选择一张记忆结晶: ");
+                    for(int i = 0; i < 6; i++){
+                        for(int j = 0; j < 3; j++){
+                            //随机记忆
+                            int randomId = (int)(Math.random()*StartActivity.USEDMEMORIA[j].size());
+                            Memoria m = new Memoria(""+StartActivity.USEDMEMORIA[j].get(randomId),BattleEndActivity.this);
+                            final CardView cd = new CardView(BattleEndActivity.this);
+                            cd.setMemoria(m.id);
+                            cd.setLv(m.lvNow,m.lvMax);
+                            cd.setChoose(false);
+                            if(j == 0){
+                                star_2_memoria_list.addView(cd);
+                            }else if(j == 1){
+                                star_3_memoria_list.addView(cd);
+                            }else if(j == 2){
+                                star_4_memoria_list.addView(cd);
                             }
-                        });
+                            cd.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if(chooseCardView == cd){
+                                        chooseCardView.setChoose(false);
+                                        chooseCardView = null;
+                                        updateChooseMemoria();
+                                    }else{
+                                        if(chooseCardView != null){
+                                            chooseCardView.setChoose(false);
+                                        }
+                                        chooseCardView = cd;
+                                        chooseCardView.setChoose(true);
+                                        updateChooseMemoria();
+                                    }
+                                }
+                            });
+                        }
                     }
+                    updateChooseMemoria();
+                    isOpenMemoriaChooseFrame = true;
                 }
-                updateChooseMemoria();
+
             }
         });
 
@@ -384,7 +390,7 @@ public class BattleEndActivity extends AppCompatActivity {
 
     public Bonus getBattleBonus(){
         Intent receivedIntent = getIntent();
-        BattleInfo bi = StartActivity.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
+        BattleInfo bi = MapActivity.mpEvent.get(receivedIntent.getIntExtra("battleInfo",0)).bi;
         if(!bi.isBossBattle){
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 1-2悲叹之种，2000-3000CC
@@ -415,7 +421,7 @@ public class BattleEndActivity extends AppCompatActivity {
     public boolean isReceivedCollection(){
         int probability = 0;
         Intent receivedIntent = getIntent();
-        BattleInfo bi = StartActivity.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
+        BattleInfo bi = MapActivity.mpEvent.get(receivedIntent.getIntExtra("battleInfo",0)).bi;
         if(!bi.isBossBattle){
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 普通战斗

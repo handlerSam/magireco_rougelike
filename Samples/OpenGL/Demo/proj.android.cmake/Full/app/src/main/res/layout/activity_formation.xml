@@ -327,7 +327,7 @@
             android:layout_marginEnd="50px"
             android:layout_marginRight="50px"
             android:layout_marginBottom="15px"
-            android:src="@drawable/start_battle"
+            android:src="@drawable/confirm_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

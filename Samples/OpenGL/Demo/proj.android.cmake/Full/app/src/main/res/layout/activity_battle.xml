@@ -24,13 +24,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/backgroundLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
         <ImageView
             android:id="@+id/backgroundLeft"
             android:layout_width="2348px"
             android:layout_height="0px"
-            android:scaleType="fitXY"
             android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:src="@drawable/background_junction1_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -39,11 +41,11 @@
             android:id="@+id/backgroundRight"
             android:layout_width="2348px"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
             android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:src="@drawable/background_street"
-            app:layout_constraintStart_toEndOf="@id/backgroundLeft"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/backgroundLeft" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

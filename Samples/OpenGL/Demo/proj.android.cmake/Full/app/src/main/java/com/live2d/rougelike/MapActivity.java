@@ -1,5 +1,6 @@
 package com.live2d.rougelike;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -7,12 +8,16 @@ import androidx.customview.widget.ViewDragHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -50,6 +55,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     public static float mapY = 0;
     private boolean isInit = false;
     public static boolean isMapSizeTransferred = false;
+    public boolean isMaskStrip = false;
 
     private ConstraintLayout kamihamaMap;
     private ConstraintLayout events_layout;
@@ -65,6 +71,25 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     ConstraintLayout collection_list_background;
     TextView no_item_text_view;
     ImageView cancel_button;
+    ImageView leader_replace_image_view;
+
+    ConstraintLayout map_event_detail_frame;
+    ConstraintLayout map_event_detail_title_frame;
+    TextView map_event_detail_title;
+    TextView event_description;
+    TextView recommend_lv;
+    TextView enemy_number;
+    TextView carry_buff;
+    ConstraintLayout go_button;
+
+    ConstraintLayout extra_mission_frame;
+    TextView extra_mission_text;
+    TextView extra_mission_add_number;
+    ImageView extra_mission_cc_icon;
+    ImageView extra_mission_grief_seed_icon;
+
+
+    private SpriteViewer leader;
 
     private List<String> commonBossNameList = Arrays.asList("monster_钟摆的魔女", "monster_立耳的魔女",
             "monster_Flower Speaker之谣", "monster_沙地的魔女", "monster_羊之魔女", "monster_屋顶的魔女",
@@ -86,7 +111,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     private Pair<Integer, Integer>[] specialPoint = new Pair[]{new Pair(536,1054), new Pair(1587,1198),
     new Pair(2793,656), new Pair(2194,958), new Pair(1345,1368), new Pair(3539,334), new Pair(2266,149), new Pair(2266,149)};
 
-    private SpriteViewer leader;
+
 
     //private ViewDragHelper mDragHelper;
 //    private float scale = 1;
@@ -98,7 +123,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
     public static final int EXPLORE_RADIUS = 200;//相对于4096*2048的地图而言
 
-    public static final int EVENT_NUMBER = 2;
+    public static final int EVENT_NUMBER = 10;
 
     private PointF startPointF = new PointF();//初始坐标
     private float distance;//初始距离
@@ -111,10 +136,29 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     public static ArrayList<MapEvent> mpEvent = new ArrayList<>();
 
     public static ArrayList<Pair<Effect,Integer>> effectPool = new ArrayList<>();
-
-    public static ArrayList<BattleInfo> randomBattleInfoList = new ArrayList<>();
-
     boolean isIntentSend = false;
+
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message message) {
+            //map activity
+            if(!isMaskStrip){
+                switch (message.what) {
+                    case 1:
+                        leader.setVisibility(View.GONE);
+                        leader_replace_image_view.setVisibility(View.VISIBLE);
+                    case 0:
+                        isMaskStrip = true;
+                        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(black_mask, "alpha", 1f, 0);
+                        fadeOut.setDuration(500);
+                        fadeOut.start();
+                        break;
+                    default:
+                }
+            }
+            return true;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +208,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 MODE = MODE_SCALE;
                 break;
             case MotionEvent.ACTION_MOVE://滑动（单+双）
+                map_event_detail_frame.setVisibility(View.GONE);
                 if (MODE == MODE_DRAG) {//单指滑动时
                     mapX += (int)(event.getX() - startPointF.x);
                     mapY += (int)(event.getY() - startPointF.y);
@@ -240,6 +285,20 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         collection_list_background = findViewById(R.id.collection_list_background);
         no_item_text_view = findViewById(R.id.no_item_text_view);
         cancel_button = findViewById(R.id.cancel_button);
+        leader_replace_image_view = findViewById(R.id.leader_replace_image_view);
+        map_event_detail_frame = findViewById(R.id.map_event_detail_frame);
+        map_event_detail_title_frame = findViewById(R.id.map_event_detail_title_frame);
+        map_event_detail_title = findViewById(R.id.map_event_detail_title);
+        event_description = findViewById(R.id.event_description);
+        recommend_lv = findViewById(R.id.recommend_lv);
+        enemy_number = findViewById(R.id.enemy_number);
+        carry_buff = findViewById(R.id.carry_buff);
+        go_button = findViewById(R.id.go_button);
+        extra_mission_frame = findViewById(R.id.extra_mission_frame);
+        extra_mission_text = findViewById(R.id.extra_mission_text);
+        extra_mission_add_number = findViewById(R.id.extra_mission_add_number);
+        extra_mission_cc_icon = findViewById(R.id.extra_mission_cc_icon);
+        extra_mission_grief_seed_icon = findViewById(R.id.extra_mission_grief_seed_icon);
     }
 
     public void initView(){
@@ -248,6 +307,8 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         updateCCAndGriefSeedView();
 
         black_mask.setVisibility(View.VISIBLE);
+
+        map_event_detail_frame.setVisibility(View.GONE);
 
         if(!isMapSizeTransferred){
             for(int i = 0; i <StartActivity.mapRandomPoint.length; i++){
@@ -297,28 +358,39 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(MapActivity.this);
-                dialog.setMessage("是否花费 "+ StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE + "cc 购买调整屋的上门服务？\n(当前地图事件会更新)");//正文
-                dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
-                dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //正确逻辑
-                        StartActivity.ccNumber -= StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE;
-                        mpEvent.clear();
-                        StartActivity.gameTime += 0.5f;
-                        if(!isIntentSend){
-                            Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(0,android.R.anim.fade_out);
-                            isIntentSend = true;
-                        }
-                    }});
-                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //错误逻辑
-                    }});
+                if(StartActivity.ccNumber >= StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE){
+                    dialog.setMessage("是否花费 "+ StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE + "cc 购买调整屋的上门服务？\n(当前地图事件会更新)");//正文
+                    dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
+                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //正确逻辑
+                            StartActivity.ccNumber -= StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE;
+                            mpEvent.clear();
+                            StartActivity.gameTime += 0.5f;
+                            if(!isIntentSend){
+                                Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);
+                                startActivity(intent1);
+                                finish();
+                                overridePendingTransition(0,android.R.anim.fade_out);
+                                isIntentSend = true;
+                            }
+                        }});
+                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //错误逻辑
+                        }});
+                }else{
+                    dialog.setMessage("购买调整屋的上门服务需要 "+ StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE + "cc, cc不足");//正文
+                    dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
+                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //错误逻辑
+                        }});
+                }
+
                 dialog.show();
 
             }
@@ -342,6 +414,11 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 collection_list_background.setVisibility(View.GONE);
             }
         });
+
+        //若spriteViewer没有正常启动，则显示备用小人
+        Message tempM = new Message();
+        tempM.what = 1;
+        handler.sendMessageDelayed(tempM, 3000);
     }
 
     void updateCCAndGriefSeedView(){
@@ -373,8 +450,14 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         sampleSet.clone(kamihamaMap);
         sampleSet.connect(leader.getId(),ConstraintSet.START,kamihamaMap.getId(),ConstraintSet.START,leaderX-40);//人物view宽80
         sampleSet.connect(leader.getId(),ConstraintSet.TOP,kamihamaMap.getId(),ConstraintSet.TOP,leaderY-110);//人物view长110
-        sampleSet.applyTo(kamihamaMap);
         leader.setVisibility(View.VISIBLE);
+
+        //设置好一份备份，当spriteViewer无法正常启动时则显示备份
+        leader_replace_image_view.setImageResource(getImageByString(temp.miniImage));
+        sampleSet.connect(leader_replace_image_view.getId(),ConstraintSet.START,kamihamaMap.getId(),ConstraintSet.START,leaderX-40);//人物view宽80
+        sampleSet.connect(leader_replace_image_view.getId(),ConstraintSet.TOP,kamihamaMap.getId(),ConstraintSet.TOP,leaderY-110);//人物view长110
+        sampleSet.applyTo(kamihamaMap);
+        leader_replace_image_view.setVisibility(View.GONE);
         //leader.resetCharacter();
         //leader.webView.loadUrl("javascript:changeSprite()");
 
@@ -405,6 +488,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             MapEvent mpe = new MapEvent();
                             mpe.x = tempX;
                             mpe.y = tempY;
+                            Log.d("Sam","randomMpeX:"+tempX+", mpeY:"+tempY);
                             mpEvent.add(mpe);
                             Log.d("Sam","addEventPoint:"+tempX+","+tempY);
                         }
@@ -448,6 +532,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
             final MapEvent mpe = mpEvent.get(i);
             final ImageView ep = new ImageView(this);
             final int tempI = i;
+            Log.d("Sam","mpeX:"+mpe.x+", mpeY:"+mpe.y);
             ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(25,32);
             ep.setLayoutParams(p);
             ep.setId(View.generateViewId());
@@ -464,18 +549,48 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 ep.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!isIntentSend){
-                            Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
-                            intent1.putExtra("battleInfo", tempI);
-                            intent1.putExtra("isRandomBattle", true);
-                            intent1.putExtra("eventX", mpe.x);
-                            intent1.putExtra("eventY", mpe.y);
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                            isIntentSend = true;
+                        map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_pink_title);
+                        map_event_detail_title.setText(mpe.bi.battleName);
+                        event_description.setText(mpe.bi.battleDescription);
+                        recommend_lv.setText(mpe.bi.recommendLV);
+                        enemy_number.setText(""+mpe.bi.monsterNumber);
+                        String tempEffectDescription = "";
+                        for(int j = 0; j < mpe.bi.useEffect.size(); j++){
+                            tempEffectDescription += mpe.bi.useEffect.get(j).first.getDescription() + "\n";
+                        }
+                        carry_buff.setText(tempEffectDescription);
+                        map_event_detail_frame.setVisibility(View.VISIBLE);
+
+                        ExtraMission em = StartActivity.extraMissionList.get(mpe.bi.extraMissionId);
+                        extra_mission_frame.setVisibility(View.VISIBLE);
+                        extra_mission_text.setText(em.name);
+                        if(em.bonus.cc > 0){
+                            extra_mission_add_number.setText("+"+em.bonus.cc);
+                            extra_mission_cc_icon.setVisibility(View.VISIBLE);
+                            extra_mission_grief_seed_icon.setVisibility(View.GONE);
+                        }else{
+                            extra_mission_add_number.setText("+"+em.bonus.griefSeed);
+                            extra_mission_cc_icon.setVisibility(View.GONE);
+                            extra_mission_grief_seed_icon.setVisibility(View.VISIBLE);
                         }
 
+
+                        go_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(!isIntentSend){
+                                    Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
+                                    intent1.putExtra("battleInfo", tempI);
+                                    intent1.putExtra("isRandomBattle", true);
+                                    intent1.putExtra("eventX", mpe.x);
+                                    intent1.putExtra("eventY", mpe.y);
+                                    startActivity(intent1);
+                                    finish();
+                                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                    isIntentSend = true;
+                                }
+                            }
+                        });
                     }
                 });
             }else if(mpe.eventType == BOSS_BATTLE){
@@ -484,18 +599,47 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 ep.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!isIntentSend){
-                            Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
-                            intent1.putExtra("battleInfo", tempI);
-                            intent1.putExtra("isRandomBattle", true);
-                            intent1.putExtra("eventX", mpe.x);
-                            intent1.putExtra("eventY", mpe.y);
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                            isIntentSend = true;
+                        map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_red_title);
+                        map_event_detail_title.setText(mpe.bi.battleName);
+                        event_description.setText(mpe.bi.battleDescription);
+                        recommend_lv.setText(mpe.bi.recommendLV);
+                        enemy_number.setText(""+mpe.bi.monsterNumber);
+                        String tempEffectDescription = "";
+                        for(int j = 0; j < mpe.bi.useEffect.size(); j++){
+                            tempEffectDescription += mpe.bi.useEffect.get(j).first.getDescription() + "\n";
+                        }
+                        carry_buff.setText(tempEffectDescription);
+                        map_event_detail_frame.setVisibility(View.VISIBLE);
+
+                        ExtraMission em = StartActivity.extraMissionList.get(mpe.bi.extraMissionId);
+                        extra_mission_frame.setVisibility(View.VISIBLE);
+                        extra_mission_text.setText(em.name);
+                        if(em.bonus.cc > 0){
+                            extra_mission_add_number.setText("+"+em.bonus.cc);
+                            extra_mission_cc_icon.setVisibility(View.VISIBLE);
+                            extra_mission_grief_seed_icon.setVisibility(View.GONE);
+                        }else{
+                            extra_mission_add_number.setText("+"+em.bonus.griefSeed);
+                            extra_mission_cc_icon.setVisibility(View.GONE);
+                            extra_mission_grief_seed_icon.setVisibility(View.VISIBLE);
                         }
 
+                        go_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(!isIntentSend){
+                                    Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
+                                    intent1.putExtra("battleInfo", tempI);
+                                    intent1.putExtra("isRandomBattle", true);
+                                    intent1.putExtra("eventX", mpe.x);
+                                    intent1.putExtra("eventY", mpe.y);
+                                    startActivity(intent1);
+                                    finish();
+                                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                    isIntentSend = true;
+                                }
+                            }
+                        });
                     }
                 });
             }else if(mpe.eventType == EVENT){
@@ -504,17 +648,30 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 ep.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        StartActivity.PLAYER_ON_MAP_X = mpe.x;
-                        StartActivity.PLAYER_ON_MAP_Y = mpe.y;
-                        if(!isIntentSend){
-                            MapActivity.mpEvent.clear();
-                            StartActivity.gameTime += 0.5f;
-                            Intent intent1 = new Intent(MapActivity.this, DialogActivity.class);
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(0,android.R.anim.fade_out);
-                            isIntentSend = true;
-                        }
+                        map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_pink_title);
+                        map_event_detail_title.setText("随机事件");
+                        event_description.setText("那里似乎有些什么，但是不过去看看显然不知道那里具体会发生什么。");
+                        recommend_lv.setText("--");
+                        enemy_number.setText("--");
+                        carry_buff.setText("");
+                        map_event_detail_frame.setVisibility(View.VISIBLE);
+                        extra_mission_frame.setVisibility(View.GONE);
+                        go_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                StartActivity.PLAYER_ON_MAP_X = mpe.x;
+                                StartActivity.PLAYER_ON_MAP_Y = mpe.y;
+                                if(!isIntentSend){
+                                    MapActivity.mpEvent.clear();
+                                    StartActivity.gameTime += 0.5f;
+                                    Intent intent1 = new Intent(MapActivity.this, DialogActivity.class);
+                                    startActivity(intent1);
+                                    finish();
+                                    overridePendingTransition(0,android.R.anim.fade_out);
+                                    isIntentSend = true;
+                                }
+                            }
+                        });
                     }
                 });
             }else{
@@ -523,17 +680,31 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 ep.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        StartActivity.PLAYER_ON_MAP_X = mpe.x;
-                        StartActivity.PLAYER_ON_MAP_Y = mpe.y;
-                        if(!isIntentSend){
-                            MapActivity.mpEvent.clear();
-                            StartActivity.gameTime += 0.5f;
-                            Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(0,android.R.anim.fade_out);
-                            isIntentSend = true;
-                        }
+                        map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_pink_title);
+                        map_event_detail_title.setText("商铺");
+                        event_description.setText("一间小小的店铺，刚好可以补充一些物资。");
+                        recommend_lv.setText("--");
+                        enemy_number.setText("--");
+                        carry_buff.setText("");
+                        extra_mission_frame.setVisibility(View.GONE);
+                        map_event_detail_frame.setVisibility(View.VISIBLE);
+                        go_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                StartActivity.PLAYER_ON_MAP_X = mpe.x;
+                                StartActivity.PLAYER_ON_MAP_Y = mpe.y;
+                                if(!isIntentSend){
+                                    MapActivity.mpEvent.clear();
+                                    StartActivity.gameTime += 0.5f;
+                                    Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);
+                                    startActivity(intent1);
+                                    finish();
+                                    overridePendingTransition(0,android.R.anim.fade_out);
+                                    isIntentSend = true;
+                                }
+                            }
+                        });
+
                     }
                 });
             }
@@ -648,13 +819,11 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         Log.d("Sam","generateTotalBuff");
         bi.useEffect = new ArrayList<>();
         //随机战斗的总buff池
-        ArrayList<Integer> randomBuffChoice = StartActivity.ENEMY_RANDOM_BUFF_DICT.get(sumPoint);
-        int tempChoice = randomBuffChoice.get((int)(Math.random()*randomBuffChoice.size()));
-        if(tempChoice % 2 == 1){
-            bi.useEffect.add(new Pair<>(new Effect(effectPool.get(0).first), effectPool.get(0).second));
-        }
-        for(int j = 1; j < effectPool.size(); j++){
-            if((tempChoice % (int)Math.pow(2,j+1)) - (tempChoice % (int)Math.pow(2,j)) == 2){
+        ArrayList<String> randomBuffChoice = StartActivity.ENEMY_RANDOM_BUFF_DICT.get(sumPoint);
+        String tempChoice = randomBuffChoice.get((int)(Math.random()*randomBuffChoice.size()));
+        Log.d("Sam","useBuffChoice:"+tempChoice);
+        for(int j = 0; j < effectPool.size(); j++){
+            if(tempChoice.substring(j,j+1).equals("1")){
                 bi.useEffect.add(new Pair<>(new Effect(effectPool.get(j).first), effectPool.get(j).second));
             }
         }
@@ -736,6 +905,19 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
         }
 
+        if(StartActivity.gameTime < 8.01f){
+            bi.recommendLV = "1";
+        }else if(StartActivity.gameTime < 10.01f){
+            bi.recommendLV = "20";
+        }else if(StartActivity.gameTime < 12.01f){
+            bi.recommendLV = "40";
+        }else if(StartActivity.gameTime < 14.01f){
+            bi.recommendLV = "60";
+        }else if(StartActivity.gameTime < 16.01f){
+            bi.recommendLV = "80";
+        }else if(StartActivity.gameTime < 18.01f){
+            bi.recommendLV = "100";
+        }
         bi.extraMissionId = (int)(Math.random()*StartActivity.extraMissionList.size());
         return bi;
     }
@@ -760,37 +942,37 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 c.lv = 1;
                 c.HP = 4500;
                 c.realHP = c.HP;
-                c.ATK = 500;
+                c.ATK = 750;
                 c.DEF = 1000;
             }else if(StartActivity.gameTime < 10.01f){
                 c.lv = 20;
                 c.HP = 9800;
                 c.realHP = c.HP;
-                c.ATK = 1000;
+                c.ATK = 1500;
                 c.DEF = 4500;
             }else if(StartActivity.gameTime < 12.01f){
                 c.lv = 40;
                 c.HP = 15000;
                 c.realHP = c.HP;
-                c.ATK = 1500;
+                c.ATK = 2250;
                 c.DEF = 6500;
             }else if(StartActivity.gameTime < 14.01f){
                 c.lv = 60;
                 c.HP = 35000;
                 c.realHP = c.HP;
-                c.ATK = 3200;
+                c.ATK = 4800;
                 c.DEF = 7000;
             }else if(StartActivity.gameTime < 16.01f){
                 c.lv = 80;
                 c.HP = 80000;
                 c.realHP = c.HP;
-                c.ATK = 6000;
+                c.ATK = 9000;
                 c.DEF = 10500;
             }else if(StartActivity.gameTime < 18.01f){
                 c.lv = 100;
                 c.HP = 150000;
                 c.realHP = c.HP;
-                c.ATK = 12000;
+                c.ATK = 14400;
                 c.DEF = 13000;
             }
         }else{
@@ -798,31 +980,31 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 c.lv = 1;
                 c.HP = 16000;
                 c.realHP = c.HP;
-                c.ATK = 750;
+                c.ATK = 1125;
                 c.DEF = 1300;
             }else if(StartActivity.gameTime < 10.01f){
                 c.lv = 20;
                 c.HP = 34300;
                 c.realHP = c.HP;
-                c.ATK = 1250;
+                c.ATK = 1875;
                 c.DEF = 4750;
             }else if(StartActivity.gameTime < 12.01f){
                 c.lv = 40;
                 c.HP = 52500;
                 c.realHP = c.HP;
-                c.ATK = 1800;
+                c.ATK = 2700;
                 c.DEF = 7000;
             }else if(StartActivity.gameTime < 14.01f){
                 c.lv = 60;
                 c.HP = 122500;
                 c.realHP = c.HP;
-                c.ATK = 4000;
+                c.ATK = 6000;
                 c.DEF = 9000;
             }else if(StartActivity.gameTime < 16.01f){
                 c.lv = 80;
                 c.HP = 280000;
                 c.realHP = c.HP;
-                c.ATK = 8000;
+                c.ATK = 12000;
                 c.DEF = 15500;
             }else if(StartActivity.gameTime < 18.01f){
                 c.lv = 100;
@@ -844,18 +1026,31 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         }
 
         //添加effect
-        //洗牌后逐个开始载入，直到总和大于buffPoint
-        Collections.shuffle(useEffectPool);
-        int tempSum = 0;
-        for(int i = 0; i < useEffectPool.size(); i++){
-            if(tempSum < buffPoint){
+        if(isBossBattle){
+            for(int i = 0; i < useEffectPool.size(); i++){
                 c.initialEffectList.add(new Effect(useEffectPool.get(i).first));
-                tempSum += useEffectPool.get(i).second;
-            }else{
-                break;
+            }
+        }else{
+            //洗牌后逐个开始载入，直到总和大于buffPoint
+            Collections.shuffle(useEffectPool);
+            int tempSum = 0;
+            for(int i = 0; i < useEffectPool.size(); i++){
+                if(tempSum < buffPoint){
+                    c.initialEffectList.add(new Effect(useEffectPool.get(i).first));
+                    tempSum += useEffectPool.get(i).second;
+                }else{
+                    break;
+                }
             }
         }
+
+
         return c;
+    }
+
+    public int getImageByString(String name){
+        Resources res = getResources();
+        return res.getIdentifier(name,"drawable",getPackageName());
     }
 }
 

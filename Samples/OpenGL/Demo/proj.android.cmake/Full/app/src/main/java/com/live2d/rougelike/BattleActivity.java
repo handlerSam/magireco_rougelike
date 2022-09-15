@@ -112,6 +112,8 @@ public class BattleActivity extends AppCompatActivity {
 
     int consumeChargeNumber = 0;
 
+    boolean isIntentSend = false;
+
 
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
     public Handler handler = new Handler(new Handler.Callback() {
@@ -1124,6 +1126,15 @@ public class BattleActivity extends AppCompatActivity {
 //        background_effect.spriteName = "all_f_f";
 //        background_effect.prefix = "bg_quest_"; //对于背景:bg_quest_  对于人物:mini_
 //        background_effect.canvasWidth = 1200;
+
+        //提示界面禁止点击
+        tipLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         //设置战斗背景
         int backgroundId = (int)(Math.random()*14) + 1;
         underlay.setImageResource(R.drawable.background_junction1_up);
@@ -2544,6 +2555,24 @@ public class BattleActivity extends AppCompatActivity {
         }else if(isPuella){
             showCombo(PUELLACOMBO);
         }
+
+        //更新角色diamond数量
+        for(int i = 0; i < 3; i++){
+            if(smallPlateList[i] != -1){
+                if(smallPlateConnectToList[i] == null){
+                    //该盘没有连携
+                    if(smallPlateList[i] <= 4 && plateList[smallPlateList[i]].c.diamondNumber < 3){
+                        plateList[smallPlateList[i]].c.diamondNumber++;
+                    }
+                }else{
+                    //该盘有连携
+                    if(smallPlateConnectToList[i].diamondNumber < 3){
+                        smallPlateConnectToList[i].diamondNumber++;
+                    }
+                    plateList[smallPlateList[i]].c.diamondNumber = 0;
+                }
+            }
+        }
     }
 
     public void showCombo(int comboType){
@@ -2592,6 +2621,8 @@ public class BattleActivity extends AppCompatActivity {
     }
 
     public void startRightAttack(){
+
+
         //判断是否是Charge盘
         if(smallPlateList[smallPlateNumber] <= 4){
             if(plateList[smallPlateList[smallPlateNumber]].plate == CHARGE){
@@ -3299,13 +3330,13 @@ public class BattleActivity extends AppCompatActivity {
             efList = isPlayerAttack? leftEffectList[defender.formationX][defender.formationY]:rightEffectList[defender.formationX][defender.formationY];
             for(int i = 0; i < efList.size(); i++){
                 Effect e = efList.get(i);
-                if(e.name.equals("Magia伤害削减") || (plateType == MAGIA || plateType == DOPPEL)){
+                if(e.name.equals("Magia伤害削减") && (plateType == MAGIA || plateType == DOPPEL)){
                     damageBuff -= e.value;
                     break;
                 }else if(e.name.equals("伤害削减")){
                     damageBuff -= e.value;
                     break;
-                }else if(e.name.equals("Blast伤害削减") || (plateType == BLAST_VERTICAL || plateType == BLAST_HORIZONTAL)){
+                }else if(e.name.equals("Blast伤害削减") && (plateType == BLAST_VERTICAL || plateType == BLAST_HORIZONTAL)){
                     damageBuff -= e.value;
                     break;
                 }
@@ -3820,23 +3851,7 @@ public class BattleActivity extends AppCompatActivity {
             return;
         }
 
-        //更新角色diamond数量
-        for(int i = 0; i < 3; i++){
-            if(smallPlateList[i] != -1){
-                if(smallPlateConnectToList[i] == null){
-                    //该盘没有连携
-                    if(smallPlateList[i] <= 4 && plateList[smallPlateList[i]].c.diamondNumber < 3){
-                        plateList[smallPlateList[i]].c.diamondNumber++;
-                    }
-                }else{
-                    //该盘有连携
-                    if(smallPlateConnectToList[i].diamondNumber < 3){
-                        smallPlateConnectToList[i].diamondNumber++;
-                    }
-                    plateList[smallPlateList[i]].c.diamondNumber = 0;
-                }
-            }
-        }
+
         for(int i = 0; i < 3; i++){
             smallPlateList[i] = -1;
             smallPlateXList[i] = -1;
@@ -4165,6 +4180,7 @@ public class BattleActivity extends AppCompatActivity {
                     if(rightCharList[i][j].c.realHP <= 1){
                         rightCharList[i][j].c.realHP = 1;
                     }
+                    rightCharList[i][j].c.initialEffectList.clear();
                 }
             }
         }
@@ -4273,7 +4289,9 @@ public class BattleActivity extends AppCompatActivity {
         }else if(probabilityOfTrue <= 0){
             return false;
         }
-        return (Math.random()*100 < probabilityOfTrue);
+        double temp = Math.random()*100;
+        Log.d("Sam","colorTossRandomNumber:"+temp);
+        return (temp < probabilityOfTrue);
     }
 }
 
@@ -4313,9 +4331,14 @@ class Effect{
             allEffect += "(" + valueTime + "T)";
         }
         if(probability == 100){
-            allEffect += "[" + value + "%]";
+            if(value != 0){
+                allEffect += "[" + value + "%]";
+            }
         }else{
-            allEffect += "(" + value + "%)[发动率: "+ probability + "%]";
+            if(value != 0){
+                allEffect += "(" + value + "%)";
+            }
+            allEffect += "[发动率: "+ probability + "%]";
         }
         return allEffect;
     }

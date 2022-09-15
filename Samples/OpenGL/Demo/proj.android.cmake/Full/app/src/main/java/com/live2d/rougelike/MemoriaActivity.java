@@ -307,6 +307,8 @@ public class MemoriaActivity extends AppCompatActivity {
                     Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
                     intent1.putExtra("battleInfo",battleId);
                     intent1.putExtra("isRandomBattle", isRandomBattle);
+                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                     startActivity(intent1);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -334,6 +336,8 @@ public class MemoriaActivity extends AppCompatActivity {
                     Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
                     intent1.putExtra("battleInfo",battleId);
                     intent1.putExtra("isRandomBattle", isRandomBattle);
+                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                     startActivity(intent1);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -759,6 +763,7 @@ class Character{
     String name = "柊音梦";
     String spriteName = "Hiiragi Nemu";
     String choosingActivityImage = "team_choose_101400_1";
+    String miniImage = "mini_remu";
     String charIconImage = "card_10144_";// 灯花10074 10075 音梦10144 10145 忧10154 10155
     int[] plateList = {ACCELE,ACCELE,ACCELE,BLAST_VERTICAL,CHARGE};
     boolean isLeader = false;
@@ -777,7 +782,7 @@ class Character{
 
     int formationX = 0; // 在战斗中有效，记录formation上的位置坐标
     int formationY = 0;
-    int diamondNumber = 0; // 在战斗中有效，记录plate上diamond的数量，战斗结束和开始时重新清零
+    int diamondNumber = 0; // 在战斗中有效，记录plate上diamond的数量，战斗结束和开始时保留
     int actionOrder = 0; // 在战斗中的行动盘优先级顺序，战斗结束和开始的时候重新清零
 
 

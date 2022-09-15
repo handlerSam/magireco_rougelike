@@ -55,6 +55,8 @@ public class FormationActivity extends AppCompatActivity {
                     Intent intent1 = new Intent(FormationActivity.this, TeamChooseActivity.class);
                     intent1.putExtra("battleInfo",battleId);
                     intent1.putExtra("isRandomBattle", isRandomBattle);
+                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                     startActivity(intent1);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

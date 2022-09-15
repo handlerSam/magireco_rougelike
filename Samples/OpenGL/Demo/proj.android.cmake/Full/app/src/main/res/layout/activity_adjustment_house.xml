@@ -45,6 +45,7 @@
         app:layout_constraintEnd_toEndOf="@id/midPoint"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <ImageView
             android:id="@+id/character_breakthrough"
             android:layout_width="243px"
@@ -54,15 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/character_plate_change"
-            android:layout_width="243px"
-            android:layout_height="365px"
-            android:layout_marginStart="150px"
-            android:layout_marginTop="180px"
-            android:background="@drawable/character_plate_change"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
         <ImageView
             android:id="@+id/character_star_up"
@@ -74,15 +67,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/character_plate_change" />
 
-        <ImageView
-            android:id="@+id/memoria_breakthrough"
-            android:layout_width="243px"
-            android:layout_height="365px"
-            android:layout_marginStart="150px"
-            android:layout_marginTop="180px"
-            android:background="@drawable/memoria_breakthrough"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/character_star_up" />
 
         <ImageView
             android:id="@+id/shop_trade"
@@ -93,6 +77,29 @@
             android:background="@drawable/shop_trade"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/memoria_breakthrough" />
+
+        <ImageView
+            android:id="@+id/memoria_breakthrough"
+            android:layout_width="243px"
+            android:layout_height="365px"
+            android:layout_marginStart="150px"
+            android:layout_marginTop="180px"
+            android:src="@drawable/memoria_breakthrough"
+            android:adjustViewBounds="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/character_star_up" />
+
+        <ImageView
+            android:id="@+id/character_plate_change"
+            android:layout_width="243px"
+            android:layout_height="365px"
+            android:layout_marginStart="150px"
+            android:layout_marginTop="180px"
+            android:src="@drawable/character_plate_change"
+            android:adjustViewBounds="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -182,9 +189,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/shop_frame"
-        android:layout_width="1290px"
-        android:layout_height="875.15px"
-        android:layout_marginTop="50px"
+        android:layout_width="1161px"
+        android:layout_height="787.6px"
+        android:layout_marginTop="45px"
         android:background="@drawable/shop_item_list_frame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -194,12 +201,12 @@
             android:id="@+id/strokeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35px"
-            android:layout_marginTop="12px"
+            android:layout_marginStart="31.5px"
+            android:layout_marginTop="10.8px"
             android:fontFamily="@font/info"
             android:text=" 交易 "
             android:textColor="#FFFFFF"
-            android:textSize="40px"
+            android:textSize="36px"
             android:visibility="visible"
             app:backgroundColor="@color/skillTextPink"
             app:layout_constraintStart_toStartOf="parent"
@@ -231,7 +238,7 @@
                 android:id="@+id/shop_list_second_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32px"
+                android:layout_marginTop="28.8px"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -305,7 +312,7 @@
         android:id="@+id/black_mask_adjustment_house"
         android:background="@color/black"
         android:alpha="1"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

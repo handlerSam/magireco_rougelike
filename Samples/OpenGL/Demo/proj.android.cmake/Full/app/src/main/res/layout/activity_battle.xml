@@ -33,7 +33,7 @@
             android:layout_height="0px"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/background_junction1_down"
+            android:src="@drawable/background_junction13_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -969,7 +969,7 @@
                     android:id="@+id/effectDetailHP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="190px"
+                    android:layout_marginTop="185px"
                     android:fontFamily="@font/info"
                     android:text="400/400"
                     android:textColor="@color/colorShader"
@@ -986,6 +986,92 @@
                     android:layout_marginTop="240px"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="126px"
+                    android:layout_height="97px"
+                    android:background="@drawable/formation_small"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/effectDetailCharName"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/formation0_0_0"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:layout_marginStart="44px"
+                        android:layout_marginLeft="44px"
+                        android:layout_marginTop="14px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/formation0_0_1"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toEndOf="@id/formation0_0_0"
+                        app:layout_constraintTop_toTopOf="@id/formation0_0_0" />
+
+                    <ImageView
+                        android:id="@+id/formation0_0_2"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toEndOf="@id/formation0_0_1"
+                        app:layout_constraintTop_toTopOf="@id/formation0_0_0" />
+
+                    <ImageView
+                        android:id="@+id/formation0_1_0"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toStartOf="@id/formation0_0_0"
+                        app:layout_constraintTop_toBottomOf="@id/formation0_0_0" />
+
+                    <ImageView
+                        android:id="@+id/formation0_1_1"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toEndOf="@id/formation0_0_0"
+                        app:layout_constraintTop_toBottomOf="@id/formation0_0_1" />
+
+                    <ImageView
+                        android:id="@+id/formation0_1_2"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toEndOf="@id/formation0_0_1"
+                        app:layout_constraintTop_toBottomOf="@id/formation0_0_2" />
+
+                    <ImageView
+                        android:id="@+id/formation0_2_0"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toStartOf="@id/formation0_0_0"
+                        app:layout_constraintTop_toBottomOf="@id/formation0_1_0" />
+
+                    <ImageView
+                        android:id="@+id/formation0_2_1"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toEndOf="@id/formation0_0_0"
+                        app:layout_constraintTop_toBottomOf="@id/formation0_1_1" />
+
+                    <ImageView
+                        android:id="@+id/formation0_2_2"
+                        android:layout_width="23px"
+                        android:layout_height="23px"
+                        android:src="@drawable/empty_block"
+                        app:layout_constraintStart_toEndOf="@id/formation0_0_1"
+                        app:layout_constraintTop_toBottomOf="@id/formation0_1_2" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <ImageView
                 android:layout_width="362px"

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class BattleEndActivity extends AppCompatActivity {
 
@@ -35,7 +36,8 @@ public class BattleEndActivity extends AppCompatActivity {
     TextView skillName;
     ImageView skillIcon;
     TextView skillDescription;
-    LinearLayout purchase_button;
+    ConstraintLayout purchase_button;
+    ImageView purchase_button_background;
     TextView purchase_button_text;
     TextView memoria_price;
     TextView cardNumber;
@@ -90,6 +92,7 @@ public class BattleEndActivity extends AppCompatActivity {
         skillIcon = findViewById(R.id.skillIcon);
         skillDescription = findViewById(R.id.skillDescription);
         purchase_button = findViewById(R.id.purchase_button);
+        purchase_button_background = findViewById(R.id.purchase_button_background);
         purchase_button_text = findViewById(R.id.purchase_button_text);
         memoria_price = findViewById(R.id.memoria_price);
         cardNumber = findViewById(R.id.cardNumber);
@@ -119,6 +122,19 @@ public class BattleEndActivity extends AppCompatActivity {
         cm.setSaturation(0); // 设置饱和度
         grayColorFilter = new ColorMatrixColorFilter(cm);
         updateCCAndGriefSeedView();
+
+        //设置背景
+        BattleInfo bi;
+        boolean isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
+        if(isRandomBattle){
+            bi = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
+        }else{
+            bi = StartActivity.battleInfoList.get(getIntent().getIntExtra("battleInfo",0));
+        }
+        underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+        backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+        backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+
 
         //额外任务
         Intent receivedIntent = getIntent();
@@ -153,11 +169,23 @@ public class BattleEndActivity extends AppCompatActivity {
 
         //通关报酬设置
         Bonus bb = getBattleBonus();
-        add_cc_number.setText("+"+bb.cc);
-        add_grief_seed_number.setText("+"+bb.griefSeed);
+        int getGriefSeed = bb.griefSeed;
+        int getCC = bb.cc;
+        if(StartActivity.collectionDict.get("\"死神的黑卡\"").isOwn){
+            if(colorToss(50)){
+                getGriefSeed += 1;
+            }
+        }
+        if(StartActivity.collectionDict.get("特制的年糕汤").isOwn){
+            if(colorToss(50)){
+                getCC += 1000;
+            }
+        }
+        add_cc_number.setText("+"+getCC);
+        add_grief_seed_number.setText("+"+getGriefSeed);
 
-        StartActivity.ccNumber += bb.cc;
-        StartActivity.griefSeedNumber += bb.griefSeed;
+        StartActivity.ccNumber += getCC;
+        StartActivity.griefSeedNumber += getGriefSeed;
 
         //人物升级
         for(int i = 0; i < StartActivity.characters.length; i++){
@@ -183,16 +211,32 @@ public class BattleEndActivity extends AppCompatActivity {
                     char_star[j].setVisibility(j < c.star? View.VISIBLE:View.GONE);
                 }
                 lv_origin.setText(""+c.lv);
+
+                int upgradeLV = 10;
+                try {
+                    if(c.lv >= Integer.parseInt(bi.recommendLV) + 20){
+                        upgradeLV = 0;
+                    }else if(c.lv >= Integer.parseInt(bi.recommendLV) + 10){
+                        upgradeLV = 5;
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 if(c.lv == 1){
-                    lv_after.setText(""+10);
-                    c.lv = 10;
-                }else if(c.lv >= c.getMaxLv()){
+                    upgradeLV--;
+                    lv_after.setText(""+(c.lv+upgradeLV));
+                    c.lv += upgradeLV;
+                }else if(c.lv >= c.getMaxLv() || upgradeLV == 0){
                     right_arrow.setVisibility(View.INVISIBLE);
                     lv_after.setVisibility(View.INVISIBLE);
                 }else{
-                    lv_after.setText(""+(c.lv+10));
-                    c.lv += 10;
+                    if(c.lv + upgradeLV > c.getMaxLv()){
+                        upgradeLV = c.getMaxLv() - c.lv;
+                    }
+                    lv_after.setText(""+(c.lv+upgradeLV));
+                    c.lv += upgradeLV;
                 }
+
                 c.updateAttributionBasedOnLv();
                 character_list.addView(view);
             }
@@ -201,21 +245,30 @@ public class BattleEndActivity extends AppCompatActivity {
 
         //是否收到收藏品
         if(isReceivedCollection()){
-            int collectionId = (int)(Math.random()*StartActivity.collectionList.size());
-            StartActivity.collectionList.get(collectionId).isOwn = true;
+            int collectionId = -1;
+            Collections.shuffle(StartActivity.collectionList);
+            for(int i = 0; i < StartActivity.collectionList.size(); i++){
+                if(!StartActivity.collectionList.get(i).isOwn){
+                    collectionId = i;
+                    break;
+                }
+            }
+            if(collectionId != -1){
+                StartActivity.collectionList.get(collectionId).isOwn = true;
 
-            Collection c = StartActivity.collectionList.get(collectionId);
-            View view = LayoutInflater.from(BattleEndActivity.this).inflate(R.layout.battle_end_item_item, item_list,false);
-            LinearLayout item_background = view.findViewById(R.id.item_background);
-            ImageView item_image = view.findViewById(R.id.item_image);
-            TextView item_name = view.findViewById(R.id.item_name);
-            TextView item_effect = view.findViewById(R.id.item_effect);
+                Collection c = StartActivity.collectionList.get(collectionId);
+                View view = LayoutInflater.from(BattleEndActivity.this).inflate(R.layout.battle_end_item_item, item_list,false);
+                LinearLayout item_background = view.findViewById(R.id.item_background);
+                ImageView item_image = view.findViewById(R.id.item_image);
+                TextView item_name = view.findViewById(R.id.item_name);
+                TextView item_effect = view.findViewById(R.id.item_effect);
 
-            item_background.setBackgroundResource(getResourceByString(c.background));
-            item_image.setImageResource(getResourceByString(c.icon));
-            item_name.setText(c.name);
-            item_effect.setText(c.effectDescription);
-            item_list.addView(view);
+                item_background.setBackgroundResource(getResourceByString(c.background));
+                item_image.setImageResource(getResourceByString(c.icon));
+                item_name.setText(c.name);
+                item_effect.setText(c.effectDescription);
+                item_list.addView(view);
+            }
         }
 
         main_frame.setVisibility(View.VISIBLE);
@@ -332,6 +385,7 @@ public class BattleEndActivity extends AppCompatActivity {
             skillName.setText("");
             skillIcon.setVisibility(View.INVISIBLE);
             skillDescription.setText("");
+            purchase_button_background.setColorFilter(null);
             purchase_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -349,7 +403,19 @@ public class BattleEndActivity extends AppCompatActivity {
         }else{
             final Memoria m = new Memoria(chooseCardView.memoriaId,BattleEndActivity.this);
             memoria_price.setVisibility(View.VISIBLE);
-            memoria_price.setText(""+StartActivity.MEMORIA_PURCHASE_PRICE[m.star-2]);
+            int tempPrice = StartActivity.MEMORIA_PURCHASE_PRICE[m.star-2];
+            if(StartActivity.collectionDict.get("5万日元商品券").isOwn){
+                if(m.star == 3){
+                    tempPrice -= 1500;
+                }
+            }
+            if(StartActivity.collectionDict.get("东西协议").isOwn){
+                if(m.star == 4){
+                    tempPrice -= 2000;
+                }
+            }
+            final int price = tempPrice;
+            memoria_price.setText(""+price);
             memoria_cc_icon.setVisibility(View.VISIBLE);
             showingMemoria.setMemoria(chooseCardView.memoriaId);
             showingMemoria.setLv(m.lvNow,m.lvMax);
@@ -360,16 +426,17 @@ public class BattleEndActivity extends AppCompatActivity {
             break_throughLinearLayout.setVisibility(View.INVISIBLE);
             coolTimeView.setText(m.isSkill() ? "冷却时间 "+m.CDOrigin:"");
             skillName.setText("");
-            skillIcon.setVisibility(getResourceByString(m.icon));
+            skillIcon.setImageResource(getResourceByString(m.icon));
             skillDescription.setText(m.getEffectDescription());
-            if(StartActivity.ccNumber >= StartActivity.MEMORIA_PURCHASE_PRICE[m.star-2]){
+            if(StartActivity.ccNumber >= price){
                 purchase_button_text.setText("购买并离开");
+                purchase_button_background.setColorFilter(null);
                 purchase_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(BattleEndActivity.this, "购买成功", Toast.LENGTH_SHORT).show();
                         StartActivity.memoriaBag.add(new Memoria(chooseCardView.memoriaId,BattleEndActivity.this));
-                        StartActivity.ccNumber -= StartActivity.MEMORIA_PURCHASE_PRICE[m.star-2];
+                        StartActivity.ccNumber -= price;
                         if(!isIntentSend){
                             MapActivity.mpEvent.clear();
                             StartActivity.gameTime += 0.5f;
@@ -382,6 +449,7 @@ public class BattleEndActivity extends AppCompatActivity {
                     }
                 });
             }else{
+                purchase_button_background.setColorFilter(grayColorFilter);
                 purchase_button_text.setText("CC不足");
                 purchase_button.setOnClickListener(null);
             }

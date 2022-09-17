@@ -70,14 +70,14 @@ public class ShopMemoriaAdapter extends RecyclerView.Adapter<ShopMemoriaAdapter.
                     skill_after_description.setText(m.getEffectDescription(true));
 
                     TextView skill_origin_attr = dialog_layout.findViewById(R.id.skill_origin_attr);
-                    if(m.DEFOrigin != 0){
+                    if(m.isSkill()){
                         skill_origin_attr.setText("HP:"+m.HPOrigin+" ATK:"+m.ATKOrigin+" DEF:"+m.DEFOrigin+" CD:"+m.CDOrigin);
                     }else{
                         skill_origin_attr.setText("HP:"+m.HPOrigin+" ATK:"+m.ATKOrigin+" DEF:"+m.DEFOrigin);
                     }
                     TextView skill_after_attr = dialog_layout.findViewById(R.id.skill_after_attr);
 
-                    if(m.DEFOrigin != 0){
+                    if(m.isSkill()){
                         skill_after_attr.setText("HP:"+m.HPAfter+" ATK:"+m.ATKAfter+" DEF:"+m.DEFAfter+" CD:"+m.CDAfter);
                     }else{
                         skill_after_attr.setText("HP:"+m.HPAfter+" ATK:"+m.ATKAfter+" DEF:"+m.DEFAfter);
@@ -100,7 +100,7 @@ public class ShopMemoriaAdapter extends RecyclerView.Adapter<ShopMemoriaAdapter.
                                 ((AdjustmentHouseActivity)context).memoria_breakthrough.performClick();
                             }});
                     }else{
-                        dialog.setMessage("需要花费 "+ price +" 个悲叹之种，悲叹之种不足.");//正文
+                        dialog.setMessage("需要花费 "+ price +"cc，cc不足.");//正文
                     }
 
                     dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

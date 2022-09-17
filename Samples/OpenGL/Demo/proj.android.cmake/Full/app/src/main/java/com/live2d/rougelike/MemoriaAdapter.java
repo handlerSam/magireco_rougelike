@@ -82,7 +82,7 @@ public class MemoriaAdapter extends RecyclerView.Adapter<MemoriaAdapter.ViewHold
                 mActivity.ATKShowingView.setText(m.breakthrough == 4? ""+ m.ATKAfter: "" +m.ATKOrigin);
                 mActivity.DEFShowingView.setText(m.breakthrough == 4? ""+ m.DEFAfter: "" +m.DEFOrigin);
                 mActivity.break_throughLinearLayout.setVisibility(m.breakthrough == 4? View.VISIBLE:View.INVISIBLE);
-                if(m.DEFOrigin != 0){
+                if(m.isSkill()){
                     mActivity.coolTimeView.setVisibility(View.VISIBLE);
                     mActivity.coolTimeView.setText("冷却回合数 "+(m.breakthrough == 4? m.CDAfter:m.CDOrigin));
                 }else{

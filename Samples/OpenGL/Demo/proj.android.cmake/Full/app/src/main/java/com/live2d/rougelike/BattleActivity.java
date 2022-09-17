@@ -46,7 +46,7 @@ public class BattleActivity extends AppCompatActivity {
     final public static int CHARACTER_NORMAL_SIZE = 1200;
     final public static int CHARACTER_MAGNIFIED_SIZE = 1200;
 
-    final public static int DOPPEL_NEED_MP = 2000;
+    final public static int DOPPEL_NEED_MP = 1500;
 
     final public static int PLATE_SHOW = 0;
     final public static int SKILL_BAR_SHOW = 1;
@@ -61,6 +61,10 @@ public class BattleActivity extends AppCompatActivity {
     final public static int BLASTCOMBO = 2;
     final public static int PUELLACOMBO = 3;
 
+    public static int winBattleCount1 = 0;
+
+    public static int winBattleCount2 = 0;
+
     public boolean isBossBattle = true;
 
     final public static float[][] multiChargeTable = new float[][]{
@@ -71,6 +75,7 @@ public class BattleActivity extends AppCompatActivity {
 
     public static int DELTA_BETWEEN_ATTACK_AND_DAMAGE = 700;
     public static int DELTA_BETWEEN_EFFECT_SHOW = 750;
+
 
 
     public Character[][] monsterFormation = new Character[3][3];
@@ -111,9 +116,6 @@ public class BattleActivity extends AppCompatActivity {
     boolean achieveExtraMission = false;
 
     int consumeChargeNumber = 0;
-
-    boolean isIntentSend = false;
-
 
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
     public Handler handler = new Handler(new Handler.Callback() {
@@ -176,12 +178,29 @@ public class BattleActivity extends AppCompatActivity {
 
                                         if(isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss)){
                                             //伤害计算
-                                            int damage = getDamage(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,true);
+                                            final int damage = getDamage(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,true);
                                             setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
                                             sendDamageNumber(damage,
                                                     smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
-                                                    (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c)>=0)? TEXT_RED:TEXT_BLUE,false,true);
+                                                    (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c, true)>=0)? TEXT_RED:TEXT_BLUE,false,true);
 
+                                            if(StartActivity.collectionDict.get("远足的传单").isOwn){
+                                                if(temp.plate == CharacterPlateView.CHARGE){
+                                                    handler.postDelayed(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realHP > 0){
+                                                                setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
+                                                                sendDamageNumber(damage,
+                                                                        smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
+                                                                        (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c, true)>=0)? TEXT_RED:TEXT_BLUE,false,true);
+                                                            }
+
+                                                        }
+                                                    },500);
+
+                                                }
+                                            }
                                             //攻击时概率附带异常效果计算
                                             ArrayList<Effect> efList = rightEffectList[c.formationX][c.formationY];
                                             for(int i = 0; i < efList.size(); i++){
@@ -203,6 +222,9 @@ public class BattleActivity extends AppCompatActivity {
                                                                 e2.name = e.name.substring(7);
                                                                 e2.time = e.valueTime;
                                                                 e2.value = e.value;
+                                                                if(StartActivity.collectionDict.get("\"死亡驯鹿\"").isOwn){
+                                                                    e2.time *= 2;
+                                                                }
                                                                 leftEffectList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].add(e2);
                                                             }else{
                                                                 e2.name = e.name.substring(7)+"无效";
@@ -264,7 +286,7 @@ public class BattleActivity extends AppCompatActivity {
                                     public void run() {
                                         //攻击MP
                                         int mp = getAttackMP(c,true,temp.plate);
-                                        c.realMP += mp;
+                                        setMpOnCharacter(c, c.realMP + mp, true);
                                         //Blast攻击时MP获得
                                         int blastAttackMp = 0;
                                         ArrayList<Effect> efList = rightEffectList[c.formationX][c.formationY];
@@ -274,9 +296,15 @@ public class BattleActivity extends AppCompatActivity {
                                                 blastAttackMp += e.value;
                                             }
                                         }
-
+                                        int attackTargetNumber = 0;
                                         for(int i = 0; i < 3; i++){
                                             SpriteViewer sv = (temp.plate == CharacterPlateView.BLAST_VERTICAL)? leftCharList[i][smallPlateYList[smallPlateNumber]] : leftCharList[smallPlateXList[smallPlateNumber]][i];
+                                            if(sv != null && sv.c.realHP > 0){
+                                                attackTargetNumber++;
+                                            }
+                                        }
+                                        for(int i = 0; i < 3; i++){
+                                            final SpriteViewer sv = (temp.plate == CharacterPlateView.BLAST_VERTICAL)? leftCharList[i][smallPlateYList[smallPlateNumber]] : leftCharList[smallPlateXList[smallPlateNumber]][i];
                                             //攻击者是否触发异常状态miss效果
                                             String isAbnormalDebuffMiss = isTriggerEffect(rightEffectList[c.formationX][c.formationY],new String[]{"雾","黑暗","幻惑"});
                                             if(sv != null && sv.c.realHP > 0){
@@ -296,18 +324,38 @@ public class BattleActivity extends AppCompatActivity {
                                                 if(isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss)){
 
                                                     //BlastMp结算
-                                                    c.realMP += blastAttackMp;
+                                                    setMpOnCharacter(c, c.realMP + blastAttackMp, true);
                                                     //计算伤害
                                                     int damage = getDamage(c,sv.c,true);
+                                                    if(StartActivity.collectionDict.get("\"试刀先生\"").isOwn){
+                                                        if(attackTargetNumber == 1){
+                                                            damage *= 3;
+                                                        }
+                                                    }
+                                                    final int tempDamage = damage;
+                                                    if(StartActivity.collectionDict.get("《刀剑历史大全》").isOwn){
+                                                            handler.postDelayed(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    if(sv.c.realHP > 0){
+                                                                        setDamageOnCharacter(sv.c,tempDamage,false,true);
+                                                                        sendDamageNumber(tempDamage,
+                                                                                sv.c.formationX,sv.c.formationY,
+                                                                                (isRestrained(c,sv.c, true)>=0)? TEXT_RED:TEXT_BLUE,false,true);
+
+                                                                    }
+                                                                }
+                                                            },500);
+                                                    }
                                                     setDamageOnCharacter(sv.c,damage,false,true);
                                                     if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
                                                         sendDamageNumber(damage,
                                                                 i,smallPlateYList[smallPlateNumber],
-                                                                (isRestrained(c,sv.c)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                                                (isRestrained(c,sv.c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
                                                     }else{
                                                         sendDamageNumber(damage,
                                                                 smallPlateXList[smallPlateNumber],i,
-                                                                (isRestrained(c,sv.c)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                                                (isRestrained(c,sv.c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
                                                     }
 
                                                     //攻击时概率附带异常效果计算
@@ -453,7 +501,7 @@ public class BattleActivity extends AppCompatActivity {
                                 setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
                                 sendDamageNumber(damage,
                                         smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
-                                        (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                        (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
                                 if(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realHP > 0){
                                     int defendMP = getDefendMP(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,false);
                                     setMpOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realMP+defendMP,false);
@@ -475,7 +523,7 @@ public class BattleActivity extends AppCompatActivity {
                                             setDamageOnCharacter(leftCharList[i][j].c,damage,false,true);
                                             sendDamageNumber(damage,
                                                     i,j,
-                                                    (isRestrained(c,leftCharList[i][j].c)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                                    (isRestrained(c,leftCharList[i][j].c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
                                             if(leftCharList[i][j].c.realHP > 0){
                                                 int defendMP = getDefendMP(c,leftCharList[i][j].c,false);
                                                 setMpOnCharacter(leftCharList[i][j].c,leftCharList[i][j].c.realMP+defendMP,false);
@@ -492,9 +540,18 @@ public class BattleActivity extends AppCompatActivity {
                             }
                             if(StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP >= DOPPEL_NEED_MP){
                                 //说明是Dp
-                                StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= DOPPEL_NEED_MP;
+                                if(StartActivity.collectionDict.get("甜酒").isOwn){
+                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
+                                }else{
+                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= DOPPEL_NEED_MP;
+                                }
                             }else{
-                                StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
+                                if(StartActivity.collectionDict.get("汽水巧克力豆").isOwn){
+                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 750;
+                                }else{
+
+                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
+                                }
                             }
                             setMpOnCharacter(c,c.realMP,true);
                             //镜头转向右方，播放我方效果
@@ -550,6 +607,17 @@ public class BattleActivity extends AppCompatActivity {
                                 }
                             },waitTime+DELTA_BETWEEN_EFFECT_SHOW);
 
+                            //判断藏品效果
+                            if(StartActivity.collectionDict.get("小型的收藏盒").isOwn){
+                                for(int i = 0; i < 3; i++){
+                                    for(int j = 0; j < 3; j++){
+                                        ArrayList<Effect> efList = rightEffectList[i][j];
+                                        if(efList != null){
+                                            efList.add(new Effect("攻击力UP", 15,999,100,0));
+                                        }
+                                    }
+                                }
+                            }
                             //判断额外任务
                             ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
                             if(em.name.equals("释放一次Magia")){
@@ -648,7 +716,19 @@ public class BattleActivity extends AppCompatActivity {
                                                 setDamageOnCharacter(rightCharList[x][y].c,damage,true,true);
                                                 sendDamageNumber(damage,
                                                         x,y,
-                                                        (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c)>=0)?TEXT_RED:TEXT_BLUE,true,true);
+                                                        (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c,false)>=0)?TEXT_RED:TEXT_BLUE,true,true);
+
+                                                //藏品效果
+                                                if(StartActivity.collectionDict.get("饿肚子模小型").isOwn){
+                                                    if(colorToss(25)){
+                                                        for(int i = 0; i < rightCharList[x][y].c.memoriaList.length; i++){
+                                                            Memoria m = rightCharList[x][y].c.memoriaList[i];
+                                                            if(m != null && m.isSkill() && m.CDNow > 0){
+                                                                m.CDNow -= 1;
+                                                            }
+                                                        }
+                                                    }
+                                                }
 
                                                 //攻击时概率附带异常效果计算
                                                 ArrayList<Effect> efList = leftEffectList[monsterAttackerX][monsterAttackerY];
@@ -700,6 +780,7 @@ public class BattleActivity extends AppCompatActivity {
 
                                             if(monsterPlate == CharacterPlateView.CHARGE){
                                                 enemyChargeNumber++;
+                                                enemyChargeNumber = Math.min(20,enemyChargeNumber);
                                             }else{
                                                 enemyChargeNumber = 0;
                                             }
@@ -731,8 +812,7 @@ public class BattleActivity extends AppCompatActivity {
                                         public void run() {
                                             //攻击MP
                                             int mp = getAttackMP(leftCharList[monsterAttackerX][monsterAttackerY].c,false,monsterPlate);
-                                            leftCharList[monsterAttackerX][monsterAttackerY].c.realMP += mp;
-
+                                            setMpOnCharacter(leftCharList[monsterAttackerX][monsterAttackerY].c,leftCharList[monsterAttackerX][monsterAttackerY].c.realMP + mp, false);
                                             //Blast攻击时MP获得
                                             int blastAttackMp = 0;
                                             ArrayList<Effect> efList = leftEffectList[monsterAttackerX][monsterAttackerY];
@@ -763,14 +843,26 @@ public class BattleActivity extends AppCompatActivity {
                                                     }
                                                     if(isMissNullified || (isAbnormalDebuffMiss.equals("") && !isMiss)){
                                                         //BlastMp
-                                                        leftCharList[monsterAttackerX][monsterAttackerY].c.realMP += blastAttackMp;
+                                                        setMpOnCharacter(leftCharList[monsterAttackerX][monsterAttackerY].c, leftCharList[monsterAttackerX][monsterAttackerY].c.realMP + blastAttackMp, false);
                                                         //计算伤害
                                                         int damage = getDamage(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false);
                                                         setDamageOnCharacter(sv.c, damage, true,true);
                                                         if ((monsterPlate == CharacterPlateView.BLAST_VERTICAL)) {
-                                                            sendDamageNumber(damage, i, y, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c) >= 0)?TEXT_RED:TEXT_BLUE, true, true);
+                                                            sendDamageNumber(damage, i, y, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false) >= 0)?TEXT_RED:TEXT_BLUE, true, true);
                                                         } else {
-                                                            sendDamageNumber(damage, x, i, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c) >= 0)?TEXT_RED:TEXT_BLUE, true, true);
+                                                            sendDamageNumber(damage, x, i, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false) >= 0)?TEXT_RED:TEXT_BLUE, true, true);
+                                                        }
+
+                                                        //藏品效果
+                                                        if(StartActivity.collectionDict.get("饿肚子模小型").isOwn){
+                                                            if(colorToss(25)){
+                                                                for(int j = 0; j < sv.c.memoriaList.length; j++){
+                                                                    Memoria m = sv.c.memoriaList[j];
+                                                                    if(m != null && m.isSkill() && m.CDNow > 0){
+                                                                        m.CDNow -= 1;
+                                                                    }
+                                                                }
+                                                            }
                                                         }
 
                                                         //攻击时概率附带异常效果计算
@@ -993,6 +1085,8 @@ public class BattleActivity extends AppCompatActivity {
     ImageView effectDetailHPBar;
     LinearLayout effectDetailEffectList;
 
+    ImageView[][] formation_ = new ImageView[3][3];
+
     ImageView acceleCombo;
     ImageView chargeCombo;
     ImageView blastCombo;
@@ -1118,6 +1212,11 @@ public class BattleActivity extends AppCompatActivity {
         for(int i = 0; i < 2; i++){
             small_plate_right_arrow[i] = findViewById(getIdByString("small_plate_right_arrow"+i));
         }
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                formation_[i][j] = findViewById(getIdByString("formation0_"+i+"_"+j));
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -1128,21 +1227,26 @@ public class BattleActivity extends AppCompatActivity {
 //        background_effect.canvasWidth = 1200;
 
         //提示界面禁止点击
-        tipLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        //tipLayout.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+//
+        //    }
+        //});
 
         //设置战斗背景
-        int backgroundId = (int)(Math.random()*14) + 1;
-        underlay.setImageResource(R.drawable.background_junction1_up);
-        backgroundLeft.setImageResource(getImageByString("background_junction"+backgroundId+"_down"));
-        backgroundRight.setImageResource(getImageByString("background_junction"+backgroundId+"_down"));
+        BattleInfo bi;
+        boolean isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
+        if(isRandomBattle){
+            bi = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
+        }else{
+            bi = StartActivity.battleInfoList.get(getIntent().getIntExtra("battleInfo",0));
+        }
+        underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+        backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+        backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
 
         //加载额外任务
-        boolean isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
         if(isRandomBattle){
             extraMissionId = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi.extraMissionId;
         }else{
@@ -1426,7 +1530,7 @@ public class BattleActivity extends AppCompatActivity {
                                 Memoria m2 = null;
                                 for(int j = 0; j < 4; j++){
                                     if(c.memoriaList[j] != null){
-                                        if(c.memoriaList[j].DEFOrigin != 0){
+                                        if(c.memoriaList[j].isSkill()){
                                             //说明是一张技能型记忆
                                             if(m1 == null){
                                                 m1 = c.memoriaList[j];
@@ -1518,7 +1622,7 @@ public class BattleActivity extends AppCompatActivity {
             if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0) {
                 for(int j = 0; j < 4; j++){
                     Memoria m = StartActivity.characters[i].memoriaList[j];
-                    if(m != null && m.DEFOrigin == 0){
+                    if(m != null && !m.isSkill()){
                         //说明是被动记忆
                         for(SkillEffect se : (StartActivity.characters[i].breakThrough == 4? m.effectAfterList:m.effectOriginList)){
                             Effect e = convertSkillEffectToEffect(se, 0);
@@ -1676,6 +1780,12 @@ public class BattleActivity extends AppCompatActivity {
                                 }
                             }, DELTA_BETWEEN_EFFECT_SHOW*(i+1));
                         }
+
+                        if(StartActivity.collectionDict.get("一盒草莓牛奶").isOwn){
+                            int recoverHP = (int)(1.0f*(rightCharList[c.formationX][c.formationY].c.getRealMaxHP())*0.05f);
+                            setDamageOnCharacter(rightCharList[c.formationX][c.formationY].c,-recoverHP,true,false);
+                            sendDamageNumber(recoverHP,c.formationX,c.formationY,TEXT_GREEN,true,false);
+                        }
                     }
                 }
             });
@@ -1717,6 +1827,60 @@ public class BattleActivity extends AppCompatActivity {
                         rightStateBarList[i][j].setAttr(StartActivity.characters[count].element);
 //                        rightEffectList[i][j] = new ArrayList<>();
                         rightEffectList[i][j] = StartActivity.characters[count].initialEffectList;
+                        if(StartActivity.collectionDict.get("南凪海双人观光券").isOwn){
+                            rightEffectList[i][j].add(new Effect("异常状态耐性UP",15,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("三个黄铜戒指").isOwn){
+                            rightEffectList[i][j].add(new Effect("防御力UP",15,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("鲸鱼先生的菜刀").isOwn){
+                            rightEffectList[i][j].add(new Effect("攻击力UP",15,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("日本刀的拓片").isOwn){
+                            rightEffectList[i][j].add(new Effect("造成伤害UP",15,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("防御力很低的泳装").isOwn){
+                            rightEffectList[i][j].add(new Effect("回避",0,1,75,0));
+                        }
+                        if(StartActivity.collectionDict.get("超高级的体重计").isOwn){
+                            rightEffectList[i][j].add(new Effect("防御力UP",winBattleCount1,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("从未间断的日记").isOwn){
+                            rightEffectList[i][j].add(new Effect("攻击力UP",winBattleCount2,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("12色彩色铅笔套装").isOwn){
+                            int characterNumber = 0;
+                            for(int k = 0; k < StartActivity.characters.length; k++){
+                                if(StartActivity.characters[k] != null){
+                                    characterNumber++;
+                                }
+                            }
+                            rightEffectList[i][j].add(new Effect("造成伤害UP",characterNumber*12,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("神滨传闻档案").isOwn){
+                            int characterNumber = 0;
+                            for(int k = 0; k < StartActivity.characters.length; k++){
+                                if(StartActivity.characters[k] != null){
+                                    characterNumber++;
+                                }
+                            }
+                            if(characterNumber == 1){
+                                rightEffectList[i][j].add(new Effect("攻击力UP",50,999,100,0));
+                                rightEffectList[i][j].add(new Effect("防御力UP",50,999,100,0));
+                            }
+                        }
+                        if(StartActivity.collectionDict.get("歌词笔记本").isOwn){
+                            rightEffectList[i][j].add(new Effect("异常状态耐性UP",25,999,100,0));
+                        }
+                        if(StartActivity.collectionDict.get("卡通巧克力").isOwn){
+                            int characterNumber = 0;
+                            for(int k = 0; k < StartActivity.characters.length; k++){
+                                if(StartActivity.characters[k] != null){
+                                    characterNumber++;
+                                }
+                            }
+                            rightEffectList[i][j].add(new Effect("伤害削减",characterNumber*12,999,100,0));
+                        }
                         final int tempCount = count;
                         rightTouchListLayout[i][j].setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
@@ -1740,6 +1904,15 @@ public class BattleActivity extends AppCompatActivity {
                                             Effect e = rightEffectList[StartActivity.characters[tempCount].formationX][StartActivity.characters[tempCount].formationY].get(i);
                                             EffectDetailLayout edl = new EffectDetailLayout(BattleActivity.this,e);
                                             effectDetailEffectList.addView(edl);
+                                        }
+                                    }
+                                    for(int i = 0; i < 3; i++){
+                                        for(int j = 0; j < 3; j++){
+                                            if(StartActivity.characters[tempCount].formationX == i && StartActivity.characters[tempCount].formationY == j){
+                                                formation_[i][j].setImageResource(R.drawable.red_block);
+                                            }else{
+                                                formation_[i][j].setImageResource(R.drawable.empty_block);
+                                            }
                                         }
                                     }
                                     effectDetailLayout.setVisibility(VISIBLE);
@@ -1766,6 +1939,21 @@ public class BattleActivity extends AppCompatActivity {
                         leftStateBarList[i][j].setAttr(monsterFormation[i][j].element);
                     }
                     leftEffectList[i][j] = monsterFormation[i][j].initialEffectList;
+
+                    if(StartActivity.collectionDict.get("漫画\"侦探少女女仆梅伊\"").isOwn){
+                        leftEffectList[i][j].add(new Effect("异常状态耐性DOWN", 25,999,100,0));
+                    }
+                    if(StartActivity.collectionDict.get("杰克死亡之镰").isOwn){
+                        leftEffectList[i][j].add(new Effect("造成伤害DOWN", 20,999,100,0));
+                    }
+                    if(StartActivity.collectionDict.get("\"占卜结果\"").isOwn){
+                        if(!isBossBattle){
+                            leftEffectList[i][j].add(new Effect("毒", 5,3,100,0));
+                        }else if(i == 1 && j == 1){
+                            leftEffectList[i][j].add(new Effect("毒", 5,3,100,0));
+                        }
+
+                    }
                     final int tempCount = count;
                     final Character mon = monsterFormation[i][j];
                     leftTouchListLayout[i][j].setOnLongClickListener(new View.OnLongClickListener() {
@@ -1802,13 +1990,38 @@ public class BattleActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-
+                                for(int i = 0; i < 3; i++){
+                                    for(int j = 0; j < 3; j++){
+                                        if(leftCharList[i][j] != null && leftCharList[i][j].c == mon){
+                                            formation_[i][j].setImageResource(R.drawable.red_block);
+                                        }else{
+                                            formation_[i][j].setImageResource(R.drawable.empty_block);
+                                        }
+                                    }
+                                }
                                 effectDetailLayout.setVisibility(VISIBLE);
                             }
                             return true;
                         }
                     });
                 }
+            }
+        }
+
+        if(StartActivity.collectionDict.get("巧克力戒指").isOwn){
+            for(int i = 0; i < StartActivity.characters.length; i++){
+                Character c = StartActivity.characters[i];
+                if(c != null){
+                    for(int j = 0; j < StartActivity.characters.length; j++){
+                        Character tempC = StartActivity.characters[j];
+                        if(tempC != null && i != j){
+                            if(Math.abs(c.formationX - tempC.formationX) + Math.abs(c.formationY - tempC.formationY) <= 1){
+                                rightEffectList[c.formationX][c.formationY].add(new Effect("防御力UP",25,999,100,0));
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -1826,6 +2039,34 @@ public class BattleActivity extends AppCompatActivity {
         if(chosenCharacterList.size() == 0){
             //说明没有可行动角色
             return false;
+        }
+        if(StartActivity.collectionDict.get("\"正史的断章\"").isOwn){
+            if(chosenCharacterList.size() > 2){
+                Collections.shuffle(chosenCharacterList);
+                while(chosenCharacterList.size() > 2){
+                    chosenCharacterList.remove(0);
+                }
+            }
+            int[] plateIdList = new int[]{-1,-1,-1,-1,-1};
+            for(int i = 0; i < 5; i++){
+                int choosePlate;
+                if(i <= 3){
+                    choosePlate = (int)(Math.random()*5);
+                    while(isInList(plateIdList,choosePlate)){
+                        choosePlate = (int)(Math.random()*5);
+                    }
+                }else{
+                    choosePlate = (int)(Math.random()*5) + 5;
+                    while(isInList(plateIdList,choosePlate)){
+                        choosePlate = (int)(Math.random()*5) + 5;
+                    }
+                }
+                plateIdList[i] = choosePlate;
+                plateList[i] = new Plate();
+                plateList[i].c = chosenCharacterList.get(choosePlate/5);
+                plateList[i].plate = plateList[i].c.plateList[choosePlate % 5];
+            }
+            return true;
         }
         if(chosenCharacterList.size() > 3){
             Collections.sort(chosenCharacterList, new ActionOrderComparator());
@@ -2527,6 +2768,9 @@ public class BattleActivity extends AppCompatActivity {
         }
         if(isChargeCombo){
             chargeNumber += 2;
+            if(StartActivity.collectionDict.get("陈旧的绘本").isOwn){
+                chargeNumber += 2;
+            }
             if(chargeNumber > 20){
                 chargeNumber = 20;
             }
@@ -2541,6 +2785,9 @@ public class BattleActivity extends AppCompatActivity {
                 for(int j = 0; j < 3; j++){
                     if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                         rightCharList[i][j].c.realMP += 200;
+                        if(StartActivity.collectionDict.get("调整屋特制能量饮料").isOwn){
+                            rightCharList[i][j].c.realMP += 150;
+                        }
                         setMpOnCharacter(rightCharList[i][j].c,rightCharList[i][j].c.realMP,true);
                     }
                 }
@@ -2570,6 +2817,16 @@ public class BattleActivity extends AppCompatActivity {
                         smallPlateConnectToList[i].diamondNumber++;
                     }
                     plateList[smallPlateList[i]].c.diamondNumber = 0;
+                }
+            }
+        }
+        if(StartActivity.collectionDict.get("巧克力蛋糕").isOwn){
+            if(turn % 2 == 1){
+                for(int i = 0; i < StartActivity.characters.length; i++){
+                    Character c = StartActivity.characters[i];
+                    if(c != null && c.diamondNumber < 3){
+                        c.diamondNumber++;
+                    }
                 }
             }
         }
@@ -2627,6 +2884,9 @@ public class BattleActivity extends AppCompatActivity {
         if(smallPlateList[smallPlateNumber] <= 4){
             if(plateList[smallPlateList[smallPlateNumber]].plate == CHARGE){
                 chargeNumber++;
+                if(StartActivity.collectionDict.get("台词抄本").isOwn){
+                    chargeNumber++;
+                }
                 if(chargeNumber > 20)chargeNumber = 20;
             }
             updateChargeView();
@@ -2992,7 +3252,6 @@ public class BattleActivity extends AppCompatActivity {
         //白值ATK
         int panelATK = attacker.getRealATK();
 
-
         //阵形ATK
         int formationATK = 0;
         if(isPlayerAttack){
@@ -3023,7 +3282,17 @@ public class BattleActivity extends AppCompatActivity {
 
         //攻击力Buff
         int atkBuff = 0;
+        if(StartActivity.collectionDict.get("等等力徽章").isOwn){
+            if(turn == 1){
+                atkBuff += 100;
+            }
+        }
         ArrayList<Effect> efList = isPlayerAttack? rightEffectList[attacker.formationX][attacker.formationY]:leftEffectList[attacker.formationX][attacker.formationY];
+        if(StartActivity.collectionDict.get("圣诞科学14号").isOwn){
+            if(isPlayerAttack){
+                atkBuff += 5 * efList.size();
+            }
+        }
         for(int i = 0; i < efList.size(); i++){
             Effect e = efList.get(i);
             if(e.name.equals("攻击力UP")){
@@ -3073,6 +3342,11 @@ public class BattleActivity extends AppCompatActivity {
         //防御力Buff
         int DEFBuff = 0;
         efList = isPlayerAttack? leftEffectList[defender.formationX][defender.formationY]:rightEffectList[defender.formationX][defender.formationY];
+        if(StartActivity.collectionDict.get("粘贴文件夹").isOwn){
+            if(isPlayerAttack){
+                DEFBuff -= 5 * efList.size();
+            }
+        }
         for(int i = 0; i < efList.size(); i++){
             Effect e = efList.get(i);
             if(e.name.equals("防御力UP")){
@@ -3210,6 +3484,12 @@ public class BattleActivity extends AppCompatActivity {
                     break;
                 default:
             }
+
+            if(StartActivity.collectionDict.get("知古辣屋的可可块").isOwn){
+                if(isPuella){
+                    fundamentalPlateCoefficient *= 1.5f;
+                }
+            }
         }
 
         //B盘位置系数
@@ -3217,6 +3497,9 @@ public class BattleActivity extends AppCompatActivity {
         if(plateType == BLAST_HORIZONTAL || plateType == BLAST_VERTICAL){
             //为b盘
             BlastPositionCoefficient = (smallPlateNumber == 0)? 1.0f:((smallPlateNumber == 1)? 1.1f:1.2f);
+            if(StartActivity.collectionDict.get("龙真流秘籍").isOwn){
+                BlastPositionCoefficient *= 1.5f;
+            }
         }
 
         //叠C原始倍率
@@ -3261,6 +3544,28 @@ public class BattleActivity extends AppCompatActivity {
                 elementRestrainedCoefficient = defender.element.equals("light") ? 1.5f:1.0f;
                 break;
             default:
+        }
+        if(StartActivity.collectionDict.get("小型游泳圈").isOwn){
+            if(isPlayerAttack){
+                if(attacker.element.equals("fire") || attacker.element.equals("water") || attacker.element.equals("tree")){
+                    elementRestrainedCoefficient = Math.max(1.0f, elementRestrainedCoefficient);
+                }
+            }else{
+                if(defender.element.equals("fire") || defender.element.equals("water") || defender.element.equals("tree")){
+                    elementRestrainedCoefficient = Math.min(1.0f, elementRestrainedCoefficient);
+                }
+            }
+        }
+        if(StartActivity.collectionDict.get("木雕的坠饰").isOwn){
+            if(isPlayerAttack){
+                if(attacker.element.equals("light") || attacker.element.equals("dark")){
+                    elementRestrainedCoefficient = Math.max(1.0f, elementRestrainedCoefficient);
+                }
+            }else{
+                if(defender.element.equals("light") || defender.element.equals("dark")){
+                    elementRestrainedCoefficient = Math.min(1.0f, elementRestrainedCoefficient);
+                }
+            }
         }
 
         //状态异常固有加成
@@ -3319,6 +3624,35 @@ public class BattleActivity extends AppCompatActivity {
             if(e.name.equals("伤害削减无效")){
                 if(colorToss(e.probability)){
                     isIgnoreDamageReduction = true;
+                    break;
+                }
+            }
+        }
+        efList = isPlayerAttack? leftEffectList[defender.formationX][defender.formationY]:rightEffectList[defender.formationX][defender.formationY];
+        for(int i = 0; i < efList.size(); i++){
+            Effect e = efList.get(i);
+            if(e.name.equals("Magia伤害削减") && (plateType == MAGIA || plateType == DOPPEL)){
+                if(!isIgnoreDamageReduction){
+                    damageBuff -= e.value;
+                }else{
+                    Effect e2 = new Effect();
+                    e2.name = "伤害削减无效";
+                    sendEffect(e2, defender.formationX, defender.formationY,!isPlayerAttack,true);
+                    break;
+                }
+            }else if(e.name.equals("伤害削减")){
+                if(!isIgnoreDamageReduction){
+                    damageBuff -= e.value;
+                }else{
+                    Effect e2 = new Effect();
+                    e2.name = "伤害削减无效";
+                    sendEffect(e2, defender.formationX, defender.formationY,!isPlayerAttack,true);
+                    break;
+                }
+            }else if(e.name.equals("Blast伤害削减") && (plateType == BLAST_VERTICAL || plateType == BLAST_HORIZONTAL)){
+                if(!isIgnoreDamageReduction){
+                    damageBuff -= e.value;
+                }else{
                     Effect e2 = new Effect();
                     e2.name = "伤害削减无效";
                     sendEffect(e2, defender.formationX, defender.formationY,!isPlayerAttack,true);
@@ -3326,22 +3660,7 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
-        if(!isIgnoreDamageReduction){
-            efList = isPlayerAttack? leftEffectList[defender.formationX][defender.formationY]:rightEffectList[defender.formationX][defender.formationY];
-            for(int i = 0; i < efList.size(); i++){
-                Effect e = efList.get(i);
-                if(e.name.equals("Magia伤害削减") && (plateType == MAGIA || plateType == DOPPEL)){
-                    damageBuff -= e.value;
-                    break;
-                }else if(e.name.equals("伤害削减")){
-                    damageBuff -= e.value;
-                    break;
-                }else if(e.name.equals("Blast伤害削减") && (plateType == BLAST_VERTICAL || plateType == BLAST_HORIZONTAL)){
-                    damageBuff -= e.value;
-                    break;
-                }
-            }
-        }
+
         if(damageBuff > 200)damageBuff = 200;
         if(damageBuff < -70)damageBuff = -70;
 
@@ -3377,11 +3696,19 @@ public class BattleActivity extends AppCompatActivity {
 
         Log.d("damage","基础伤害"+fundamentalDamage+" 盘型基础系数"+fundamentalPlateCoefficient+" B盘位置系数"+BlastPositionCoefficient+" 叠C原始倍率"+chargeCoefficient+" 属性克制系数"+elementRestrainedCoefficient+" 异常状态固有加成"+StateAbnormalCoefficient);
 
+
+
         switch(plateType){
             case ACCELE: case BLAST_HORIZONTAL: case BLAST_VERTICAL: case CHARGE:
                 int finalDamage = (int)Math.max(250, fundamentalDamage * fundamentalPlateCoefficient * BlastPositionCoefficient
                         * chargeCoefficient * elementRestrainedCoefficient * StateAbnormalCoefficient
                         * 1.0f * (100 + damageBuff) / 100);
+
+                if(StartActivity.collectionDict.get("胡桃西餐厅餐券").isOwn){
+                    if(isPlayerAttack){
+                        finalDamage += defender.getRealMaxHP() * 0.05f;
+                    }
+                }
                 Log.d("damage","伤害buff"+damageBuff+" 最终伤害"+finalDamage);
                 return (int)((0.95f + Math.random()*0.1)*finalDamage);
             case MAGIA:case DOPPEL:
@@ -3566,7 +3893,7 @@ public class BattleActivity extends AppCompatActivity {
         return (int)Math.floor(Math.floor(Math.round(simplePlateOriginMp* 1.0f*(100+AcceleMpBuff)/100 )* multiChargeCoefficient)*attackMpRatio* 1.0f*(100+MpGetBuff)/100);
     }
 
-    public int getDefendMP(Character attacker, Character defender, boolean isRight){
+    public int getDefendMP(Character attacker, Character defender, boolean isRightDefend){
         //基础受击MP
         int fundamentalDefendMp = 40;
 
@@ -3575,7 +3902,7 @@ public class BattleActivity extends AppCompatActivity {
 
         //MP获得量 Buff
         int MpGetBuff = 0;
-        ArrayList<Effect> efList = isRight ? rightEffectList[defender.formationX][defender.formationY]:leftEffectList[defender.formationX][defender.formationY];
+        ArrayList<Effect> efList = isRightDefend ? rightEffectList[defender.formationX][defender.formationY]:leftEffectList[defender.formationX][defender.formationY];
         for(int i = 0; i < efList.size(); i++){
             Effect e = efList.get(i);
             if(e.name.equals("MP获得量DOWN")){
@@ -3591,8 +3918,8 @@ public class BattleActivity extends AppCompatActivity {
 
         //被弱点属性攻击时MPUP
         int MpGetFromRestraintAttacker = 0;
-        if(isRestrained(attacker,defender) == 1){
-            efList = isRight ? rightEffectList[defender.formationX][defender.formationY]:leftEffectList[defender.formationX][defender.formationY];
+        if(isRestrained(attacker,defender,!isRightDefend) == 1){
+            efList = isRightDefend ? rightEffectList[defender.formationX][defender.formationY]:leftEffectList[defender.formationX][defender.formationY];
             for(int i = 0; i < efList.size(); i++){
                 Effect e = efList.get(i);
                 if(e.name.equals("被弱点属性攻击时MPUP")){
@@ -3862,6 +4189,14 @@ public class BattleActivity extends AppCompatActivity {
 
         //更新回合信息
         turn++;
+
+        //更新藏品效果
+        if(StartActivity.collectionDict.get("珍贵的明信片").isOwn){
+            chargeNumber++;
+            chargeNumber = Math.min(20,chargeNumber);
+            updateChargeView();
+        }
+
         //更新主动技能cd
         for(int i = 0; i < 5; i++){
             if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
@@ -4225,10 +4560,60 @@ public class BattleActivity extends AppCompatActivity {
                     }
                 }
             }
-        }else if(em.name.equals("消耗10个charge")){
-            achieveExtraMission = consumeChargeNumber >= 10;
+        }else if(em.name.equals("消耗5个charge")){
+            achieveExtraMission = consumeChargeNumber >= 5;
         }
 
+        //判断收藏品效果
+        if(StartActivity.collectionDict.get("失窃的珊瑚项链").isOwn){
+            ArrayList<Character> tempCList = new ArrayList<>();
+            for(int i = 0; i < StartActivity.characters.length; i++){
+                Character c = StartActivity.characters[i];
+                if(c != null){
+                    for(int j = 0; j < c.memoriaList.length; j++){
+                        Memoria m = c.memoriaList[j];
+                        if(m != null && m.isSkill() && m.CDNow != 0){
+                            tempCList.add(c);
+                            break;
+                        }
+                    }
+                }
+            }
+            if(tempCList.size() > 0){
+                //随机清除其中一人技能cd
+                int rnd = (int)(Math.random()*tempCList.size());
+                Character c = tempCList.get(rnd);
+                for(int i = 0; i < c.memoriaList.length; i++){
+                    Memoria m = c.memoriaList[i];
+                    if(m != null && m.isSkill()){
+                        m.CDNow = 0;
+                    }
+                }
+            }
+        }
+        if(StartActivity.collectionDict.get("粉碎的珍珠发饰").isOwn){
+            int rnd = (int)(Math.random()*StartActivity.characterList.size());
+            Character c = StartActivity.characterList.get(rnd);
+            c.realMP += 1000;
+            if(c.realMP >= c.getMaxMp()){
+                c.realMP = c.getMaxMp();
+            }
+        }
+        if(StartActivity.collectionDict.get("超高级的体重计").isOwn){
+            winBattleCount1++;
+        }
+        if(StartActivity.collectionDict.get("从未间断的日记").isOwn){
+            winBattleCount2++;
+        }
+        if(StartActivity.collectionDict.get("五公斤名牌大米").isOwn){
+            for(int i = 0; i < StartActivity.characters.length; i++){
+                Character c = StartActivity.characters[i];
+                if(c != null){
+                    c.realHP += c.getRealMaxHP()*0.05f;
+                    c.realHP = Math.min(c.getRealMaxHP(), c.realHP);
+                }
+            }
+        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -4244,7 +4629,7 @@ public class BattleActivity extends AppCompatActivity {
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
-        },2500);
+        },3000);
     }
 
     public void lose(){
@@ -4252,21 +4637,49 @@ public class BattleActivity extends AppCompatActivity {
         Toast.makeText(this,"失败",Toast.LENGTH_LONG).show();
     }
 
-    public int isRestrained(Character attacker, Character defender){
+    public int isRestrained(Character attacker, Character defender, boolean isPlayerAttack){
+        int tempReturn = 0;
         switch(attacker.element){
             case "tree":
-                return defender.element.equals("fire") ? -1:(defender.element.equals("water")? 1:0);
+                tempReturn = defender.element.equals("fire") ? -1:(defender.element.equals("water")? 1:0);
+                break;
             case "water":
-                return defender.element.equals("tree") ? -1:(defender.element.equals("fire")? 1:0);
+                tempReturn = defender.element.equals("tree") ? -1:(defender.element.equals("fire")? 1:0);
+                break;
             case "fire":
-                return defender.element.equals("water") ? -1:(defender.element.equals("tree")? 1:0);
+                tempReturn = defender.element.equals("water") ? -1:(defender.element.equals("tree")? 1:0);
+                break;
             case "light":
-                return defender.element.equals("dark") ? 1:0;
+                tempReturn =  defender.element.equals("dark") ? 1:0;
+                break;
             case "dark":
-                return defender.element.equals("light") ? 1:0;
+                tempReturn =  defender.element.equals("light") ? 1:0;
+                break;
             default:
         }
-        return 0;
+        if(StartActivity.collectionDict.get("小型游泳圈").isOwn){
+            if(isPlayerAttack){
+                if(attacker.element.equals("fire") || attacker.element.equals("water") || attacker.element.equals("tree")){
+                    tempReturn = Math.max(0, tempReturn);
+                }
+            }else{
+                if(defender.element.equals("fire") || defender.element.equals("water") || defender.element.equals("tree")){
+                    tempReturn = Math.min(0, tempReturn);
+                }
+            }
+        }
+        if(StartActivity.collectionDict.get("木雕的坠饰").isOwn){
+            if(isPlayerAttack){
+                if(attacker.element.equals("light") || attacker.element.equals("dark")){
+                    tempReturn = Math.max(0, tempReturn);
+                }
+            }else{
+                if(defender.element.equals("light") || defender.element.equals("dark")){
+                    tempReturn = Math.min(0, tempReturn);
+                }
+            }
+        }
+        return tempReturn;
     }
 
     public int getIdByString(String name){

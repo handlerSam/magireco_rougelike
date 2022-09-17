@@ -121,6 +121,16 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
+        android:id="@+id/change_map_button"
+        android:layout_width="187px"
+        android:layout_height="188px"
+        android:layout_marginStart="15px"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/shop_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/team_button"
         android:layout_width="187px"
         android:layout_height="189px"

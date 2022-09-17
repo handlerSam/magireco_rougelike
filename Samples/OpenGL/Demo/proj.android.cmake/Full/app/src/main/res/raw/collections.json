@@ -63,7 +63,7 @@
     "price": 2000
 },{
     "name":"等等力徽章",
-    "description":"侦探剧《流浪侦探等等力耕一》中主角的徽章。家长需要注意提醒孩子多去交点朋友，不要总是和徽章说话。",
+    "description":"侦探剧《流浪侦探等等力耕一》中主角的徽章。家长需要注意提醒孩子应该多去交点朋友，而不是总和徽章说话。",
     "effectDescription":"每场战斗第一回合角色将自动进行攻击，且所有我方角色攻击力提升100%",
     "icon":"red_box",
  	"background":"item_frame_2",
@@ -71,7 +71,7 @@
 },{
     "name":"\"正史的断章\"",
     "description":"可以作为正史的碎片被收录进\"空白的预言书\"中。不过往手机中安装这类来源不明的东西时请小心广告和病毒。",
-    "effectDescription":"发盘时仅出现32盘形",
+    "effectDescription":"发盘时仅出现32盘型",
     "icon":"red_box",
  	"background":"item_frame_1",
     "price": 2500
@@ -105,7 +105,7 @@
     "price": 2500
 },{
     "name":"饿肚子模小型",
-    "description":"一个小的人体模型。工匠学园的七大不可思议之一，传闻中会偷吃学生书包中的零食。",
+    "description":"一个小型人体模型。工匠学园的七大不可思议之一，传闻中会偷吃学生书包中的零食。",
     "effectDescription":"角色受到攻击时有25%概率技能冷却时间减少1",
     "icon":"red_box",
  	"background":"item_frame_2",
@@ -134,21 +134,21 @@
 },{
     "name":"特制的年糕汤",
     "description":"外表和味道闻起来都很正常的年糕汤，但是如果知道制作者是谁，那品尝这碗汤是需要一点勇气的。",
-    "effectDescription":"每场战斗有25%概率额外掉落一个悲叹之种",
+    "effectDescription":"每场战斗有50%概率额外掉落1000CC",
     "icon":"blue_box",
  	"background":"item_frame_2",
     "price": 3000
 },{
     "name":"\"死神的黑卡\"",
     "description":"传闻中本应带来恐惧和厄运的黑卡，阴差阳错之下却频频带给人们好运，让绿头发的少女大为光火。",
-    "effectDescription":"立即获得3个悲叹之种",
+    "effectDescription":"每场战斗有50%概率额外掉落一个悲叹之种",
     "icon":"blue_box",
  	"background":"item_frame_2",
     "price": 3000
 },{
     "name":"一盒草莓牛奶",
     "description":"绿头发的少女本不喜欢甜的饮品，可惜只能从某人处抢到这一种饮品，慢慢的也就习惯了它的味道。",
-    "effectDescription":"所有我方单位立即恢复25%生命值",
+    "effectDescription":"角色使用技能时回复5%生命值",
     "icon":"blue_box",
  	"background":"item_frame_1",
     "price": 2000
@@ -176,7 +176,7 @@
 },{
     "name":"超高级的体重计",
     "description":"水德商店街活动中的特等奖品。虽然是超高级的体重计，但是次品就是次品。",
-    "effectDescription":"每次战斗胜利时，所有角色基础防御力+100",
+    "effectDescription":"每次战斗胜利时，所有角色防御力+1%",
     "icon":"red_box",
  	"background":"item_frame_1",
     "price": 2500
@@ -197,7 +197,7 @@
 },{
     "name":"甜酒",
     "description":"具有缓解疲劳和美容养颜的效果。某个有点可爱有点自恋脑袋又有点脱线的女生常喝的饮品。",
-    "effectDescription":"释放doppel所需MP下降到100",
+    "effectDescription":"释放doppel消耗MP下降到100",
     "icon":"red_box",
  	"background":"item_frame_3",
     "price": 4500
@@ -211,7 +211,7 @@
 },{
     "name":"从未间断的日记",
     "description":"日记的主人每次帮助了他人便会去商店购买一支新的颜色的彩铅，在那一天日记的页脚用那支彩铅画上一幅插画。",
-    "effectDescription":"每次战斗胜利时，所有角色基础攻击力+100",
+    "effectDescription":"每次战斗胜利时，所有角色攻击力+1%",
     "icon":"red_box",
  	"background":"item_frame_2",
     "price": 3000
@@ -232,7 +232,7 @@
 },{
     "name":"小型的收藏盒",
     "description":"装满各式小东西的收藏品盒子。盒子的主人有着四处捡东西的习惯，尽管有时候会捡回比如虫子尸体这样让人不舒服的东西，她的两位监护人姐姐倒是仍旧宠溺着她的行为。",
-    "effectDescription":"每释放一次magia，所有角色基础攻击力+100",
+    "effectDescription":"每释放一次magia，本场战斗所有角色攻击力+15%",
     "icon":"blue_box",
  	"background":"item_frame_1",
     "price": 2500
@@ -253,7 +253,7 @@
 },{
     "name":"杰克死亡之镰",
     "description":"魔法花凛的武器。本来是怪盗花凛的武器，在花凛被某位资深魔法少女说教了一顿之后怪盗花凛不复存在，镰刀也变成了魔法花凛的武器。",
-    "effectDescription":"敌人每回合第二次攻击的伤害提高20%，第一三次攻击伤害降低20%",
+    "effectDescription":"所有敌人伤害降低20%",
     "icon":"red_box",
  	"background":"item_frame_1",
     "price": 2000
@@ -308,7 +308,7 @@
     "price": 3000
 },{
     "name":"粘贴文件夹",
-    "description":"粘贴有很多八千代照片的收藏文件夹。\n\"作...作为竞争对手，多了解一点对方有什么奇怪的！\"",
+    "description":"粘贴有很多八千代照片的收藏文件夹。\n\"作...作为竞争对手，想多了解对方一点有什么奇怪的！\"",
     "effectDescription":"敌方每有一种效果，防御力降低5%",
     "icon":"blue_box",
  	"background":"item_frame_1",

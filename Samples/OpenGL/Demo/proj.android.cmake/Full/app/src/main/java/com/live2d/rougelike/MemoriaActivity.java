@@ -823,7 +823,7 @@ class Character{
         int skillNumber = 0;
         for(int i = 0; i < 4; i++){
             if(memoriaList[i] != null){
-                if(i != chooseId && memoriaList[i].DEFOrigin > 0){
+                if(i != chooseId && memoriaList[i].isSkill()){
                     skillNumber++;
                 }
             }
@@ -835,7 +835,7 @@ class Character{
         int normalcyNumber = 0;
         for(int i = 0; i < 4; i++){
             if(memoriaList[i] != null){
-                if(i != chooseId && memoriaList[i].DEFOrigin == 0){
+                if(i != chooseId && !memoriaList[i].isSkill()){
                     normalcyNumber++;
                 }
             }

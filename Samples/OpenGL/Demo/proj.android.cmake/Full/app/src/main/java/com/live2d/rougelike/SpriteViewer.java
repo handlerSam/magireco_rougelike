@@ -77,6 +77,31 @@ public class SpriteViewer extends ConstraintLayout {
                             }else{
                                 ((BattleActivity)context).showPlate();
                             }
+                            if(StartActivity.collectionDict.get("等等力徽章").isOwn){
+                                ((BattleActivity)context).clickable = false;
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((BattleActivity)context).smallPlateXList[((BattleActivity)context).smallPlateNumber] = ((BattleActivity)context).chooseMonsterX;
+                                        ((BattleActivity)context).smallPlateYList[((BattleActivity)context).smallPlateNumber] = ((BattleActivity)context).chooseMonsterY;
+                                        ((BattleActivity)context).setSmallPlate(((BattleActivity)context).smallPlateNumber,0,null);
+                                        ((BattleActivity)context).smallPlateNumber++;
+                                        ((BattleActivity)context).smallPlateXList[((BattleActivity)context).smallPlateNumber] = ((BattleActivity)context).chooseMonsterX;
+                                        ((BattleActivity)context).smallPlateYList[((BattleActivity)context).smallPlateNumber] = ((BattleActivity)context).chooseMonsterY;
+                                        ((BattleActivity)context).setSmallPlate(((BattleActivity)context).smallPlateNumber,2,null);
+                                        ((BattleActivity)context).smallPlateNumber++;
+                                        ((BattleActivity)context).smallPlateXList[((BattleActivity)context).smallPlateNumber] = ((BattleActivity)context).chooseMonsterX;
+                                        ((BattleActivity)context).smallPlateYList[((BattleActivity)context).smallPlateNumber] = ((BattleActivity)context).chooseMonsterY;
+                                        ((BattleActivity)context).setSmallPlate(((BattleActivity)context).smallPlateNumber,4,null);
+                                        ((BattleActivity)context).smallPlateNumber++;
+                                        ((BattleActivity)context).prepareRightAttack();
+//                                        ((BattleActivity)context).charPlateViewList[0].performClick();
+//                                        ((BattleActivity)context).charPlateViewList[2].performClick();
+//                                        ((BattleActivity)context).charPlateViewList[4].performClick();
+                                        Log.d("Sam","startClick");
+                                    }
+                                }, 1500);
+                            }
 
                         }else{
                             ((BattleActivity)context).tipLayout.setVisibility(VISIBLE);

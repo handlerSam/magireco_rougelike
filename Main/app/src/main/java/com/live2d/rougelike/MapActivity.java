@@ -2,17 +2,22 @@ package com.live2d.rougelike;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PointF;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +38,7 @@ import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_VERTICAL;
 import static com.live2d.rougelike.CharacterPlateView.CHARGE;
 
-public class MapActivity extends AppCompatActivity implements View.OnTouchListener {
+public class MapActivity extends AppCompatActivity implements View.OnTouchListener{
 
     public static final int EVENT = 1;
     public static final int NORMAL_BATTLE = 2;
@@ -44,10 +49,12 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     public static final int MODE_SCALE = 2;//双指操作
     public static final int EXPLORE_RADIUS = 200;//相对于4096*2048的地图而言
     public static final int EVENT_NUMBER = 2;
-    public static float mapX = 0;
-    public static float mapY = 0;
+    public static float mapX = 1720;
+    public static float mapY = 855;
     public static boolean isMapSizeTransferred = false;
-    public static float scaleMultiple = 1;//缩放倍数
+    public static float scaleMultiple = 2.464692f;//缩放倍数
+
+    //医疗中心出口 MapX:1720.0, MapY:855.0, Scale:2.464692
 
     public static boolean isSimpleMap = true;
 
@@ -80,23 +87,24 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     ImageView extra_mission_cc_icon;
     ImageView extra_mission_grief_seed_icon;
     ImageView change_map_button;
+    ImageView[] clock_number = new ImageView[4];
+
     boolean isIntentSend = false;
+    ColorMatrixColorFilter grayColorFilter;//用于灰度设置
     private int screenHeight;
     private int screenWidth;
-
-
     //private ViewDragHelper mDragHelper;
 //    private float scale = 1;
     private boolean isInit = false;
     private ConstraintLayout kamihamaMap;
     private ConstraintLayout events_layout;
     private SpriteViewer leader;
-    Handler handler = new Handler(new Handler.Callback() {
+    Handler handler = new Handler(new Handler.Callback(){
         @Override
-        public boolean handleMessage(@NonNull Message message) {
+        public boolean handleMessage(@NonNull Message message){
             //map activity
-            if (!isMaskStrip) {
-                switch (message.what) {
+            if(!isMaskStrip){
+                switch(message.what){
                     case 1:
                         leader.setVisibility(View.GONE);
                         leader_replace_image_view.setVisibility(View.VISIBLE);
@@ -134,30 +142,35 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     private int leaderY = 0;
 
     //获取距离
-    private static float getDistance(MotionEvent event) {//获取两点间距离
+    private static float getDistance(MotionEvent event){//获取两点间距离
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return (float) Math.sqrt(x * x + y * y);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_map);
         findView();
-        if (effectPool.size() == 0) {
+        if(effectPool.size() == 0){
             initEffectPool();
         }
         //mDragHelper = ViewDragHelper.create((ViewGroup)(findViewById(R.id.rootActivity)),1.0f, callback);
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
+    public void onWindowFocusChanged(boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
         screenHeight = kamihamaMap.getMeasuredHeight();
         screenWidth = kamihamaMap.getMeasuredWidth();
         Log.d("Sam", "mapHeight:" + screenHeight + ", mapWidth:" + screenWidth);
-        if (!isInit) {
+
+
+
+        if(!isInit){
             initView();
             isInit = true;
         }
@@ -165,10 +178,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View v, MotionEvent event){
         //Log.d("Sam", "pivotX:"+ViewHelper.getPivotX(kamihamaMap) + "pivotY:"+ViewHelper.getPivotY(kamihamaMap));
 
-        switch (event.getAction() & event.getActionMasked()) {
+        switch(event.getAction() & event.getActionMasked()){
             case MotionEvent.ACTION_DOWN://单指触碰
                 //起始矩阵先获取ImageView的当前状态
                 //获取起始坐标
@@ -189,12 +202,12 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 break;
             case MotionEvent.ACTION_MOVE://滑动（单+双）
                 map_event_detail_frame.setVisibility(View.GONE);
-                if (MODE == MODE_DRAG) {//单指滑动时
+                if(MODE == MODE_DRAG){//单指滑动时
                     mapX += (int) (event.getX() - startPointF.x);
                     mapY += (int) (event.getY() - startPointF.y);
                     ViewHelper.setX(kamihamaMap, mapX);
                     ViewHelper.setY(kamihamaMap, mapY);
-                } else if (MODE == MODE_SCALE) {//双指滑动时
+                }else if(MODE == MODE_SCALE){//双指滑动时
                     //计算缩放倍数
                     scaleMultiple = scaleMultiple * getDistance(event) / distance;
                     ViewHelper.setScaleX(kamihamaMap, scaleMultiple);// x方向上缩放
@@ -204,11 +217,11 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
             case MotionEvent.ACTION_UP://单指离开
             case MotionEvent.ACTION_POINTER_UP://双指离开
                 //防止缩放过度
-                if (scaleMultiple > 3) {
+                if(scaleMultiple > 3){
                     scaleMultiple = 3;
                     ViewHelper.setScaleX(kamihamaMap, scaleMultiple);// x方向上缩放
                     ViewHelper.setScaleY(kamihamaMap, scaleMultiple);// y方向上缩放
-                } else if (scaleMultiple < 1) {
+                }else if(scaleMultiple < 1){
                     scaleMultiple = 1;
                     ViewHelper.setScaleX(kamihamaMap, scaleMultiple);// x方向上缩放
                     ViewHelper.setScaleY(kamihamaMap, scaleMultiple);// y方向上缩放
@@ -219,14 +232,14 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 }
 
                 //防止过度移动, 图片不能移出屏幕的1/4
-                if (mapX > ((screenWidth * scaleMultiple) / 2 - screenWidth / 4.0f)) {
+                if(mapX > ((screenWidth * scaleMultiple) / 2 - screenWidth / 4.0f)){
                     mapX = (screenWidth * scaleMultiple) / 2 - screenWidth / 4.0f;
-                } else if (mapX < -screenWidth * scaleMultiple / 2 + screenWidth / 4.0f) {
+                }else if(mapX < -screenWidth * scaleMultiple / 2 + screenWidth / 4.0f){
                     mapX = -(screenWidth * scaleMultiple) / 2 + screenWidth / 4.0f;
                 }
-                if (mapY > (screenHeight * scaleMultiple) / 2 - screenHeight / 4.0f) {
+                if(mapY > (screenHeight * scaleMultiple) / 2 - screenHeight / 4.0f){
                     mapY = (screenHeight * scaleMultiple) / 2 - screenHeight / 4.0f;
-                } else if (mapY < -screenHeight * scaleMultiple / 2 + screenHeight / 4.0f) {
+                }else if(mapY < -screenHeight * scaleMultiple / 2 + screenHeight / 4.0f){
                     mapY = -(screenHeight * scaleMultiple) / 2 + screenHeight / 4.0f;
                 }
                 ViewHelper.setX(kamihamaMap, mapX);
@@ -235,16 +248,16 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 MODE = MODE_NONE;
                 break;
         }
-//        Log.d("Sam","MapX:" + mapX + ", MapY:" + mapY);
+        Log.d("Sam","MapX:" + mapX + ", MapY:" + mapY + ", Scale:" + scaleMultiple);
         return true;
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed(){
 //        super.onBackPressed();
     }
 
-    public void findView() {
+    public void findView(){
         kamihamaMap = findViewById(R.id.kamihamaMap);
         leader = findViewById(R.id.leader);
         events_layout = findViewById(R.id.events_layout);
@@ -273,19 +286,35 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         extra_mission_cc_icon = findViewById(R.id.extra_mission_cc_icon);
         extra_mission_grief_seed_icon = findViewById(R.id.extra_mission_grief_seed_icon);
         change_map_button = findViewById(R.id.change_map_button);
+        for(int i = 0; i < 4; i++){
+            clock_number[i] = findViewById(getIdByString("clock_number"+i));
+        }
     }
 
-    public void initView() {
+    public void initView(){
         kamihamaMap.setOnTouchListener(this);
 
         updateCCAndGriefSeedView();
+
+        setClock();
 
         black_mask.setVisibility(View.VISIBLE);
 
         map_event_detail_frame.setVisibility(View.GONE);
 
-        if (!isMapSizeTransferred) {
-            for (int i = 0; i < StartActivity.mapRandomPoint.length; i++) {
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0); // 设置饱和度
+        grayColorFilter = new ColorMatrixColorFilter(cm);
+
+        //恢复上次地图
+        if(isSimpleMap){
+            kamihamaMap.setBackgroundResource(R.drawable.kamihama_map);
+        }else{
+            kamihamaMap.setBackgroundResource(R.drawable.kamihama_map_mark);
+        }
+
+        if(!isMapSizeTransferred){
+            for(int i = 0; i < StartActivity.mapRandomPoint.length; i++){
                 StartActivity.mapRandomPoint[i][0] = (int) (1.0f * StartActivity.mapRandomPoint[i][0] / 4096.0f * screenWidth);
                 StartActivity.mapRandomPoint[i][1] = (int) (1.0f * StartActivity.mapRandomPoint[i][1] / 2048.0f * screenHeight);
             }
@@ -313,10 +342,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         ViewHelper.setScaleY(kamihamaMap, scaleMultiple);// y方向上缩放
 
         //查看队伍
-        team_button.setOnClickListener(new View.OnClickListener() {
+        team_button.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                if (!isIntentSend) {
+            public void onClick(View v){
+                if(!isIntentSend){
                     Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                     intent1.putExtra("battleInfo", -1);
                     startActivity(intent1);
@@ -328,26 +357,31 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         });
 
         //进入商店
-        shop_button.setOnClickListener(new View.OnClickListener() {
+        shop_button.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(MapActivity.this);
-                if (StartActivity.ccNumber >= StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE) {
-                    dialog.setMessage("是否花费 " + StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE + "cc 购买调整屋的上门服务？\n(当前地图事件会更新)");//正文
-                    dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
-                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            public void onClick(View v){
+                if(StartActivity.ccNumber >= StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+                    final AlertDialog dialog = builder.create();
+
+                    View dialog_frame = LayoutInflater.from(MapActivity.this).inflate(R.layout.alert_dialog_frame, null);
+                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("购买服务");
+                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("是否花费 " + StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE + "cc 购买调整屋的上门服务？\n(当前地图事件会更新)");
+                    ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                    //((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView();
+                    ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
+                    (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //正确逻辑
-                            StartActivity.ccNumber -= StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE;
-                            mpEvent.clear();
-                            StartActivity.gameTime += 0.5f;
-                            if (StartActivity.collectionDict.get("幽灵执照").isOwn) {
-                                if (colorToss(25)) {
-                                    StartActivity.gameTime -= 0.5f;
+                        public void onClick(View v){
+                            if(!isIntentSend){
+                                StartActivity.ccNumber -= StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE;
+                                mpEvent.clear();
+                                StartActivity.gameTime += 0.5f;
+                                if(StartActivity.collectionDict.get("幽灵执照").isOwn){
+                                    if(colorToss(25)){
+                                        StartActivity.gameTime -= 0.5f;
+                                    }
                                 }
-                            }
-                            if (!isIntentSend) {
                                 Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);
                                 startActivity(intent1);
                                 finish();
@@ -356,25 +390,41 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             }
                         }
                     });
-                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    (dialog_frame.findViewById(R.id.alert_dialog_cancel_button)).setOnClickListener(new View.OnClickListener(){
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //错误逻辑
+                        public void onClick(View v){
+                            dialog.cancel();
+                            dialog.dismiss();
                         }
                     });
-                } else {
-                    dialog.setMessage("购买调整屋的上门服务需要 " + StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE + "cc, cc不足");//正文
-                    dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
-                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    dialog.show();
+                    dialog.getWindow().setContentView(dialog_frame);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+                    final AlertDialog dialog = builder.create();
+
+                    View dialog_frame = LayoutInflater.from(MapActivity.this).inflate(R.layout.alert_dialog_frame, null);
+                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("购买服务");
+                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("购买调整屋的上门服务需要 " + StartActivity.COST_FOR_SUMMON_ADJUSTMENT_HOUSE + "cc, cc不足");
+                    ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(grayColorFilter);
+                    ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                    (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //错误逻辑
+                        public void onClick(View v){
+
                         }
                     });
+                    (dialog_frame.findViewById(R.id.alert_dialog_cancel_button)).setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v){
+                            dialog.cancel();
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                    dialog.getWindow().setContentView(dialog_frame);
                 }
-
-                dialog.show();
-
             }
         });
 
@@ -384,23 +434,23 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         StaggeredGridLayoutManager m = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         collection_recycler_view.setLayoutManager(m);
         collection_list_background.setVisibility(View.GONE);
-        item_button.setOnClickListener(new View.OnClickListener() {
+        item_button.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 collection_list_background.setVisibility(View.VISIBLE);
             }
         });
-        collection_list_background.setOnClickListener(new View.OnClickListener() {
+        collection_list_background.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 collection_list_background.setVisibility(View.GONE);
             }
         });
 
         //切换地图
-        change_map_button.setOnClickListener(new View.OnClickListener() {
+        change_map_button.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 if(isSimpleMap){
                     kamihamaMap.setBackgroundResource(R.drawable.kamihama_map_mark);
                 }else{
@@ -416,23 +466,43 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         handler.sendMessageDelayed(tempM, 3000);
     }
 
-    void updateCCAndGriefSeedView() {
+    void updateCCAndGriefSeedView(){
         cc_number.setText(" " + StartActivity.ccNumber + " ");
         grief_seed_number.setText(" " + StartActivity.griefSeedNumber + " ");
     }
 
-    public void initLeader() {
+    void setClock(){
+        float t = StartActivity.gameTime;
+        for(int i = 0; i < 24; i++){
+            if(i - 0.1f < t && t < i + 0.6f){
+                clock_number[0].setBackgroundResource(getImageByString("blue_"+(i / 10)));
+                clock_number[1].setBackgroundResource(getImageByString("blue_"+(i % 10)));
+                if(i - 0.1f < t && t < i + 0.1f){
+                    clock_number[2].setBackgroundResource(R.drawable.blue_0);
+                    clock_number[3].setBackgroundResource(R.drawable.blue_0);
+                }else{
+                    clock_number[2].setBackgroundResource(R.drawable.blue_3);
+                    clock_number[3].setBackgroundResource(R.drawable.blue_0);
+                }
+            }
+        }
+
+
+    }
+
+
+    public void initLeader(){
         Character temp = null;
-        for (int i = 0; i < StartActivity.characters.length; i++) {
-            if (StartActivity.characters[i] != null && StartActivity.characters[i].isLeader) {
+        for(int i = 0; i < StartActivity.characters.length; i++){
+            if(StartActivity.characters[i] != null && StartActivity.characters[i].isLeader){
                 temp = StartActivity.characters[i];
                 break;
             }
         }
         leader.charName = temp.spriteName;
-        if (temp.spriteName.equals("Satomi Touka")) {
+        if(temp.spriteName.equals("Satomi Touka")){
             leader.spriteName = "stance";// 灯花打伞好看
-        } else {
+        }else{
             leader.spriteName = "wait";
         }
 
@@ -458,32 +528,32 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
     }
 
-    public void initSurrendingEvents() {
+    public void initSurrendingEvents(){
         int finalEventNumber = EVENT_NUMBER;
-        if (StartActivity.collectionDict.get("红蓝蜡烛").isOwn) {
+        if(StartActivity.collectionDict.get("红蓝蜡烛").isOwn){
             finalEventNumber += 2;
         }
-        if (mpEvent.size() < finalEventNumber) {
+        if(mpEvent.size() < finalEventNumber){
             //选择所有可能的点
-            for (int i = 0; i < StartActivity.mapRandomPoint.length; i++) {
+            for(int i = 0; i < StartActivity.mapRandomPoint.length; i++){
                 //1.在leader的一定距离范围内
                 int tempX = StartActivity.mapRandomPoint[i][0];
                 int tempY = StartActivity.mapRandomPoint[i][1];
-                if (Math.pow(tempX - leaderX, 2) + Math.pow(tempY - leaderY, 2) <= EXPLORE_RADIUS * EXPLORE_RADIUS) {
+                if(Math.pow(tempX - leaderX, 2) + Math.pow(tempY - leaderY, 2) <= EXPLORE_RADIUS * EXPLORE_RADIUS){
                     //2.不能在leader的图像范围内 80*110 与 25*32
-                    if (!(Math.pow(tempX - leaderX, 2) + Math.pow(tempY - 16 - leaderY + 55, 2) <= Math.pow(80, 2))) {
+                    if(!(Math.pow(tempX - leaderX, 2) + Math.pow(tempY - 16 - leaderY + 55, 2) <= Math.pow(80, 2))){
                         //if(!(Math.abs(tempX-12-leaderX) <= 40 && Math.abs(tempY-16-leaderY+55) <= 55)){
                         //3.不能和已经触发的点图像重叠 25*32
                         boolean isOverlap = false;
-                        for (int j = 0; j < mpEvent.size(); j++) {
+                        for(int j = 0; j < mpEvent.size(); j++){
                             int tempJx = mpEvent.get(j).x;
                             int tempJy = mpEvent.get(j).y;
-                            if (Math.pow(tempX - tempJx, 2) + Math.pow(tempY - tempJy, 2) <= Math.pow(32, 2)) {
+                            if(Math.pow(tempX - tempJx, 2) + Math.pow(tempY - tempJy, 2) <= Math.pow(32, 2)){
                                 isOverlap = true;
                                 break;
                             }
                         }
-                        if (!isOverlap) {
+                        if(!isOverlap){
                             MapEvent mpe = new MapEvent();
                             mpe.x = tempX;
                             mpe.y = tempY;
@@ -497,40 +567,45 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
             //筛选点
             Collections.shuffle(mpEvent);
-            for (int i = 0; i < mpEvent.size() && mpEvent.size() > finalEventNumber; i++) {
-                MapEvent mpe = mpEvent.get(i);
-                for (int j = 0; j < mpEvent.size(); j++) {
-                    MapEvent testMpe = mpEvent.get(j);
-                    if (Math.pow(mpe.x - testMpe.x, 2) + Math.pow(mpe.y - testMpe.y, 2) <= Math.max(Math.random(),0.2f) * 10000) {
-                        mpEvent.remove(testMpe);
-                        j--;
+            while(mpEvent.size() > finalEventNumber){
+                int markPoint = -1;
+                double maxD = -1d;
+                for(int i = 0; i < mpEvent.size(); i++){
+                    //计算除去某个点后所有点之间的距离，最终remove掉距离总和最大的点
+                    double tempD = calculateSumDistance(mpEvent, i);
+                    if(tempD > maxD){
+                        maxD = tempD;
+                        markPoint = i;
                     }
                 }
+                mpEvent.remove(markPoint);
+                Log.d("Sam","removePoint:" + markPoint);
             }
 
 
-            while (mpEvent.size() > finalEventNumber) {
+
+            while(mpEvent.size() > finalEventNumber){
                 int randomId = (int) (Math.random() * mpEvent.size());
                 mpEvent.remove(randomId);
             }
 
             //为剩下的点添加事件
-            for (int i = 0; i < mpEvent.size(); i++) {
+            for(int i = 0; i < mpEvent.size(); i++){
                 MapEvent mpe = mpEvent.get(i);
                 double tempRandom = Math.random();
-                if (tempRandom < 0.4d) {
+                if(tempRandom < 0.4d){
                     //普通战斗
                     mpe.eventType = NORMAL_BATTLE;
                     mpe.bi = generateRandomBattle(mpe.x, mpe.y, false);
-                } else if (tempRandom < 0.8d) {
+                }else if(tempRandom < 0.6d){
                     //魔女战斗
                     mpe.eventType = BOSS_BATTLE;
                     mpe.bi = generateRandomBattle(mpe.x, mpe.y, true);
-                } else if (tempRandom < 0.9d) {
+                }else if(tempRandom < 0.9d){
                     //事件
                     mpe.eventType = EVENT;
                     mpe.bi = null;
-                } else {
+                }else{
                     //商店
                     mpe.eventType = SHOP;
                 }
@@ -540,7 +615,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
 
         //在地图上生成筛选后的点
-        for (int i = 0; i < mpEvent.size(); i++) {
+        for(int i = 0; i < mpEvent.size(); i++){
             final MapEvent mpe = mpEvent.get(i);
             final ImageView ep = new ImageView(this);
             final int tempI = i;
@@ -555,19 +630,19 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
             sampleSet.connect(ep.getId(), ConstraintSet.TOP, events_layout.getId(), ConstraintSet.TOP, mpe.y - 32);
             sampleSet.applyTo(events_layout);
 
-            if (mpe.eventType == NORMAL_BATTLE) {
+            if(mpe.eventType == NORMAL_BATTLE){
                 //普通战斗
                 ep.setBackgroundResource(R.drawable.map_mark_battle);
-                ep.setOnClickListener(new View.OnClickListener() {
+                ep.setOnClickListener(new View.OnClickListener(){
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v){
                         map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_pink_title);
                         map_event_detail_title.setText(mpe.bi.battleName);
                         event_description.setText(mpe.bi.battleDescription);
                         recommend_lv.setText(mpe.bi.recommendLV);
                         enemy_number.setText("" + mpe.bi.monsterNumber);
                         String tempEffectDescription = "";
-                        for (int j = 0; j < mpe.bi.useEffect.size(); j++) {
+                        for(int j = 0; j < mpe.bi.useEffect.size(); j++){
                             tempEffectDescription += mpe.bi.useEffect.get(j).first.getDescription() + "\n";
                         }
                         carry_buff.setText(tempEffectDescription);
@@ -576,21 +651,21 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         ExtraMission em = StartActivity.extraMissionList.get(mpe.bi.extraMissionId);
                         extra_mission_frame.setVisibility(View.VISIBLE);
                         extra_mission_text.setText(em.name);
-                        if (em.bonus.cc > 0) {
+                        if(em.bonus.cc > 0){
                             extra_mission_add_number.setText("+" + em.bonus.cc);
                             extra_mission_cc_icon.setVisibility(View.VISIBLE);
                             extra_mission_grief_seed_icon.setVisibility(View.GONE);
-                        } else {
+                        }else{
                             extra_mission_add_number.setText("+" + em.bonus.griefSeed);
                             extra_mission_cc_icon.setVisibility(View.GONE);
                             extra_mission_grief_seed_icon.setVisibility(View.VISIBLE);
                         }
 
 
-                        go_button.setOnClickListener(new View.OnClickListener() {
+                        go_button.setOnClickListener(new View.OnClickListener(){
                             @Override
-                            public void onClick(View v) {
-                                if (!isIntentSend) {
+                            public void onClick(View v){
+                                if(!isIntentSend){
                                     Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                                     intent1.putExtra("battleInfo", tempI);
                                     intent1.putExtra("isRandomBattle", true);
@@ -605,19 +680,19 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         });
                     }
                 });
-            } else if (mpe.eventType == BOSS_BATTLE) {
+            }else if(mpe.eventType == BOSS_BATTLE){
                 //boss战斗
                 ep.setBackgroundResource(R.drawable.map_mark_emergent_battle);
-                ep.setOnClickListener(new View.OnClickListener() {
+                ep.setOnClickListener(new View.OnClickListener(){
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v){
                         map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_red_title);
                         map_event_detail_title.setText(mpe.bi.battleName);
                         event_description.setText(mpe.bi.battleDescription);
                         recommend_lv.setText(mpe.bi.recommendLV);
                         enemy_number.setText("" + mpe.bi.monsterNumber);
                         String tempEffectDescription = "";
-                        for (int j = 0; j < mpe.bi.useEffect.size(); j++) {
+                        for(int j = 0; j < mpe.bi.useEffect.size(); j++){
                             tempEffectDescription += mpe.bi.useEffect.get(j).first.getDescription() + "\n";
                         }
                         carry_buff.setText(tempEffectDescription);
@@ -626,20 +701,20 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         ExtraMission em = StartActivity.extraMissionList.get(mpe.bi.extraMissionId);
                         extra_mission_frame.setVisibility(View.VISIBLE);
                         extra_mission_text.setText(em.name);
-                        if (em.bonus.cc > 0) {
+                        if(em.bonus.cc > 0){
                             extra_mission_add_number.setText("+" + em.bonus.cc);
                             extra_mission_cc_icon.setVisibility(View.VISIBLE);
                             extra_mission_grief_seed_icon.setVisibility(View.GONE);
-                        } else {
+                        }else{
                             extra_mission_add_number.setText("+" + em.bonus.griefSeed);
                             extra_mission_cc_icon.setVisibility(View.GONE);
                             extra_mission_grief_seed_icon.setVisibility(View.VISIBLE);
                         }
 
-                        go_button.setOnClickListener(new View.OnClickListener() {
+                        go_button.setOnClickListener(new View.OnClickListener(){
                             @Override
-                            public void onClick(View v) {
-                                if (!isIntentSend) {
+                            public void onClick(View v){
+                                if(!isIntentSend){
                                     Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                                     intent1.putExtra("battleInfo", tempI);
                                     intent1.putExtra("isRandomBattle", true);
@@ -654,12 +729,12 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         });
                     }
                 });
-            } else if (mpe.eventType == EVENT) {
+            }else if(mpe.eventType == EVENT){
                 //对话
                 ep.setBackgroundResource(R.drawable.map_mark_event);
-                ep.setOnClickListener(new View.OnClickListener() {
+                ep.setOnClickListener(new View.OnClickListener(){
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v){
                         map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_pink_title);
                         map_event_detail_title.setText("随机事件");
                         event_description.setText("那里似乎有些什么，但是不过去看看显然不知道那里具体会发生什么。");
@@ -668,19 +743,19 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         carry_buff.setText("");
                         map_event_detail_frame.setVisibility(View.VISIBLE);
                         extra_mission_frame.setVisibility(View.GONE);
-                        go_button.setOnClickListener(new View.OnClickListener() {
+                        go_button.setOnClickListener(new View.OnClickListener(){
                             @Override
-                            public void onClick(View v) {
+                            public void onClick(View v){
                                 StartActivity.PLAYER_ON_MAP_X = mpe.x;
                                 StartActivity.PLAYER_ON_MAP_Y = mpe.y;
-                                if (!isIntentSend) {
-                                    if (StartActivity.collectionDict.get("便携式照相机").isOwn) {
+                                if(!isIntentSend){
+                                    if(StartActivity.collectionDict.get("便携式照相机").isOwn){
                                         StartActivity.ccNumber += 500;
                                     }
                                     MapActivity.mpEvent.clear();
                                     StartActivity.gameTime += 0.5f;
-                                    if (StartActivity.collectionDict.get("幽灵执照").isOwn) {
-                                        if (colorToss(25)) {
+                                    if(StartActivity.collectionDict.get("幽灵执照").isOwn){
+                                        if(colorToss(25)){
                                             StartActivity.gameTime -= 0.5f;
                                         }
                                     }
@@ -694,30 +769,30 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         });
                     }
                 });
-            } else {
+            }else{
                 //商店
                 ep.setBackgroundResource(R.drawable.map_mark_shop);
-                ep.setOnClickListener(new View.OnClickListener() {
+                ep.setOnClickListener(new View.OnClickListener(){
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v){
                         map_event_detail_title_frame.setBackgroundResource(R.drawable.map_event_detail_pink_title);
-                        map_event_detail_title.setText("商铺");
-                        event_description.setText("一间小小的店铺，刚好可以补充一些物资。");
+                        map_event_detail_title.setText("调整屋");
+                        event_description.setText("调整屋似乎正好在此地出外勤。是个补充物资的好机会。");
                         recommend_lv.setText("--");
                         enemy_number.setText("--");
                         carry_buff.setText("");
                         extra_mission_frame.setVisibility(View.GONE);
                         map_event_detail_frame.setVisibility(View.VISIBLE);
-                        go_button.setOnClickListener(new View.OnClickListener() {
+                        go_button.setOnClickListener(new View.OnClickListener(){
                             @Override
-                            public void onClick(View v) {
+                            public void onClick(View v){
                                 StartActivity.PLAYER_ON_MAP_X = mpe.x;
                                 StartActivity.PLAYER_ON_MAP_Y = mpe.y;
-                                if (!isIntentSend) {
+                                if(!isIntentSend){
                                     MapActivity.mpEvent.clear();
                                     StartActivity.gameTime += 0.5f;
-                                    if (StartActivity.collectionDict.get("幽灵执照").isOwn) {
-                                        if (colorToss(25)) {
+                                    if(StartActivity.collectionDict.get("幽灵执照").isOwn){
+                                        if(colorToss(25)){
                                             StartActivity.gameTime -= 0.5f;
                                         }
                                     }
@@ -736,7 +811,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         }
     }
 
-    public void initEffectPool() {
+    public void initEffectPool(){
         effectPool = new ArrayList<>();
         effectPool.add(new Pair<>(new Effect("攻击力UP", 15, 999, 100, 0), 2));
         effectPool.add(new Pair<>(new Effect("攻击力UP", 35, 999, 100, 0), 4));
@@ -833,7 +908,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         effectPool.add(new Pair<>(new Effect("伤害削减无效", 0, 999, 100, 0), 4));
     }
 
-    public BattleInfo generateRandomBattle(int x, int y, boolean isBossBattle) {
+    public BattleInfo generateRandomBattle(int x, int y, boolean isBossBattle){
         Log.d("Sam", "generateRandomBattle");
         BattleInfo bi = new BattleInfo();
         bi.backgroundId = (int) (Math.random() * StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.size());
@@ -848,8 +923,8 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         ArrayList<String> randomBuffChoice = StartActivity.ENEMY_RANDOM_BUFF_DICT.get(sumPoint);
         String tempChoice = randomBuffChoice.get((int) (Math.random() * randomBuffChoice.size()));
         Log.d("Sam", "useBuffChoice:" + tempChoice);
-        for (int j = 0; j < effectPool.size(); j++) {
-            if (tempChoice.substring(j, j + 1).equals("1")) {
+        for(int j = 0; j < effectPool.size(); j++){
+            if(tempChoice.substring(j, j + 1).equals("1")){
                 bi.useEffect.add(new Pair<>(new Effect(effectPool.get(j).first), effectPool.get(j).second));
             }
         }
@@ -857,10 +932,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         Log.d("Sam", "generateEnemyName");
         //得到敌人名字
         ArrayList<String> monsterNameList;
-        if (isBossBattle) {
+        if(isBossBattle){
             monsterNameList = new ArrayList<>(commonBossNameList);
-            for (int i = 0; i < specialBossList.length; i++) {
-                if (Math.pow(x - 1.0f * specialPoint[i].first / screenWidth, 2) + Math.pow(y - 1.0f * specialPoint[i].second / screenHeight, 2) <= 200) {
+            for(int i = 0; i < specialBossList.length; i++){
+                if(Math.pow(x - 1.0f * specialPoint[i].first / screenWidth, 2) + Math.pow(y - 1.0f * specialPoint[i].second / screenHeight, 2) <= 200){
                     monsterNameList.add(specialBossList[i]);
                     monsterNameList.add(specialBossList[i]);
                     monsterNameList.add(specialBossList[i]);
@@ -868,10 +943,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                     monsterNameList.add(specialBossList[i]);
                 }
             }
-        } else {
+        }else{
             monsterNameList = new ArrayList<>(commonMonsterNameList);
-            for (int i = 0; i < specialMonsterList.length; i++) {
-                if (Math.pow(x - 1.0f * specialPoint[i].first / screenWidth, 2) + Math.pow(y - 1.0f * specialPoint[i].second / screenHeight, 2) <= 200) {
+            for(int i = 0; i < specialMonsterList.length; i++){
+                if(Math.pow(x - 1.0f * specialPoint[i].first / screenWidth, 2) + Math.pow(y - 1.0f * specialPoint[i].second / screenHeight, 2) <= 200){
                     monsterNameList.add(specialMonsterList[i]);
                     monsterNameList.add(specialMonsterList[i]);
                     monsterNameList.add(specialMonsterList[i]);
@@ -884,45 +959,45 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
         bi.battleDescription = isBossBattle ? "似乎有魔女在此活动。请小心。" : "似乎有使魔的气息，为了人们的安全最好尽快击败他们。";
 
-        if (isBossBattle) {
+        if(isBossBattle){
             Log.d("Sam", "generateBoss");
             bi.monsterNumber = 1;
             bi.monsterList.add(generateMonster(x, y, bi.useEffect, monsterSprite, sumPoint, true));
             bi.monsterFormation[1][1] = bi.monsterList.get(0);
             int p = 7;
-            if (Math.random() * 10 < p) {
+            if(Math.random() * 10 < p){
                 bi.monsterFormation[1][0] = bi.monsterList.get(0);
                 p -= 2;
             }
-            if (Math.random() * 10 < p) {
+            if(Math.random() * 10 < p){
                 bi.monsterFormation[0][0] = bi.monsterList.get(0);
                 bi.monsterFormation[2][0] = bi.monsterList.get(0);
                 p -= 2;
             }
-            if (Math.random() * 10 < p) {
+            if(Math.random() * 10 < p){
                 bi.monsterFormation[1][2] = bi.monsterList.get(0);
                 p -= 2;
             }
-            if (Math.random() * 10 < p) {
+            if(Math.random() * 10 < p){
                 bi.monsterFormation[0][1] = bi.monsterList.get(0);
                 bi.monsterFormation[2][1] = bi.monsterList.get(0);
                 p -= 2;
             }
-            if (Math.random() * 10 < p) {
+            if(Math.random() * 10 < p){
                 bi.monsterFormation[0][2] = bi.monsterList.get(0);
                 bi.monsterFormation[2][2] = bi.monsterList.get(0);
                 p -= 2;
             }
-        } else {
+        }else{
             //确定怪物数量, 添加相应怪物
             Log.d("Sam", "generateMonsters");
             bi.monsterNumber = (int) (Math.random() * 3) + 3;
-            for (int i = 0; i < bi.monsterNumber; i++) {
+            for(int i = 0; i < bi.monsterNumber; i++){
                 bi.monsterList.add(generateMonster(x, y, bi.useEffect, monsterSprite, sumPoint * 3 / 4, false));
-                while (true) {
+                while(true){
                     int tempX = (int) (Math.random() * 3);
                     int tempY = (int) (Math.random() * 3);
-                    if (bi.monsterFormation[tempX][tempY] == null) {
+                    if(bi.monsterFormation[tempX][tempY] == null){
                         bi.monsterFormation[tempX][tempY] = bi.monsterList.get(i);
                         break;
                     }
@@ -931,24 +1006,24 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
         }
 
-        if (StartActivity.gameTime < 8.01f) {
+        if(StartActivity.gameTime < 8.01f){
             bi.recommendLV = "1";
-        } else if (StartActivity.gameTime < 10.01f) {
+        }else if(StartActivity.gameTime < 10.01f){
             bi.recommendLV = "20";
-        } else if (StartActivity.gameTime < 12.01f) {
+        }else if(StartActivity.gameTime < 12.01f){
             bi.recommendLV = "40";
-        } else if (StartActivity.gameTime < 14.01f) {
+        }else if(StartActivity.gameTime < 14.01f){
             bi.recommendLV = "60";
-        } else if (StartActivity.gameTime < 16.01f) {
+        }else if(StartActivity.gameTime < 16.01f){
             bi.recommendLV = "80";
-        } else if (StartActivity.gameTime < 18.01f) {
+        }else if(StartActivity.gameTime < 18.01f){
             bi.recommendLV = "100";
         }
         bi.extraMissionId = (int) (Math.random() * StartActivity.extraMissionList.size());
         return bi;
     }
 
-    public Character generateMonster(int x, int y, ArrayList<Pair<Effect, Integer>> useEffectPool, String spriteName, int buffPoint, boolean isBossBattle) {
+    public Character generateMonster(int x, int y, ArrayList<Pair<Effect, Integer>> useEffectPool, String spriteName, int buffPoint, boolean isBossBattle){
         Log.d("Sam", "generateMonster:buffLength:" + useEffectPool.size() + ", name:" + spriteName);
         Character c = new Character();
 
@@ -958,81 +1033,81 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
         //名字
         c.spriteName = spriteName;
-        if (c.spriteName.startsWith("monster_")) {
+        if(c.spriteName.startsWith("monster_")){
             c.name = c.spriteName.substring(8);
         }
 
         //数值
-        if (!isBossBattle) {
-            if (StartActivity.gameTime < 8.01f) {
+        if(!isBossBattle){
+            if(StartActivity.gameTime < 8.01f){
                 c.lv = 1;
                 c.HP = 4500;
                 c.realHP = c.HP;
                 c.ATK = 750;
                 c.DEF = 1000;
-            } else if (StartActivity.gameTime < 10.01f) {
+            }else if(StartActivity.gameTime < 10.01f){
                 c.lv = 20;
                 c.HP = 9800;
                 c.realHP = c.HP;
                 c.ATK = 1500;
                 c.DEF = 4500;
-            } else if (StartActivity.gameTime < 12.01f) {
+            }else if(StartActivity.gameTime < 12.01f){
                 c.lv = 40;
                 c.HP = 15000;
                 c.realHP = c.HP;
                 c.ATK = 2250;
                 c.DEF = 6500;
-            } else if (StartActivity.gameTime < 14.01f) {
+            }else if(StartActivity.gameTime < 14.01f){
                 c.lv = 60;
                 c.HP = 35000;
                 c.realHP = c.HP;
                 c.ATK = 4800;
                 c.DEF = 7000;
-            } else if (StartActivity.gameTime < 16.01f) {
+            }else if(StartActivity.gameTime < 16.01f){
                 c.lv = 80;
                 c.HP = 80000;
                 c.realHP = c.HP;
                 c.ATK = 9000;
                 c.DEF = 10500;
-            } else if (StartActivity.gameTime < 18.01f) {
+            }else if(StartActivity.gameTime < 18.01f){
                 c.lv = 100;
                 c.HP = 150000;
                 c.realHP = c.HP;
                 c.ATK = 14400;
                 c.DEF = 13000;
             }
-        } else {
-            if (StartActivity.gameTime < 8.01f) {
+        }else{
+            if(StartActivity.gameTime < 8.01f){
                 c.lv = 1;
                 c.HP = 16000;
                 c.realHP = c.HP;
-                c.ATK = 1125;
+                c.ATK = 1500;
                 c.DEF = 1300;
-            } else if (StartActivity.gameTime < 10.01f) {
+            }else if(StartActivity.gameTime < 10.01f){
                 c.lv = 20;
                 c.HP = 34300;
                 c.realHP = c.HP;
-                c.ATK = 1875;
+                c.ATK = 2875;
                 c.DEF = 4750;
-            } else if (StartActivity.gameTime < 12.01f) {
+            }else if(StartActivity.gameTime < 12.01f){
                 c.lv = 40;
                 c.HP = 52500;
                 c.realHP = c.HP;
-                c.ATK = 2700;
+                c.ATK = 4700;
                 c.DEF = 7000;
-            } else if (StartActivity.gameTime < 14.01f) {
+            }else if(StartActivity.gameTime < 14.01f){
                 c.lv = 60;
                 c.HP = 122500;
                 c.realHP = c.HP;
-                c.ATK = 6000;
+                c.ATK = 8700;
                 c.DEF = 9000;
-            } else if (StartActivity.gameTime < 16.01f) {
+            }else if(StartActivity.gameTime < 16.01f){
                 c.lv = 80;
                 c.HP = 280000;
                 c.realHP = c.HP;
-                c.ATK = 12000;
+                c.ATK = 14000;
                 c.DEF = 15500;
-            } else if (StartActivity.gameTime < 18.01f) {
+            }else if(StartActivity.gameTime < 18.01f){
                 c.lv = 100;
                 c.HP = 525000;
                 c.realHP = c.HP;
@@ -1047,24 +1122,24 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         //盘型
         int[] plateList = new int[]{ACCELE, CHARGE, CHARGE, BLAST_HORIZONTAL, BLAST_VERTICAL};
         c.plateList = new int[5];
-        for (int i = 0; i < c.plateList.length; i++) {
+        for(int i = 0; i < c.plateList.length; i++){
             c.plateList[i] = plateList[(int) (Math.random() * plateList.length)];
         }
 
         //添加effect
-        if (isBossBattle) {
-            for (int i = 0; i < useEffectPool.size(); i++) {
+        if(isBossBattle){
+            for(int i = 0; i < useEffectPool.size(); i++){
                 c.initialEffectList.add(new Effect(useEffectPool.get(i).first));
             }
-        } else {
+        }else{
             //洗牌后逐个开始载入，直到总和大于buffPoint
             Collections.shuffle(useEffectPool);
             int tempSum = 0;
-            for (int i = 0; i < useEffectPool.size(); i++) {
-                if (tempSum < buffPoint) {
+            for(int i = 0; i < useEffectPool.size(); i++){
+                if(tempSum < buffPoint){
                     c.initialEffectList.add(new Effect(useEffectPool.get(i).first));
                     tempSum += useEffectPool.get(i).second;
-                } else {
+                }else{
                     break;
                 }
             }
@@ -1074,10 +1149,27 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         return c;
     }
 
-    public boolean colorToss(int probabilityOfTrue) {
-        if (probabilityOfTrue >= 100) {
+    public double calculateSumDistance(ArrayList<MapEvent> mpEvent, int ignorePoint){
+        // ignorePoint == -1代表不忽略点
+        double d = 0d;
+        for(int i = 0; i < mpEvent.size()-1; i++){
+            if(i != ignorePoint){
+                int x = mpEvent.get(i).x;
+                int y = mpEvent.get(i).y;
+                for(int j = i+1; j < mpEvent.size(); j++){
+                    if(j != ignorePoint){
+                        d += Math.sqrt((Math.pow(x-mpEvent.get(j).x,2)+Math.pow(y-mpEvent.get(j).y,2)));
+                    }
+                }
+            }
+        }
+        return d * (Math.random()+0.5);
+    }
+
+    public boolean colorToss(int probabilityOfTrue){
+        if(probabilityOfTrue >= 100){
             return true;
-        } else if (probabilityOfTrue <= 0) {
+        }else if(probabilityOfTrue <= 0){
             return false;
         }
         double temp = Math.random() * 100;
@@ -1085,22 +1177,27 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         return (temp < probabilityOfTrue);
     }
 
-    public int getImageByString(String name) {
+    public int getImageByString(String name){
         Resources res = getResources();
         return res.getIdentifier(name, "drawable", getPackageName());
     }
+
+    public int getIdByString(String name){
+        Resources res = getResources();
+        return res.getIdentifier(name, "id", getPackageName());
+    }
 }
 
-class MapEvent {
+class MapEvent{
     int x;
     int y;
     int eventType;// SHOP NORMAL_BATTLE BOSS_BATTLE EVENT
     BattleInfo bi;
 
-    public MapEvent() {
+    public MapEvent(){
     }
 
-    public MapEvent(int x, int y, int eventType, BattleInfo bi) {
+    public MapEvent(int x, int y, int eventType, BattleInfo bi){
         this.x = x;
         this.y = y;
         this.eventType = eventType;

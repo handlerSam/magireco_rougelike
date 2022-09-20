@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.view.KeyEvent.ACTION_DOWN;
 import static com.live2d.rougelike.CharacterPlateView.ACCELE;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_VERTICAL;
@@ -39,7 +42,7 @@ import static com.live2d.rougelike.CharacterPlateView.CHARGE;
 import static com.live2d.rougelike.MemoriaActivity.isDesc;
 import static com.live2d.rougelike.MemoriaActivity.isOrderByLV;
 
-public class AdjustmentHouseActivity extends AppCompatActivity {
+public class AdjustmentHouseActivity extends AppCompatActivity{
 
     public static Collection DEFAULT_COLLECTION;
     int changePlateTo = -1;
@@ -82,10 +85,10 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
 
     boolean isTouchCharacterPlateChangeTransparent = false;
 
-    Handler handler = new Handler(new Handler.Callback() {
+    Handler handler = new Handler(new Handler.Callback(){
         @Override
-        public boolean handleMessage(@NonNull Message message) {
-            switch (message.what) {
+        public boolean handleMessage(@NonNull Message message){
+            switch(message.what){
                 case 0:
                     ObjectAnimator fadeOut = ObjectAnimator.ofFloat(black_mask_adjustment_house, "alpha", 1f, 0);
                     fadeOut.setDuration(500);
@@ -98,7 +101,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     });
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 //        Log.d("Sam","adjustmentHouseActivityCreate");
         setContentView(R.layout.activity_adjustment_house);
@@ -109,12 +112,12 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
 
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
+    public void onWindowFocusChanged(boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
         changeBackground("11061");
     }
 
-    public void initView() {
+    public void initView(){
         ColorMatrix cm = new ColorMatrix();
         cm.setSaturation(0); // 设置饱和度
         grayColorFilter = new ColorMatrixColorFilter(cm);
@@ -122,10 +125,10 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         DEFAULT_COLLECTION = new Collection("", "", "", "", 0, "item_frame_3");
         DEFAULT_COLLECTION.isOwn = true;
 
-        back.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                if (!isIntentSend) {
+            public void onClick(View v){
+                if(!isIntentSend){
                     Intent intent1 = new Intent(AdjustmentHouseActivity.this, MapActivity.class);
                     startActivity(intent1);
                     finish();
@@ -134,14 +137,14 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 }
             }
         });
-        character_breakthrough.setOnClickListener(new View.OnClickListener() {
+        character_breakthrough.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 right_item_container.removeAllViews();
                 right_item_container.setVisibility(View.VISIBLE);
                 memoria_list.setVisibility(View.GONE);
                 shop_frame.setVisibility(View.GONE);
-                for (int i = 0; i < StartActivity.characterList.size(); i++) {
+                for(int i = 0; i < StartActivity.characterList.size(); i++){
                     final Character c = StartActivity.characterList.get(i);
                     View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_break_through_item, right_item_container, false);
                     right_item_container.addView(item);
@@ -166,72 +169,83 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                     charAttr.setImageResource(getResourceByString(c.element));
                     lvView.setText("Lv " + c.lv + " ");
 
-                    for (int j = 0; j < 3; j++) {
-                        if (c.breakThrough > j + 1) {
+                    for(int j = 0; j < 3; j++){
+                        if(c.breakThrough > j + 1){
                             slot_list[j].setBackgroundResource(R.drawable.character_slot);
-                        } else {
+                        }else{
                             slot_list[j].setBackgroundResource(R.drawable.character_empty_slot);
                         }
                     }
 
-                    if (c.breakThrough < 4) {
-                        for (int j = 0; j < 3; j++) {
-                            if (c.breakThrough > j) {
+                    if(c.breakThrough < 4){
+                        for(int j = 0; j < 3; j++){
+                            if(c.breakThrough > j){
                                 slot_list[j + 3].setBackgroundResource(R.drawable.character_slot);
-                            } else {
+                            }else{
                                 slot_list[j + 3].setBackgroundResource(R.drawable.character_empty_slot);
                             }
                         }
                         item_price.setText("-" + StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1]);
                         starsLayout.setVisibility(View.VISIBLE);
-                        for (int j = 0; j < 5; j++) {
+                        for(int j = 0; j < 5; j++){
                             char_star[j].setVisibility(j < c.star ? View.VISIBLE : View.GONE);
                         }
 
-                        if (StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] > StartActivity.griefSeedNumber) {
+                        if(StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] > StartActivity.griefSeedNumber){
                             //买不起
                             purchase_button_background.setColorFilter(grayColorFilter);
                             purchase_button.setOnClickListener(null);
-                        } else {
+                        }else{
                             //买得起
                             purchase_button_background.setColorFilter(null);
-                            purchase_button.setOnClickListener(new View.OnClickListener() {
+                            purchase_button.setOnClickListener(new View.OnClickListener(){
                                 @Override
-                                public void onClick(View v) {
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(AdjustmentHouseActivity.this);
-                                    dialog.setTitle("魔力解放:" + c.name);//标题
-                                    dialog.setMessage("将消耗" + StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] + "个悲叹之种将魔力解放至" + (c.breakThrough + 1) + "级.");//正文
-                                    dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
-                                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                public void onClick(View v){
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(AdjustmentHouseActivity.this);
+                                    final AlertDialog dialog = builder.create();
+
+                                    View dialog_frame = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.alert_dialog_frame, null);
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("魔力解放:" + c.name);
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗" + StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] + "个悲叹之种将魔力解放至" + (c.breakThrough + 1) + "级.");
+                                    ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                                    //((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView();
+                                    ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
+                                    (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        public void onClick(View v){
                                             //正确逻辑
                                             StartActivity.griefSeedNumber -= StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1];
                                             c.breakThrough++;
                                             updateCCAndGriefSeedView();
                                             character_breakthrough.performClick();
+                                            dialog.dismiss();
+                                            dialog.cancel();
                                         }
                                     });
-                                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    (dialog_frame.findViewById(R.id.alert_dialog_cancel_button)).setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            //错误逻辑
+                                        public void onClick(View v){
+                                            dialog.dismiss();
+                                            dialog.cancel();
                                         }
                                     });
                                     dialog.show();
+                                    dialog.getWindow().setContentView(dialog_frame);
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
                                 }
                             });
                         }
-                    } else {
+                    }else{
                         //已将魔力解放至最大
-                        for (int j = 0; j < 3; j++) {
+                        for(int j = 0; j < 3; j++){
                             slot_list[j + 3].setVisibility(View.GONE);
                         }
                         changeToArrow.setVisibility(View.GONE);
 
                         item_price.setText("--");
                         starsLayout.setVisibility(View.VISIBLE);
-                        for (int j = 0; j < 5; j++) {
+                        for(int j = 0; j < 5; j++){
                             char_star[j].setVisibility(j < c.star ? View.VISIBLE : View.GONE);
                         }
                         purchase_button_background.setColorFilter(grayColorFilter);
@@ -241,33 +255,35 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                 }
             }
         });
-        character_plate_change.setOnTouchListener(new View.OnTouchListener() {
+        character_plate_change.setOnTouchListener(new View.OnTouchListener(){
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (characterPlateChangeBitmap.getPixel((int) event.getX(), (int) event.getY()) == 0) {
-                    isTouchCharacterPlateChangeTransparent = true;
-                    if (2 * event.getY() > characterPlateChangeBitmap.getHeight()) {
-                        character_star_up.dispatchTouchEvent(event);
-                    } else {
-                        character_breakthrough.dispatchTouchEvent(event);
+            public boolean onTouch(View v, MotionEvent event){
+                if(event.getAction() == ACTION_DOWN){
+                    if(characterPlateChangeBitmap.getPixel((int) event.getX(), (int) event.getY()) == 0){
+                        isTouchCharacterPlateChangeTransparent = true;
+                        if(2 * event.getY() > characterPlateChangeBitmap.getHeight()){
+                            character_star_up.dispatchTouchEvent(event);
+                        }else{
+                            character_breakthrough.dispatchTouchEvent(event);
+                        }
+                    }else{
+                        isTouchCharacterPlateChangeTransparent = false;
                     }
-                } else {
-                    isTouchCharacterPlateChangeTransparent = false;
+                    Log.d("Sam", "is CharacterPlateChange Touch Transparent:" + isTouchCharacterPlateChangeTransparent);
                 }
-                Log.d("Sam", "is CharacterPlateChange Touch Transparent:" + isTouchCharacterPlateChangeTransparent);
                 return false;
             }
         });
         characterPlateChangeBitmap = ((BitmapDrawable) character_plate_change.getDrawable()).getBitmap();
-        character_plate_change.setOnClickListener(new View.OnClickListener() {
+        character_plate_change.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                if (!isTouchCharacterPlateChangeTransparent) {
+            public void onClick(View v){
+                if(!isTouchCharacterPlateChangeTransparent){
                     right_item_container.removeAllViews();
                     right_item_container.setVisibility(View.VISIBLE);
                     memoria_list.setVisibility(View.GONE);
                     shop_frame.setVisibility(View.GONE);
-                    for (int i = 0; i < StartActivity.characterList.size(); i++) {
+                    for(int i = 0; i < StartActivity.characterList.size(); i++){
                         final Character c = StartActivity.characterList.get(i);
                         View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_plate_change_item, right_item_container, false);
                         right_item_container.addView(item);
@@ -287,9 +303,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                         charAttr.setImageResource(getResourceByString(c.element));
                         lvView.setText("Lv " + c.lv + " ");
 
-                        for (int j = 0; j < 5; j++) {
+                        for(int j = 0; j < 5; j++){
                             ImageView plate = item.findViewById(getIdByString("plate" + (j + 1)));
-                            switch (c.plateList[j]) {
+                            switch(c.plateList[j]){
                                 case ACCELE:
                                     plate.setImageResource(R.drawable.accele_small_plate);
                                     break;
@@ -305,9 +321,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                             }
 
                             final int tempJ = j;
-                            plate.setOnClickListener(new View.OnClickListener() {
+                            plate.setOnClickListener(new View.OnClickListener(){
                                 @Override
-                                public void onClick(View v) {
+                                public void onClick(View v){
                                     final View dialog_layout = getLayoutInflater().inflate(R.layout.plate_change_alert_dialog, null, false);
                                     final ImageView origin_plate = dialog_layout.findViewById(R.id.origin_plate);
                                     final ImageView accele_plate_choose_arrow = dialog_layout.findViewById(R.id.accele_plate_choose_arrow);
@@ -318,14 +334,14 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                                     ImageView charge_plate = dialog_layout.findViewById(R.id.charge_plate);
                                     ImageView blast_vertical_plate = dialog_layout.findViewById(R.id.blast_vertical_plate);
                                     ImageView blast_horizontal_plate = dialog_layout.findViewById(R.id.blast_horizontal_plate);
-                                    if (c.plateList[tempJ] == ACCELE) {
+                                    if(c.plateList[tempJ] == ACCELE){
                                         charge_plate_choose_arrow.setVisibility(View.VISIBLE);
                                         changePlateTo = CHARGE;
-                                    } else {
+                                    }else{
                                         accele_plate_choose_arrow.setVisibility(View.VISIBLE);
                                         changePlateTo = ACCELE;
                                     }
-                                    switch (c.plateList[tempJ]) {
+                                    switch(c.plateList[tempJ]){
                                         case ACCELE:
                                             origin_plate.setImageResource(R.drawable.accele_small_plate);
                                             LinearLayout accele_plate_layout = dialog_layout.findViewById(R.id.accele_plate_layout);
@@ -347,68 +363,84 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                                             blast_vertical_plate_layout.setVisibility(View.GONE);
                                             break;
                                     }
-                                    accele_plate.setOnClickListener(new View.OnClickListener() {
+                                    accele_plate.setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(View v) {
+                                        public void onClick(View v){
                                             clearPlateChosen(dialog_layout);
                                             accele_plate_choose_arrow.setVisibility(View.VISIBLE);
                                             changePlateTo = ACCELE;
                                         }
                                     });
-                                    charge_plate.setOnClickListener(new View.OnClickListener() {
+                                    charge_plate.setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(View v) {
+                                        public void onClick(View v){
                                             clearPlateChosen(dialog_layout);
                                             charge_plate_choose_arrow.setVisibility(View.VISIBLE);
                                             changePlateTo = CHARGE;
                                         }
                                     });
-                                    blast_horizontal_plate.setOnClickListener(new View.OnClickListener() {
+                                    blast_horizontal_plate.setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(View v) {
+                                        public void onClick(View v){
                                             clearPlateChosen(dialog_layout);
                                             blast_horizontal_plate_choose_arrow.setVisibility(View.VISIBLE);
                                             changePlateTo = BLAST_HORIZONTAL;
                                         }
                                     });
-                                    blast_vertical_plate.setOnClickListener(new View.OnClickListener() {
+                                    blast_vertical_plate.setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(View v) {
+                                        public void onClick(View v){
                                             clearPlateChosen(dialog_layout);
                                             blast_vertical_plate_choose_arrow.setVisibility(View.VISIBLE);
                                             changePlateTo = BLAST_VERTICAL;
                                         }
                                     });
 
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(AdjustmentHouseActivity.this);
+                                    final AlertDialog dialog = builder.create();
 
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(AdjustmentHouseActivity.this);
-                                    dialog.setTitle("行动盘替换: " + c.name);//标题
-                                    dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
-                                    dialog.setView(dialog_layout);
-                                    if (price <= StartActivity.griefSeedNumber) {
-                                        dialog.setMessage("将消耗 " + price + " 个悲叹之种对行动盘进行如下替换：");//正文
-                                        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    View dialog_frame = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.alert_dialog_frame, null);
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("行动盘替换: " + c.name);
+                                    ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                                    ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView(dialog_layout);
+
+                                    if(price <= StartActivity.griefSeedNumber){
+                                        ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗 " + price + " 个悲叹之种对行动盘进行如下替换：");
+                                        ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
+                                        (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
                                             @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                                            public void onClick(View v){
                                                 //正确逻辑
                                                 StartActivity.griefSeedNumber -= price;
                                                 StartActivity.plate_change_time++;
                                                 c.plateList[tempJ] = changePlateTo;
                                                 updateCCAndGriefSeedView();
                                                 character_plate_change.performClick();
+                                                dialog.dismiss();
+                                                dialog.cancel();
                                             }
                                         });
-                                    } else {
-                                        dialog.setMessage("需要消耗 " + price + " 个悲叹之种，悲叹之种不足.");//正文
+                                    }else{
+                                        ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("需要消耗 " + price + " 个悲叹之种，悲叹之种不足.");
+                                        ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(grayColorFilter);
+                                        (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
+                                            @Override
+                                            public void onClick(View v){
+                                                dialog.dismiss();
+                                                dialog.cancel();
+                                            }
+                                        });
                                     }
-
-                                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    (dialog_frame.findViewById(R.id.alert_dialog_cancel_button)).setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            //错误逻辑
+                                        public void onClick(View v){
+                                            dialog.cancel();
+                                            dialog.dismiss();
                                         }
                                     });
                                     dialog.show();
+                                    dialog.getWindow().setContentView(dialog_frame);
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
                                 }
                             });
                         }
@@ -418,14 +450,14 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
             }
         });
 
-        character_star_up.setOnClickListener(new View.OnClickListener() {
+        character_star_up.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 right_item_container.removeAllViews();
                 right_item_container.setVisibility(View.VISIBLE);
                 memoria_list.setVisibility(View.GONE);
                 shop_frame.setVisibility(View.GONE);
-                for (int i = 0; i < StartActivity.characterList.size(); i++) {
+                for(int i = 0; i < StartActivity.characterList.size(); i++){
                     final Character c = StartActivity.characterList.get(i);
                     View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_star_up_item, right_item_container, false);
                     right_item_container.addView(item);
@@ -448,7 +480,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                     charAttr.setImageResource(getResourceByString(c.element));
                     lvView.setText("Lv " + c.lv);
                     starsLayout.setVisibility(View.VISIBLE);
-                    for (int j = 0; j < 5; j++) {
+                    for(int j = 0; j < 5; j++){
                         char_star[j].setVisibility(j < c.star ? View.VISIBLE : View.GONE);
                     }
 
@@ -468,55 +500,66 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                     ImageView purchase_button_background = item.findViewById(R.id.purchase_button_background);
 
 
-                    if (c.star != 5) {
+                    if(c.star != 5){
                         //initRight
                         charImage.setImageResource(getResourceByString(c.charIconImage + "d"));
                         charImage.setBackgroundResource(getResourceByString("bg_" + c.element));
                         charFrame.setBackgroundResource(getResourceByString("frame_rank_" + c.star));
                         charAttr.setImageResource(getResourceByString(c.element));
                         lvView.setText("Lv " + c.lv);
-                        for (int j = 0; j < 5; j++) {
+                        for(int j = 0; j < 5; j++){
                             char_star[j].setVisibility(j <= c.star ? View.VISIBLE : View.GONE);
                         }
 
                         item_price.setText("-" + StartActivity.CHARACTER_STAR_UP_PRICE);
                         starsLayout.setVisibility(View.VISIBLE);
 
-                        if (StartActivity.CHARACTER_STAR_UP_PRICE > StartActivity.griefSeedNumber) {
+                        if(StartActivity.CHARACTER_STAR_UP_PRICE > StartActivity.griefSeedNumber){
                             //买不起
                             purchase_button_background.setColorFilter(grayColorFilter);
                             purchase_button.setOnClickListener(null);
-                        } else {
+                        }else{
                             //买得起
                             purchase_button_background.setColorFilter(null);
-                            purchase_button.setOnClickListener(new View.OnClickListener() {
+                            purchase_button.setOnClickListener(new View.OnClickListener(){
                                 @Override
-                                public void onClick(View v) {
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(AdjustmentHouseActivity.this);
-                                    dialog.setTitle("星级提升: " + c.name);//标题
-                                    dialog.setMessage("将消耗 " + StartActivity.CHARACTER_STAR_UP_PRICE + " 个悲叹之种将星级提升至 " + (c.star + 1) + " 星.");//正文
-                                    dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
-                                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                public void onClick(View v){
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(AdjustmentHouseActivity.this);
+                                    final AlertDialog dialog = builder.create();
+
+                                    View dialog_frame = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.alert_dialog_frame, null);
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("星级提升: " + c.name);
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗 " + StartActivity.CHARACTER_STAR_UP_PRICE + " 个悲叹之种将星级提升至 " + (c.star + 1) + " 星.");
+                                    ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                                    //((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView();
+                                    ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
+                                    (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        public void onClick(View v){
                                             //正确逻辑
                                             StartActivity.griefSeedNumber -= StartActivity.CHARACTER_STAR_UP_PRICE;
                                             c.star++;
                                             updateCCAndGriefSeedView();
                                             character_star_up.performClick();
+                                            dialog.dismiss();
+                                            dialog.cancel();
                                         }
                                     });
-                                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    (dialog_frame.findViewById(R.id.alert_dialog_cancel_button)).setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            //错误逻辑
+                                        public void onClick(View v){
+                                            dialog.dismiss();
+                                            dialog.cancel();
                                         }
                                     });
                                     dialog.show();
+                                    dialog.getWindow().setContentView(dialog_frame);
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
                                 }
                             });
                         }
-                    } else {
+                    }else{
                         right_char_Layout.setVisibility(View.GONE);
                         changeToArrow.setVisibility(View.GONE);
                         purchase_button_background.setColorFilter(grayColorFilter);
@@ -527,28 +570,30 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
             }
         });
 
-        memoria_breakthrough.setOnTouchListener(new View.OnTouchListener() {
+        memoria_breakthrough.setOnTouchListener(new View.OnTouchListener(){
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (memoriaBreakthroughBitmap.getPixel((int) event.getX(), (int) event.getY()) == 0) {
-                    isTouchMemoriaBreakthroughTransparent = true;
-                    if (2 * event.getY() > characterPlateChangeBitmap.getHeight()) {
-                        shop_trade.dispatchTouchEvent(event);
-                    } else {
-                        character_star_up.dispatchTouchEvent(event);
+            public boolean onTouch(View v, MotionEvent event){
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    if(memoriaBreakthroughBitmap.getPixel((int) event.getX(), (int) event.getY()) == 0){
+                        isTouchMemoriaBreakthroughTransparent = true;
+                        if(2 * event.getY() > characterPlateChangeBitmap.getHeight()){
+                            shop_trade.dispatchTouchEvent(event);
+                        }else{
+                            character_star_up.dispatchTouchEvent(event);
+                        }
+                    }else{
+                        isTouchMemoriaBreakthroughTransparent = false;
                     }
-                } else {
-                    isTouchMemoriaBreakthroughTransparent = false;
+                    Log.d("Sam", "is MemoriaBreakthrough Touch Point Transparent:" + isTouchMemoriaBreakthroughTransparent);
                 }
-                Log.d("Sam", "is MemoriaBreakthrough Touch Point Transparent:" + isTouchMemoriaBreakthroughTransparent);
                 return false;
             }
         });
         memoriaBreakthroughBitmap = ((BitmapDrawable) memoria_breakthrough.getDrawable()).getBitmap();
-        memoria_breakthrough.setOnClickListener(new View.OnClickListener() {
+        memoria_breakthrough.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                if (!isTouchMemoriaBreakthroughTransparent) {
+            public void onClick(View v){
+                if(!isTouchMemoriaBreakthroughTransparent){
                     right_item_container.removeAllViews();
                     right_item_container.setVisibility(View.GONE);
                     memoria_list.setVisibility(View.VISIBLE);
@@ -566,18 +611,18 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                     updateSortedOutcome();
                     memoriaAdapter.notifyItemRangeChanged(0, StartActivity.memoriaBag.size());
 
-                    orderBy.setOnClickListener(new View.OnClickListener() {
+                    orderBy.setOnClickListener(new View.OnClickListener(){
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View view){
                             isOrderByLV = !isOrderByLV;
                             orderBy.setImageResource(isOrderByLV ? R.drawable.order2 : R.drawable.order1);
                             updateSortedOutcome();
                             memoriaAdapter.notifyItemRangeChanged(0, StartActivity.memoriaBag.size());
                         }
                     });
-                    order.setOnClickListener(new View.OnClickListener() {
+                    order.setOnClickListener(new View.OnClickListener(){
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View view){
                             isDesc = !isDesc;
                             order.setImageResource(isDesc ? R.drawable.desc : R.drawable.incr);
                             updateSortedOutcome();
@@ -592,8 +637,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         //随机取六个商品
         ArrayList<Collection> tempShopItemList = new ArrayList<>();
         int cnt = 6;
-        for (int i = 0; i < StartActivity.collectionList.size() && cnt > 0; i++) {
-            if (!StartActivity.collectionList.get(i).isOwn) {
+        for(int i = 0; i < StartActivity.collectionList.size() && cnt > 0; i++){
+            if(!StartActivity.collectionList.get(i).isOwn){
                 tempShopItemList.add(StartActivity.collectionList.get(i));
                 cnt--;
             }
@@ -605,32 +650,32 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
 //                tempShopItemList.add(c);
 //            }
 //        }
-        for (int i = 0; i < tempShopItemList.size(); i++) {
+        for(int i = 0; i < tempShopItemList.size(); i++){
             Collection c = tempShopItemList.get(i);
-            if (i < 3) {
+            if(i < 3){
                 shopCollectionList[0][i] = c;
-            } else {
+            }else{
                 shopCollectionList[1][i - 3] = c;
             }
         }
-        for (int i = tempShopItemList.size(); i < 6; i++) {
-            if (i < 3) {
+        for(int i = tempShopItemList.size(); i < 6; i++){
+            if(i < 3){
                 shopCollectionList[0][i] = DEFAULT_COLLECTION;
-            } else {
+            }else{
                 shopCollectionList[1][i - 3] = DEFAULT_COLLECTION;
             }
         }
 
-        shop_trade.setOnClickListener(new View.OnClickListener() {
+        shop_trade.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 right_item_container.setVisibility(View.GONE);
                 memoria_list.setVisibility(View.GONE);
                 shop_frame.setVisibility(View.VISIBLE);
                 shop_list_first_row.removeAllViews();
                 shop_list_second_row.removeAllViews();
-                for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 3; j++) {
+                for(int i = 0; i < 2; i++){
+                    for(int j = 0; j < 3; j++){
                         final Collection c = shopCollectionList[i][j];
                         View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.shop_item, i == 0 ? shop_list_first_row : shop_list_second_row, false);
                         ImageView shop_item_image = item.findViewById(R.id.shop_item_image);
@@ -639,16 +684,16 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                         ImageView cc_icon = item.findViewById(R.id.cc_icon);
                         shop_item_image.setBackgroundResource(getResourceByString(c.icon));
                         shop_item_name.setText(c.name);
-                        if (c.isOwn) {
+                        if(c.isOwn){
                             shop_item_price.setText("-售罄-");
                             cc_icon.setVisibility(View.GONE);
                             item.setAlpha(0.5f);
-                        } else {
+                        }else{
                             shop_item_price.setText("" + c.price);
                             cc_icon.setVisibility(View.VISIBLE);
-                            item.setOnClickListener(new View.OnClickListener() {
+                            item.setOnClickListener(new View.OnClickListener(){
                                 @Override
-                                public void onClick(View v) {
+                                public void onClick(View v){
                                     final View dialog_layout = getLayoutInflater().inflate(R.layout.shop_item_alert_dialog, null, false);
                                     ImageView shop_item_image = dialog_layout.findViewById(R.id.shop_item_image);
                                     TextView shop_item_name = dialog_layout.findViewById(R.id.shop_item_name);
@@ -660,40 +705,57 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
                                     shop_item_effect_description.setText(c.effectDescription);
                                     shop_item_description.setText(c.description);
 
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(AdjustmentHouseActivity.this);
-                                    //dialog.setTitle("购买");//标题
-                                    if (StartActivity.ccNumber >= c.price) {
-                                        dialog.setMessage("将花费 " + c.price + "cc 购买以下商品:");//正文
-                                        dialog.setView(dialog_layout);
-                                        dialog.setCancelable(true);//是否能点击屏幕取消该弹窗
-                                        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(AdjustmentHouseActivity.this);
+                                    final AlertDialog dialog = builder.create();
+
+                                    View dialog_frame = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.alert_dialog_frame, null);
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("购买");
+                                    if(StartActivity.ccNumber >= c.price){
+                                        ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将花费 " + c.price + "cc 购买以下商品:");
+                                        ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                                        ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView(dialog_layout);
+                                        ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
+                                        (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
                                             @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                                            public void onClick(View v){
                                                 //正确逻辑
                                                 StartActivity.ccNumber -= c.price;
                                                 c.isOwn = true;
                                                 updateCCAndGriefSeedView();
                                                 shop_trade.performClick();
+                                                dialog.dismiss();
+                                                dialog.cancel();
                                             }
                                         });
-                                    } else {
-                                        dialog.setMessage("购买商品需要 " + c.price + "cc , cc不足.");//正文
-                                        dialog.setView(dialog_layout);
+                                    }else{
+                                        ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("购买商品需要 " + c.price + "cc , cc不足.");
+                                        ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                                        ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView(dialog_layout);
+                                        ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(grayColorFilter);
+                                        (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
+                                            @Override
+                                            public void onClick(View v){
+                                                //正确逻辑
+                                            }
+                                        });
                                     }
-                                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    (dialog_frame.findViewById(R.id.alert_dialog_cancel_button)).setOnClickListener(new View.OnClickListener(){
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            //错误逻辑
+                                        public void onClick(View v){
+                                            dialog.dismiss();
+                                            dialog.cancel();
                                         }
                                     });
                                     dialog.show();
+                                    dialog.getWindow().setContentView(dialog_frame);
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
                                 }
                             });
 
                         }
-                        if (i == 0) {
+                        if(i == 0){
                             shop_list_first_row.addView(item);
-                        } else {
+                        }else{
                             shop_list_second_row.addView(item);
                         }
                     }
@@ -706,7 +768,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         character_breakthrough.performClick();
     }
 
-    public void initLive2d() {
+    public void initLive2d(){
         JniBridgeJava.SetActivityInstance(this);
         JniBridgeJava.SetContext(this);
 
@@ -718,9 +780,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
 
         live2dContainer.addView(_glSurfaceView);
         final Timer live2dTimer = new Timer();
-        TimerTask live2dTimerTask = new TimerTask() {
+        TimerTask live2dTimerTask = new TimerTask(){
             @Override
-            public void run() {
+            public void run(){
                 JniBridgeJava.nativeSetCharacter(
                         "101700", "001", "011",
                         "", "", "",
@@ -754,29 +816,29 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     //}
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy(){
         super.onDestroy();
         JniBridgeJava.nativeOnPause();
         JniBridgeJava.nativeOnStop();
         JniBridgeJava.nativeOnDestroy();
     }
 
-    public void updateSortedOutcome() {
-        Collections.sort(StartActivity.memoriaBag, new Comparator<Memoria>() {
+    public void updateSortedOutcome(){
+        Collections.sort(StartActivity.memoriaBag, new Comparator<Memoria>(){
             @Override
-            public int compare(Memoria lhs, Memoria rhs) {
+            public int compare(Memoria lhs, Memoria rhs){
                 // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
                 int weight = 0;
-                if (isOrderByLV) {
+                if(isOrderByLV){
                     return lhs.lvNow > rhs.lvNow ? (isDesc ? -1 : 1) : (lhs.lvNow < rhs.lvNow) ? (isDesc ? 1 : -1) : (Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id) ? -1 : (Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1 : 0));
-                } else {
+                }else{
                     return lhs.star > rhs.star ? (isDesc ? -1 : 1) : (lhs.star < rhs.star) ? (isDesc ? 1 : -1) : (Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id) ? -1 : (Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1 : 0));
                 }
             }
         });
     }
 
-    public void findView() {
+    public void findView(){
         live2dContainer = findViewById(R.id.live2dContainer);
         character_breakthrough = findViewById(R.id.character_breakthrough);
         character_plate_change = findViewById(R.id.character_plate_change);
@@ -798,7 +860,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
         black_mask_adjustment_house = findViewById(R.id.black_mask_adjustment_house);
     }
 
-    public void clearPlateChosen(View dialog_layout) {
+    public void clearPlateChosen(View dialog_layout){
         ImageView accele_plate_choose_arrow = dialog_layout.findViewById(R.id.accele_plate_choose_arrow);
         accele_plate_choose_arrow.setVisibility(View.INVISIBLE);
         ImageView charge_plate_choose_arrow = dialog_layout.findViewById(R.id.charge_plate_choose_arrow);
@@ -810,20 +872,20 @@ public class AdjustmentHouseActivity extends AppCompatActivity {
     }
 
 
-    void updateCCAndGriefSeedView() {
+    void updateCCAndGriefSeedView(){
         cc_number.setText(" " + StartActivity.ccNumber + " ");
         grief_seed_number.setText(" " + StartActivity.griefSeedNumber + " ");
     }
 
-    void changeBackground(String backgroundNumber) {
+    void changeBackground(String backgroundNumber){
         JniBridgeJava.nativeChangeBackground("bg_adv_" + backgroundNumber + ".png");
     }
 
-    public int getResourceByString(String idName) {
+    public int getResourceByString(String idName){
         return getResources().getIdentifier(idName, "drawable", getPackageName());
     }
 
-    public int getIdByString(String idName) {
+    public int getIdByString(String idName){
         return getResources().getIdentifier(idName, "id", getPackageName());
     }
 }

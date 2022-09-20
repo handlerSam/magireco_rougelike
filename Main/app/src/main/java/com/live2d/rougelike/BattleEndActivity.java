@@ -462,7 +462,7 @@ public class BattleEndActivity extends AppCompatActivity {
         if(!bi.isBossBattle){
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 1-2悲叹之种，2000-3000CC
-                int randomGF = (int)(Math.random()*2)+1;
+                int randomGF = (int)(Math.random()*2)+0;
                 int randomCC = ((int)(Math.random()*3))*500+2000;
                 return new Bonus(randomCC,randomGF);
             }else{
@@ -474,7 +474,7 @@ public class BattleEndActivity extends AppCompatActivity {
         }else{
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 2-3悲叹之种，2000-4000CC
-                int randomGF = (int)(Math.random()*2)+2;
+                int randomGF = (int)(Math.random()*2)+1;
                 int randomCC = ((int)(Math.random()*5))*500+2000;
                 return new Bonus(randomCC,randomGF);
             }else{
@@ -493,18 +493,18 @@ public class BattleEndActivity extends AppCompatActivity {
         if(!bi.isBossBattle){
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 普通战斗
-                probability = 20;
+                probability = 0;
             }else{
                 //说明是游戏后期, 普通战斗
-                probability = 30;
+                probability = 20;
             }
         }else{
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 魔女战斗
-                probability = 70;
+                probability = 30;
             }else{
                 //说明是游戏后期, 魔女战斗
-                probability = 80;
+                probability = 50;
             }
         }
         return colorToss(probability);

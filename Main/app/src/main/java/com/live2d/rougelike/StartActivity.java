@@ -27,7 +27,7 @@ import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_VERTICAL;
 import static com.live2d.rougelike.CharacterPlateView.CHARGE;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity{
 
     final public static int[] CHARACTER_BREAK_THROUGH_PRICE = new int[]{1, 1, 2};
     //选中的formation：StartActivity.formationList.get(TeamChooseActivity.usingFormationId)
@@ -62,15 +62,15 @@ public class StartActivity extends AppCompatActivity {
     public static Dictionary<Integer, ArrayList<String>> ENEMY_RANDOM_BUFF_DICT = new Hashtable();
     public int[] preloadMemoria = {1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1037, 1038, 1039, 1041, 1042, 1043, 1044, 1045, 1046, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1059, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1103, 1105, 1106, 1107, 1112, 1113, 1115, 1117, 1119, 1120, 1121, 1122, 1124, 1126, 1127, 1130, 1131, 1132, 1133, 1134, 1136, 1137, 1138, 1140, 1142, 1144, 1145, 1146, 1151, 1152, 1154, 1155, 1156, 1160, 1161, 1162, 1163, 1164, 1166, 1167, 1168, 1169, 1171, 1174, 1176, 1177, 1179, 1180, 1182, 1186, 1187, 1188, 1189, 1192, 1193, 1195, 1196, 1197, 1199, 1200, 1202, 1207, 1209, 1210, 1214, 1215, 1216, 1218, 1219, 1221, 1222, 1224, 1225, 1226, 1227, 1229, 1230, 1231, 1232, 1234, 1235, 1236, 1237, 1239, 1240, 1241, 1243, 1244, 1246, 1247, 1250, 1251, 1252, 1253, 1255, 1259, 1260, 1261, 1262, 1264, 1265, 1266, 1267, 1268, 1270, 1271, 1272, 1273, 1274, 1277, 1278, 1280, 1283, 1284, 1285, 1286, 1288, 1289, 1290, 1291, 1293, 1294, 1295, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1309, 1310, 1311, 1313, 1316, 1317, 1318, 1320, 1321, 1322, 1324, 1326, 1327, 1329, 1330, 1331, 1332, 1334, 1336, 1337, 1339, 1340, 1341, 1342, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1353, 1354, 1355, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1367, 1368, 1369, 1370, 1371, 1374, 1376, 1377, 1378, 1379, 1381, 1382, 1383, 1384, 1386, 1387, 1388, 1390, 1391, 1392, 1393, 1394, 1395, 1396, 1397, 1398, 1400, 1401, 1403, 1404, 1405, 1406, 1407, 1409, 1411, 1412, 1417, 1418, 1419, 1420, 1421, 1423, 1424, 1428, 1429, 1430, 1431, 1432, 1434, 1435, 1437, 1438, 1439, 1440, 1441, 1443, 1444, 1445, 1446, 1449, 1450, 1453, 1454, 1456, 1457, 1458, 1460, 1461, 1465, 1466, 1469, 1472, 1473, 1474, 1475, 1476, 1477, 1478, 1479, 1481, 1482, 1483, 1486, 1487, 1489, 1490, 1491, 1492, 1494, 1495, 1496, 1497, 1501, 1502, 1503, 1504, 1505, 1509, 1510, 1511, 1512, 1515, 1516, 1519, 1520, 1521, 1522, 1524, 1525, 1526, 1529, 1530, 1531, 1532, 1534, 1535, 1536, 1537, 1541, 1542, 1543, 1545, 1546, 1547, 1548, 1550, 1551, 1552, 1553, 1555, 1557, 1558, 1559, 1561, 1562, 1564, 1565, 1566, 1568, 1569, 1570, 1571, 1572, 1574, 1575, 1576, 1577, 1578, 1579, 1580, 1582, 1583, 1584, 1585, 1587, 1588, 1590, 1591, 1592, 1593, 1594, 1595, 1597, 1599, 1600, 1601, 1602, 1604, 1605, 1606, 1607, 1609, 1610, 1611, 1612, 1613, 1614, 1616, 1617, 1619, 1620, 1621, 1624, 1625, 1626, 1627, 1629, 1630, 1631, 1632, 1634, 1635, 1636, 1637, 1639, 1640, 1641, 1642, 1643, 1645, 1646, 1647, 1648, 1650, 1651, 1652, 1653, 1655, 1656, 1657, 1659, 1660, 1661, 1663, 1664, 1665, 1666, 1668, 1669, 1670, 1671, 1673, 1674, 1675, 1676, 1677, 1678, 1679, 1681, 1682, 1683, 1684, 1686, 1687, 1688, 1689, 1691, 1692, 1693, 1696, 1697, 1699, 1702, 1703, 1704, 1706, 1707, 1708, 1709, 1712, 1713, 1714, 1715, 1719, 1720, 1723, 1724, 1726, 1728, 1729, 1730, 1731, 1732};
 
-    public static void clearCharBattleInfo() {
-        for (int i = 0; i < characterList.size(); i++) {
+    public static void clearCharBattleInfo(){
+        for(int i = 0; i < characterList.size(); i++){
 //            characterList.get(i).diamondNumber = 0;
             characterList.get(i).actionOrder = 2;
         }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         DisplayMetrics metric = new DisplayMetrics();
@@ -106,7 +106,7 @@ public class StartActivity extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    public void initCharacterList() {
+    public void initCharacterList(){
         Character remu = new Character();
         remu.breakThrough = 1;
         remu.element = "tree";
@@ -303,12 +303,12 @@ public class StartActivity extends AppCompatActivity {
         characters[3] = characterList.get(1);
     }
 
-    public void initBattleInfoList() {
+    public void initBattleInfoList(){
         initMonsterList();
         initBossList();
     }
 
-    public void initBossList() {
+    public void initBossList(){
         BattleInfo bi = new BattleInfo();
         bi.isBossBattle = true;
 
@@ -337,7 +337,7 @@ public class StartActivity extends AppCompatActivity {
         battleInfoList.add(bi);
     }
 
-    public void initMonsterList() {
+    public void initMonsterList(){
         BattleInfo bi = new BattleInfo();
         bi.isBossBattle = false;
         Character monster1 = new Character();
@@ -411,7 +411,7 @@ public class StartActivity extends AppCompatActivity {
         battleInfoList.add(bi);
     }
 
-    public void initFormation() {
+    public void initFormation(){
         formationList.add(new Formation(new int[][]{{1, 0, 1}, {0, 2, 0}, {1, 0, 1}}, "英勇梯队"));
         formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
         formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
@@ -471,12 +471,12 @@ public class StartActivity extends AppCompatActivity {
 
     }
 
-    public void initMemoria() {
-        for (int i = 0; i < 3; i++) {
+    public void initMemoria(){
+        for(int i = 0; i < 3; i++){
             USEDMEMORIA[i] = new ArrayList<>();
         }
         //把preloadMemoria中的记忆按照星级分到USEDMEMORIA中
-        for (int i = 0; i < preloadMemoria.length; i++) {
+        for(int i = 0; i < preloadMemoria.length; i++){
             int id = preloadMemoria[i];
             Memoria m = new Memoria("" + id, StartActivity.this);
             USEDMEMORIA[m.star - 2].add(id);
@@ -498,27 +498,27 @@ public class StartActivity extends AppCompatActivity {
         //}
     }
 
-    public void initCollection() {
+    public void initCollection(){
         JSONObject textList = null;
         InputStream stream = getResources().openRawResource(R.raw.collections);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         StringBuffer sb = new StringBuffer();
         String line = "";
-        try {
-            while ((line = reader.readLine()) != null) {
+        try{
+            while((line = reader.readLine()) != null){
                 sb.append(line);
             }
-        } catch (IOException e) {
+        }catch(IOException e){
             e.printStackTrace();
         }
-        try {
+        try{
             textList = new JSONObject(sb.toString());
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
-        try {
+        try{
             JSONArray efList = textList.getJSONArray("collections");
-            for (int i = 0; i < efList.length(); i++) {
+            for(int i = 0; i < efList.length(); i++){
                 Collection c = new Collection();
                 JSONObject temp = efList.getJSONObject(i);
                 c.name = temp.optString("name");
@@ -530,14 +530,14 @@ public class StartActivity extends AppCompatActivity {
                 collectionList.add(c);
                 collectionDict.put(c.name, c);
             }
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
         Collections.shuffle(collectionList);
 
     }
 
-    public void initBackground() {
+    public void initBackground(){
         DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_east_riverbank_down));
         DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_east_street_down));
         DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_riverbank_up, R.drawable.background_day_riverbank_down));
@@ -561,70 +561,70 @@ public class StartActivity extends AppCompatActivity {
         JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction14_down));
     }
 
-    public void initRandomBuff() {
+    public void initRandomBuff(){
         JSONObject textList = null;
         InputStream stream = getResources().openRawResource(R.raw.random_buff);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         StringBuffer sb = new StringBuffer();
         String line = "";
-        try {
-            while ((line = reader.readLine()) != null) {
+        try{
+            while((line = reader.readLine()) != null){
                 sb.append(line);
             }
-        } catch (IOException e) {
+        }catch(IOException e){
             e.printStackTrace();
         }
-        try {
+        try{
             textList = new JSONObject(sb.toString());
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
-        try {
-            for (int i = 2; i <= 16; i++) {
+        try{
+            for(int i = 2; i <= 16; i++){
                 JSONArray efList = textList.getJSONArray("" + i);
                 ArrayList<String> buffIdList = new ArrayList<>();
-                for (int j = 0; j < efList.length(); j++) {
+                for(int j = 0; j < efList.length(); j++){
                     buffIdList.add(efList.optString(j));
                 }
                 ENEMY_RANDOM_BUFF_DICT.put(i, buffIdList);
             }
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
 
     }
 
-    public void initMapRandomPoint() {
+    public void initMapRandomPoint(){
         JSONObject textList = null;
         InputStream stream = getResources().openRawResource(R.raw.map_random_points);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         StringBuffer sb = new StringBuffer();
         String line = "";
-        try {
-            while ((line = reader.readLine()) != null) {
+        try{
+            while((line = reader.readLine()) != null){
                 sb.append(line);
             }
-        } catch (IOException e) {
+        }catch(IOException e){
             e.printStackTrace();
         }
-        try {
+        try{
             textList = new JSONObject(sb.toString());
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
-        try {
+        try{
             JSONArray efList = textList.getJSONArray("mapPoints");
             mapRandomPoint = new int[efList.length()][2];
-            for (int i = 0; i < efList.length(); i++) {
+            for(int i = 0; i < efList.length(); i++){
                 mapRandomPoint[i][0] = efList.getJSONArray(i).getInt(0);
                 mapRandomPoint[i][1] = efList.getJSONArray(i).getInt(1);
             }
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    public void initExtraMissionList() {
+    public void initExtraMissionList(){
         ExtraMission em = new ExtraMission("3回合内通关", new Bonus(1000, 0));
         extraMissionList.add(em);
 
@@ -672,11 +672,11 @@ public class StartActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed(){
 //        super.onBackPressed();
     }
 
-    public void saveCharacters() {
+    public void saveCharacters(){
 //        //写入
 //        SharedPreferences.Editor editor = getSharedPreferences("characters",MODE_PRIVATE).edit();
 //        for()
@@ -690,7 +690,7 @@ public class StartActivity extends AppCompatActivity {
 
 }
 
-class Formation {
+class Formation{
     public int[][] grid;//0空 1可以填角色 2all位
 
     public ArrayList<SkillEffect>[][] gridAllEffectList = new ArrayList[3][3];
@@ -699,22 +699,22 @@ class Formation {
 
     public boolean isChose = false; //在FormationActivity里是否被选中
 
-    public Formation(int[][] grid, String name) {
+    public Formation(int[][] grid, String name){
         this.grid = grid;
         this.name = name;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
                 gridAllEffectList[i][j] = new ArrayList<>();
             }
         }
     }
 
-    public void setFormation(ImageView[][] formation, ImageView allView, int id) {
+    public void setFormation(ImageView[][] formation, ImageView allView, int id){
         //id为第几个人，从0开始
         int count = 0; //记录这是第几个人的位置
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                switch (grid[i][j]) {
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                switch(grid[i][j]){
                     case 0:
                         formation[i][j].setVisibility(View.INVISIBLE);
                         break;
@@ -723,12 +723,12 @@ class Formation {
                     case 3:
                     case 4:
                         formation[i][j].setVisibility(View.VISIBLE);
-                        if (count == id) {
+                        if(count == id){
                             formation[i][j].setImageResource(R.drawable.red_block);
-                            if (allView != null) {
+                            if(allView != null){
                                 allView.setVisibility((grid[i][j] > 1) ? View.VISIBLE : View.INVISIBLE);
                             }
-                        } else {
+                        }else{
                             formation[i][j].setImageResource(R.drawable.empty_block);
                         }
                         count++;
@@ -740,7 +740,7 @@ class Formation {
     }
 }
 
-class BattleInfo {
+class BattleInfo{
     ArrayList<Character> monsterList = new ArrayList<>();
     Character[][] monsterFormation = new Character[3][3];
     boolean isBossBattle;
@@ -752,11 +752,11 @@ class BattleInfo {
     String recommendLV = "??";
     int backgroundId = -1;
 
-    public BattleInfo() {
+    public BattleInfo(){
     }
 }
 
-class Collection {
+class Collection{
     public String name;
     public String description;
     public String effectDescription;
@@ -765,7 +765,7 @@ class Collection {
     public int price;
     public boolean isOwn = false;
 
-    public Collection(String name, String description, String effectDescription, String icon, int price, String background) {
+    public Collection(String name, String description, String effectDescription, String icon, int price, String background){
         this.name = name;
         this.description = description;
         this.effectDescription = effectDescription;
@@ -774,36 +774,36 @@ class Collection {
         this.background = background;
     }
 
-    public Collection() {
+    public Collection(){
 
     }
 }
 
-class ExtraMission {
+class ExtraMission{
     String name;
     Bonus bonus;
 
-    ExtraMission(String name, Bonus bonus) {
+    ExtraMission(String name, Bonus bonus){
         this.name = name;
         this.bonus = bonus;
     }
 }
 
-class Bonus {
+class Bonus{
     int cc;
     int griefSeed;
 
-    Bonus(int cc, int griefSeed) {
+    Bonus(int cc, int griefSeed){
         this.cc = cc;
         this.griefSeed = griefSeed;
     }
 }
 
-class BackgroundImage {
+class BackgroundImage{
     int upImageId;
     int downImageId;
 
-    public BackgroundImage(int upImageId, int downImageId) {
+    public BackgroundImage(int upImageId, int downImageId){
         this.upImageId = upImageId;
         this.downImageId = downImageId;
     }

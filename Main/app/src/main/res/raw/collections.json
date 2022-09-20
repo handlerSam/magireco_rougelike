@@ -172,70 +172,70 @@
     "effectDescription":"所有我方角色第一回合获得75%回避效果",
     "icon":"blue_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 3500
 },{
     "name":"超高级的体重计",
     "description":"水德商店街活动中的特等奖品。虽然是超高级的体重计，但是次品就是次品。",
     "effectDescription":"每次战斗胜利时，所有角色防御力+1%",
     "icon":"red_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 3000
 },{
     "name":"远足的传单",
     "description":"登山猜谜活动的宣传单。有人在活动中彼此之间的感情更进一步，有人在活动中得到了大米，可喜可贺。",
     "effectDescription":"我方角色Charge盘攻击额外造成一次伤害",
     "icon":"red_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 4000
 },{
     "name":"五公斤名牌大米",
     "description":"登山猜谜活动一等奖的奖品。好孩子不可以为了得到奖品忽悠别人去参加比赛。",
     "effectDescription":"每次战斗胜利时，所有角色恢复5%生命值",
     "icon":"blue_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 4500
 },{
     "name":"甜酒",
     "description":"具有缓解疲劳和美容养颜的效果。某个有点可爱有点自恋脑袋又有点脱线的女生常喝的饮品。",
     "effectDescription":"释放doppel消耗MP下降到100",
     "icon":"red_box",
  	"background":"item_frame_3",
-    "price": 4500
+    "price": 5500
 },{
     "name":"调整屋特制能量饮料",
     "description":"由甜酒，凉拌海带，巧克力，保健品混合而成的东西。调整屋小姐成功的证明了有益于健康的东西混合在一起不一定有益于健康。",
     "effectDescription":"AcceleCombo额外提供15MP",
     "icon":"red_box",
  	"background":"item_frame_2",
-    "price": 3000
+    "price": 4000
 },{
     "name":"从未间断的日记",
     "description":"日记的主人每次帮助了他人便会去商店购买一支新的颜色的彩铅，在那一天日记的页脚用那支彩铅画上一幅插画。",
     "effectDescription":"每次战斗胜利时，所有角色攻击力+1%",
     "icon":"red_box",
  	"background":"item_frame_2",
-    "price": 3000
+    "price": 4000
 },{
     "name":"12色彩色铅笔套装",
     "description":"作为生日礼物而被赠予的彩铅套装，外盒上雕刻着美丽的铃兰花，象征着被赠予者的洁白无暇。",
     "effectDescription":"队伍中每上场一名角色，所有角色造成伤害+12%",
     "icon":"blue_box",
  	"background":"item_frame_2",
-    "price": 3000
+    "price": 4500
 },{
     "name":"神滨传闻档案",
     "description":"整理了流传于神滨的传闻的小册子。不过对传闻来说这可能更接近于生死簿。",
     "effectDescription":"当只上场一名角色时，该角色攻击力+50%，防御力+50%",
     "icon":"red_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 4500
 },{
     "name":"小型的收藏盒",
     "description":"装满各式小东西的收藏品盒子。盒子的主人有着四处捡东西的习惯，尽管有时候会捡回比如虫子尸体这样让人不舒服的东西，她的两位监护人姐姐倒是仍旧宠溺着她的行为。",
     "effectDescription":"每释放一次magia，本场战斗所有角色攻击力+15%",
     "icon":"blue_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 3000
 },{
     "name":"漫画\"侦探少女女仆梅伊\"",
     "description":"某位万圣节魔法少女特别喜欢的漫画。尽管作为漫画是部优秀的作品，但是作为女仆的教科书似乎有些微妙。",
@@ -249,89 +249,89 @@
     "effectDescription":"购买4星记忆所需CC减少2000",
     "icon":"blue_box",
  	"background":"item_frame_3",
-    "price": 4000
+    "price": 5000
 },{
     "name":"杰克死亡之镰",
     "description":"魔法花凛的武器。本来是怪盗花凛的武器，在花凛被某位资深魔法少女说教了一顿之后怪盗花凛不复存在，镰刀也变成了魔法花凛的武器。",
     "effectDescription":"所有敌人伤害降低20%",
     "icon":"red_box",
  	"background":"item_frame_1",
-    "price": 2000
+    "price": 3500
 },{
     "name":"幽灵执照",
     "description":"只有持有执照的幽灵才能在现世活动，而一旦残留的心愿被满足，执照便会被吊销，永远的离开现实世界。",
     "effectDescription":"地图上行动时有25%概率不消耗时间",
     "icon":"blue_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 4500
 },{
     "name":"歌词笔记本",
     "description":"\"一个点，单枪匹马的突刺，两个点，两人撕开一条线，三个点，开始磨去棱角，像圆的形状一点点改变...\"",
     "effectDescription":"所有我方角色异常状态耐性提升25%",
     "icon":"blue_box",
  	"background":"item_frame_2",
-    "price": 3000
+    "price": 4500
 },{
     "name":"\"占卜结果\"",
     "description":"\"当神滨出现异变之时  可能会发生某个巨大的变化  但那里会聚起许多个点  描绘出一个柔和的圆\"",
     "effectDescription":"战斗开始时对全体敌方赋予3回合毒效果",
     "icon":"red_box",
  	"background":"item_frame_2",
-    "price": 3500
+    "price": 3000
 },{
     "name":"珍贵的明信片",
     "description":"现已过世的神滨天才画家茂根老师所画的明信片，目前收藏于神滨现代美术馆。",
     "effectDescription":"每个回合额外获得1Charge数",
     "icon":"blue_box",
  	"background":"item_frame_1",
-    "price": 2000
+    "price": 3500
 },{
     "name":"龙真流秘籍",
     "description":"龙真道场代代相传的重要宝物。但是从某位龙真流魔法少女的行为来看，难免让人怀疑秘籍里是否有教唆人自尽的内容。",
     "effectDescription":"Blast盘伤害系数提高50%",
     "icon":"red_box",
  	"background":"item_frame_1",
-    "price": 2000
+    "price": 4500
 },{
     "name":"《刀剑历史大全》",
     "description":"已经绝版的刀剑书，是某位神滨少女偶像的宝贝，作为武士刀的替代品随身携带。",
     "effectDescription":"我方角色Blast盘攻击额外造成一次伤害",
     "icon":"red_box",
  	"background":"item_frame_2",
-    "price": 3000
+    "price": 4500
 },{
     "name":"木雕的坠饰",
     "description":"对少女来说，宝贵的坠饰是早逝的父亲唯一留下的纪念，而它上面的划痕和断了的链子是另一份友谊的纪念。",
     "effectDescription":"我方光、暗属性角色不再受敌方克制",
     "icon":"red_box",
  	"background":"item_frame_2",
-    "price": 3000
+    "price": 3500
 },{
     "name":"粘贴文件夹",
     "description":"粘贴有很多八千代照片的收藏文件夹。\n\"作...作为竞争对手，想多了解对方一点有什么奇怪的！\"",
     "effectDescription":"敌方每有一种效果，防御力降低5%",
     "icon":"blue_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 3500
 },{
     "name":"圣诞科学14号",
     "description":"某位化学魔法少女的杰作，从名称上完全看不出是巧克力的巧克力。不管再怎么说起码比前十三个厉害。",
     "effectDescription":"我方角色身上每有一种效果，攻击力提升5%",
     "icon":"blue_box",
  	"background":"item_frame_1",
-    "price": 2500
+    "price": 4000
 },{
     "name":"卡通巧克力",
     "description":"刻有长春花的卡通巧克力。可爱的颜色很符合活泼的赠送对象，上面的长春花寓意\"快乐的回忆\"。",
     "effectDescription":"每上场一名我方角色，所有我方角色获得12%伤害削减",
     "icon":"blue_box",
  	"background":"item_frame_2",
-    "price": 3000
+    "price": 3500
 },{
     "name":"汽水巧克力豆",
     "description":"某位能干的天音竹工坊女性的自制零食，清凉的薄荷点心，数量众多适合打发小孩子。",
     "effectDescription":"释放magia所需MP下降到75",
     "icon":"red_box",
  	"background":"item_frame_3",
-    "price": 4000
+    "price": 4500
 }]}

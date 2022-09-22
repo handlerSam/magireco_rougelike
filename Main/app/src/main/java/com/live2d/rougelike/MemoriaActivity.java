@@ -894,5 +894,12 @@ class Character{
         }
         realHP = getRealMaxHP() - damagedHP;
     }
+
+    public void recoverProportionHp(float proportion){
+        realHP += (int)(proportion*getRealMaxHP());
+        if(realHP > getRealMaxHP()){
+            realHP = getRealMaxHP();
+        }
+    }
 }
 

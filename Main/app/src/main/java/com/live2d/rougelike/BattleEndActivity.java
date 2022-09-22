@@ -68,6 +68,10 @@ public class BattleEndActivity extends AppCompatActivity {
 
     boolean isOpenMemoriaChooseFrame = false;
 
+    boolean isRandomBattle;
+
+    BattleInfo bi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,17 +128,21 @@ public class BattleEndActivity extends AppCompatActivity {
         updateCCAndGriefSeedView();
 
         //设置背景
-        BattleInfo bi;
-        boolean isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
+        isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
         if(isRandomBattle){
             bi = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
         }else{
-            bi = StartActivity.battleInfoList.get(getIntent().getIntExtra("battleInfo",0));
+            bi = StartActivity.battleInfoList.get(getIntent().getIntExtra("battleInfo",-1));
         }
-        underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
-        backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
-        backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
-
+        if(bi.backgroundType == BattleInfo.JUNCTION){
+            underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+        }else if(bi.backgroundType == BattleInfo.DAY){
+            underlay.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+        }
 
         //额外任务
         Intent receivedIntent = getIntent();
@@ -389,15 +397,7 @@ public class BattleEndActivity extends AppCompatActivity {
             purchase_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!isIntentSend){
-                        MapActivity.mpEvent.clear();
-                        StartActivity.gameTime += 0.5f;
-                        Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
-                        startActivity(intent1);
-                        finish();
-                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                        isIntentSend = true;
-                    }
+                    jumpToNextActivity();
                 }
             });
         }else{
@@ -437,15 +437,7 @@ public class BattleEndActivity extends AppCompatActivity {
                         Toast.makeText(BattleEndActivity.this, "购买成功", Toast.LENGTH_SHORT).show();
                         StartActivity.memoriaBag.add(new Memoria(chooseCardView.memoriaId,BattleEndActivity.this));
                         StartActivity.ccNumber -= price;
-                        if(!isIntentSend){
-                            MapActivity.mpEvent.clear();
-                            StartActivity.gameTime += 0.5f;
-                            Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                            isIntentSend = true;
-                        }
+                        jumpToNextActivity();
                     }
                 });
             }else{
@@ -457,8 +449,6 @@ public class BattleEndActivity extends AppCompatActivity {
     }
 
     public Bonus getBattleBonus(){
-        Intent receivedIntent = getIntent();
-        BattleInfo bi = MapActivity.mpEvent.get(receivedIntent.getIntExtra("battleInfo",0)).bi;
         if(!bi.isBossBattle){
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 1-2悲叹之种，2000-3000CC
@@ -488,8 +478,6 @@ public class BattleEndActivity extends AppCompatActivity {
 
     public boolean isReceivedCollection(){
         int probability = 0;
-        Intent receivedIntent = getIntent();
-        BattleInfo bi = MapActivity.mpEvent.get(receivedIntent.getIntExtra("battleInfo",0)).bi;
         if(!bi.isBossBattle){
             if(StartActivity.gameTime < 14.01f){
                 //说明是游戏前期, 普通战斗
@@ -513,6 +501,33 @@ public class BattleEndActivity extends AppCompatActivity {
     void updateCCAndGriefSeedView(){
         cc_number.setText(" "+StartActivity.ccNumber+" ");
         grief_seed_number.setText(" "+StartActivity.griefSeedNumber+" ");
+    }
+
+    public void jumpToNextActivity(){
+        if(!isIntentSend){
+            if(!isRandomBattle){
+                if(getIntent().getIntExtra("battleInfo",-1) == 0){
+                    //robbery battle
+                    Intent intent1 = new Intent(BattleEndActivity.this, DialogActivity.class);
+                    intent1.putExtra("storyResourceId",R.raw.robbery_after);
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    isIntentSend = true;
+                }
+            }else{
+                //随机战斗
+                MapActivity.mpEvent.clear();
+                StartActivity.gameTime += 0.5f;
+                Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
+                startActivity(intent1);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                isIntentSend = true;
+            }
+
+
+        }
     }
 
     public boolean colorToss(int probabilityOfTrue){

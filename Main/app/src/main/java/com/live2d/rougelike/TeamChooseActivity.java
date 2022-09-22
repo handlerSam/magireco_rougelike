@@ -213,8 +213,10 @@ public class TeamChooseActivity extends AppCompatActivity {
 //                            StartActivity.characters[i].realHP = characters[i].getRealMaxHP();
 //                        }
 //                    }
-                        StartActivity.PLAYER_ON_MAP_X = receivedIntent.getIntExtra("eventX", -1);
-                        StartActivity.PLAYER_ON_MAP_Y = receivedIntent.getIntExtra("eventY", -1);
+                        if(receivedIntent.getIntExtra("eventX", -1) != -1){
+                            StartActivity.PLAYER_ON_MAP_X = receivedIntent.getIntExtra("eventX", -1);
+                            StartActivity.PLAYER_ON_MAP_Y = receivedIntent.getIntExtra("eventY", -1);
+                        }
                         Log.d("Sam","PlayerX:"+StartActivity.PLAYER_ON_MAP_X+", PlayerY:"+StartActivity.PLAYER_ON_MAP_Y);
                         if(!isIntentSend){
                             boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
@@ -270,19 +272,23 @@ public class TeamChooseActivity extends AppCompatActivity {
         });
 
         //初始化返回键
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!isIntentSend){
-                    Intent intent1 = new Intent(TeamChooseActivity.this, MapActivity.class);
-                    startActivity(intent1);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                    isIntentSend = true;
+        if(getIntent().getBooleanExtra("isRandomBattle",true)){
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!isIntentSend){
+                        Intent intent1 = new Intent(TeamChooseActivity.this, MapActivity.class);
+                        startActivity(intent1);
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                        isIntentSend = true;
+                    }
                 }
+            });
+        }else{
+            back.setVisibility(View.GONE);
+        }
 
-            }
-        });
 
         updateCheckingViews();
     }

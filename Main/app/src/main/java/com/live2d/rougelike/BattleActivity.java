@@ -126,7 +126,6 @@ public class BattleActivity extends AppCompatActivity {
                     //我方进攻in结束
                     recoverCharacterSize(true);
                     magnifyCharacter(false);
-
                     //判断该敌人是否已经被打死,若打死则找新的目标
                     if(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realHP <= 0){
                         int[] tempP = new int[]{-1, -1};
@@ -951,7 +950,15 @@ public class BattleActivity extends AppCompatActivity {
                                     },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                                 }
                                 if(!isBossBattle){
-                                    leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 4 + ")");
+                                    //对某些角色，限制其动画播放时间
+                                    String tempStr = leftCharList[monsterAttackerX][monsterAttackerY].c.spriteName;
+                                    if(tempStr.equals("Mitsuki Felicia") || tempStr.equals("Natsume Kako") || tempStr.equals("Mikuri Ayame")){
+                                        Message m = new Message();
+                                        m.what = 4;
+                                        handler.sendMessageDelayed(m,1500);
+                                    }else{
+                                        leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 4 + ")");
+                                    }
                                 }else{
                                     handler.postDelayed(new Runnable() {
                                         @Override
@@ -1022,7 +1029,18 @@ public class BattleActivity extends AppCompatActivity {
                                             }else if(plate == CharacterPlateView.BLAST_VERTICAL){
                                                 leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackv_in";
                                             }
-                                            leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
+
+
+                                            //对某些角色，限制其动画播放时间
+                                            String tempStr = leftCharList[monsterAttackerX][monsterAttackerY].c.spriteName;
+                                            if(tempStr.equals("Mitsuki Felicia") || tempStr.equals("Natsume Kako") || tempStr.equals("Mikuri Ayame")){
+                                                Message m = new Message();
+                                                m.what = 3;
+                                                handler.sendMessageDelayed(m,1000);
+                                            }else{
+                                                leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
+                                            }
+
                                             changeSprite(monsterAttackerX,monsterAttackerY, false);
                                             handler.postDelayed(new Runnable() {
                                                 @Override
@@ -1241,10 +1259,34 @@ public class BattleActivity extends AppCompatActivity {
             bi = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
         }else{
             bi = StartActivity.battleInfoList.get(getIntent().getIntExtra("battleInfo",0));
+            for(int i = 0; i < bi.monsterList.size(); i++){
+                Character c = bi.monsterList.get(i);
+                if(StartActivity.gameTime < 8.01f){
+                    c.lv = 1;
+                }else if(StartActivity.gameTime < 10.01f){
+                    c.lv = 20;
+                }else if(StartActivity.gameTime < 12.01f){
+                    c.lv = 40;
+                }else if(StartActivity.gameTime < 14.01f){
+                    c.lv = 60;
+                }else if(StartActivity.gameTime < 16.01f){
+                    c.lv = 80;
+                }else if(StartActivity.gameTime < 18.01f){
+                    c.lv = 100;
+                }
+                c.updateAttributionBasedOnLv();
+                c.realHP = c.HP;
+            }
         }
-        underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
-        backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
-        backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+        if(bi.backgroundType == BattleInfo.JUNCTION){
+            underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+        }else if(bi.backgroundType == BattleInfo.DAY){
+            underlay.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+        }
 
         //加载额外任务
         if(isRandomBattle){
@@ -2026,7 +2068,6 @@ public class BattleActivity extends AppCompatActivity {
         }
     }
 
-
     public boolean randomChoosePlates(){
         //返回false时说明没有可行动角色
         ArrayList<Character> chosenCharacterList = new ArrayList<>();
@@ -2370,7 +2411,6 @@ public class BattleActivity extends AppCompatActivity {
                         }
                     }
                 }
-
             }
         }
         //恢复背景
@@ -2399,8 +2439,6 @@ public class BattleActivity extends AppCompatActivity {
         rightCharList[x][y].resetCharacter();
         rightCharList[x][y].webView.loadUrl("javascript:changeCharacter()");
     }
-
-
 
     public void changeCharacterPosition(int x, int y, boolean isRight, boolean isMagnify){
         final SpriteViewer sp = isRight? rightCharList[x][y]:leftCharList[x][y];
@@ -2878,8 +2916,6 @@ public class BattleActivity extends AppCompatActivity {
     }
 
     public void startRightAttack(){
-
-
         //判断是否是Charge盘
         if(smallPlateList[smallPlateNumber] <= 4){
             if(plateList[smallPlateList[smallPlateNumber]].plate == CHARGE){
@@ -4015,7 +4051,16 @@ public class BattleActivity extends AppCompatActivity {
                                 }else if(plate == CharacterPlateView.BLAST_VERTICAL){
                                     leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackv_in";
                                 }
-                                leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
+
+                                //对某些角色，限制其动画播放时间
+                                String tempStr = leftCharList[monsterAttackerX][monsterAttackerY].c.spriteName;
+                                if(tempStr.equals("Mitsuki Felicia") || tempStr.equals("Natsume Kako") || tempStr.equals("Mikuri Ayame")){
+                                    Message m = new Message();
+                                    m.what = 3;
+                                    handler.sendMessageDelayed(m,1000);
+                                }else{
+                                    leftCharList[monsterAttackerX][monsterAttackerY].webView.loadUrl("javascript:setAnimationIndex(" + 3 + ")");
+                                }
                                 changeSprite(monsterAttackerX,monsterAttackerY, false);
                                 final int tempi = monsterAttackerX;
                                 final int tempj = monsterAttackerY;
@@ -4033,7 +4078,6 @@ public class BattleActivity extends AppCompatActivity {
                         }
                     }
                 }
-
             }
         }, 1000);
     }

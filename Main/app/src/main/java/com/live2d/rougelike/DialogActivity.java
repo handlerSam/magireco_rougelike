@@ -63,7 +63,7 @@ public class DialogActivity extends Activity {
     ImageView skip;
 
     boolean isOver = false;
-
+    int storyResourceId = -1;
     float modelAlpha = 0;
     boolean isModelAlphaInc = true;
     public static float ALPHASPEED = 0.15f;
@@ -122,6 +122,7 @@ public class DialogActivity extends Activity {
         p = new Plot();
         loadPlot(p);
         isOver = false;
+        plotFlag = 0;
         JniBridgeJava.SetActivityInstance(this);
         JniBridgeJava.SetContext(this);
         GLRenderer _glRenderer = new GLRenderer();
@@ -364,7 +365,18 @@ public class DialogActivity extends Activity {
 
 
     public boolean loadPlot(Plot p){
-        InputStream stream = getResources().openRawResource(R.raw.story1);
+        InputStream stream;
+        int mpEventId = getIntent().getIntExtra("mpEventId",-1);
+        if(mpEventId != -1){
+            storyResourceId = MapActivity.mpEvent.get(mpEventId).randomEvent;
+        }else{
+            if(getIntent().getIntExtra("storyResourceId",-1) != -1){
+                storyResourceId = getIntent().getIntExtra("storyResourceId",-1);
+            }else{
+                storyResourceId = R.raw.story1;
+            }
+        }
+        stream = getResources().openRawResource(storyResourceId);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         StringBuffer sb = new StringBuffer();
         String line = "";
@@ -463,20 +475,23 @@ public class DialogActivity extends Activity {
             boolean middleVisibility = false;
             boolean rightVisibility = false;
             switch(p.getSpeakerDirection()){
+                case -1:
+                    dialog.setBackgroundResource(R.drawable.dialogue_empty);
+                    break;
                 case 0:
                     leftVisibility = true;
                     left_name.setText(p.getSpeakerName());
-                    dialog.setBackground(getResources().getDrawable(R.drawable.dialogue_left));
+                    dialog.setBackgroundResource(R.drawable.dialogue_left);
                     break;
                 case 1:
                     middleVisibility = true;
                     middle_name.setText(p.getSpeakerName());
-                    dialog.setBackground(getResources().getDrawable(R.drawable.dialogue_middle));
+                    dialog.setBackgroundResource(R.drawable.dialogue_middle);
                     break;
                 case 2:
                     rightVisibility = true;
                     right_name.setText(p.getSpeakerName());
-                    dialog.setBackground(getResources().getDrawable(R.drawable.dialogue_right));
+                    dialog.setBackgroundResource(R.drawable.dialogue_right);
                     break;
                 default:
             }
@@ -518,9 +533,61 @@ public class DialogActivity extends Activity {
 
     void jumpToNextActivity(){
         if(!isIntentSend){
-            Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
-            canTouchNext = false;
-            startActivity(intent1);
+            if(storyResourceId == R.raw.story1){
+                Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
+                canTouchNext = false;
+                startActivity(intent1);
+            }else if(storyResourceId == R.raw.promotion_of_bangbangzai){
+                if(plotFlag == 3 || plotFlag == 4){
+                    //所有人的HP恢复了25%
+                    for(int i = 0; i < StartActivity.characterList.size(); i++){
+                        StartActivity.characterList.get(i).recoverProportionHp(0.25f);
+                    }
+                    //花费了500CC
+                    if(plotFlag == 4){
+                        StartActivity.ccNumber -= 500;
+                    }
+                }
+                MapActivity.mpEvent.clear();
+                Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
+                canTouchNext = false;
+                startActivity(intent1);
+            }else if(storyResourceId == R.raw.robbery_before){
+                if(plotFlag == 1){
+                    //交出身上一半的钱，获得交朋友记忆
+                    StartActivity.ccNumber -= (int)(StartActivity.ccNumber*0.5f);
+                    StartActivity.memoriaBag.add(new Memoria("1122",DialogActivity.this));
+                    MapActivity.mpEvent.clear();
+                    Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
+                    canTouchNext = false;
+                    startActivity(intent1);
+                }else{
+                    //开始战斗
+                    Intent intent1 = new Intent(DialogActivity.this, TeamChooseActivity.class);
+                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
+                    intent1.putExtra("isRandomBattle", false);
+                    intent1.putExtra("battleInfo",0);
+                    canTouchNext = false;
+                    startActivity(intent1);
+                }
+            }else if(storyResourceId == R.raw.robbery_after){
+                //获得交朋友记忆
+                StartActivity.memoriaBag.add(new Memoria("1122",DialogActivity.this));
+                MapActivity.mpEvent.clear();
+                Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
+                canTouchNext = false;
+                startActivity(intent1);
+            }
+
             finish();
             overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             isIntentSend = true;

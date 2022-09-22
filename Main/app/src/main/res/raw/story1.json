@@ -2,6 +2,7 @@
     {
         "flag": 0,
         "char1id": "101503",
+        "char1face": "050",
         "char1motion": "000",
         "text": "...",
         "speakerName": "忧",
@@ -141,6 +142,13 @@
         "text": "好啦好啦两个人别吵了，再吵下去粥都要凉了...",
         "speakerName": "忧",
         "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "text":"...",
+        "speakerName": "",
+        "speakerDirection": -1,
+        "background": "00000"
     },
     {
         "flag": 0,

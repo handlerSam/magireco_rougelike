@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static android.view.View.VISIBLE;
 import static com.live2d.rougelike.CharacterPlateView.ACCELE;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_VERTICAL;
@@ -88,6 +91,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     ImageView extra_mission_grief_seed_icon;
     ImageView change_map_button;
     ImageView[] clock_number = new ImageView[4];
+    ImageView clock_colon;
 
     boolean isIntentSend = false;
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
@@ -99,6 +103,15 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     private ConstraintLayout kamihamaMap;
     private ConstraintLayout events_layout;
     private SpriteViewer leader;
+
+    Runnable clockColonControl = new Runnable(){
+        @Override
+        public void run(){
+            clock_colon.setVisibility(clock_colon.getVisibility() == VISIBLE? View.INVISIBLE:VISIBLE);
+            handler.postDelayed(this,1000);
+        }
+    };
+
     Handler handler = new Handler(new Handler.Callback(){
         @Override
         public boolean handleMessage(@NonNull Message message){
@@ -289,6 +302,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         for(int i = 0; i < 4; i++){
             clock_number[i] = findViewById(getIdByString("clock_number"+i));
         }
+        clock_colon = findViewById(R.id.clock_colon);
     }
 
     public void initView(){
@@ -486,8 +500,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 }
             }
         }
-
-
+        handler.postDelayed(clockColonControl,1000);
     }
 
 
@@ -582,14 +595,13 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 Log.d("Sam","removePoint:" + markPoint);
             }
 
-
-
             while(mpEvent.size() > finalEventNumber){
                 int randomId = (int) (Math.random() * mpEvent.size());
                 mpEvent.remove(randomId);
             }
 
-            //为剩下的点添加事件
+            boolean hasShop = false;
+            //为留下来的点添加事件
             for(int i = 0; i < mpEvent.size(); i++){
                 MapEvent mpe = mpEvent.get(i);
                 double tempRandom = Math.random();
@@ -601,13 +613,27 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                     //魔女战斗
                     mpe.eventType = BOSS_BATTLE;
                     mpe.bi = generateRandomBattle(mpe.x, mpe.y, true);
-                }else if(tempRandom < 0.9d){
+                }else if(tempRandom < 0.7d && !hasShop){
+                    //商店
+                    mpe.eventType = SHOP;
+                    hasShop = true;
+                }else{
                     //事件
                     mpe.eventType = EVENT;
                     mpe.bi = null;
-                }else{
-                    //商店
-                    mpe.eventType = SHOP;
+                    ArrayList<Integer> availableEventList = new ArrayList<>();
+                    for(int j = 0; j < StartActivity.randomEventList.length; j++){
+                        int temp = StartActivity.randomEventList[j];
+                        if(temp == R.raw.promotion_of_bangbangzai){
+                            if(StartActivity.ccNumber > 500){
+                                availableEventList.add(temp);
+                            }
+                        }else{
+                            availableEventList.add(temp);
+                        }
+                    }
+                    mpe.randomEvent = availableEventList.get((int)(Math.random()*availableEventList.size()));
+
                 }
             }
 
@@ -752,7 +778,6 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                                     if(StartActivity.collectionDict.get("便携式照相机").isOwn){
                                         StartActivity.ccNumber += 500;
                                     }
-                                    MapActivity.mpEvent.clear();
                                     StartActivity.gameTime += 0.5f;
                                     if(StartActivity.collectionDict.get("幽灵执照").isOwn){
                                         if(colorToss(25)){
@@ -760,6 +785,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                                         }
                                     }
                                     Intent intent1 = new Intent(MapActivity.this, DialogActivity.class);
+                                    intent1.putExtra("mpEventId", tempI);
                                     startActivity(intent1);
                                     finish();
                                     overridePendingTransition(0, android.R.anim.fade_out);
@@ -911,6 +937,8 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     public BattleInfo generateRandomBattle(int x, int y, boolean isBossBattle){
         Log.d("Sam", "generateRandomBattle");
         BattleInfo bi = new BattleInfo();
+
+        bi.backgroundType = BattleInfo.JUNCTION;
         bi.backgroundId = (int) (Math.random() * StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.size());
         bi.isBossBattle = isBossBattle;
         bi.battleName = isBossBattle ? "魔女的气息..." : "有使魔在活动！";
@@ -1186,6 +1214,12 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         Resources res = getResources();
         return res.getIdentifier(name, "id", getPackageName());
     }
+
+    @Override
+    protected void onDestroy(){
+        handler.removeCallbacks(clockColonControl);
+        super.onDestroy();
+    }
 }
 
 class MapEvent{
@@ -1193,6 +1227,7 @@ class MapEvent{
     int y;
     int eventType;// SHOP NORMAL_BATTLE BOSS_BATTLE EVENT
     BattleInfo bi;
+    int randomEvent = -1;
 
     public MapEvent(){
     }
@@ -1202,5 +1237,12 @@ class MapEvent{
         this.y = y;
         this.eventType = eventType;
         this.bi = bi;
+    }
+
+    public MapEvent(int x, int y, int eventType, int randomEvent){
+        this.x = x;
+        this.y = y;
+        this.eventType = eventType;
+        this.randomEvent = randomEvent;
     }
 }

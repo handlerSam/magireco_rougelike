@@ -1,0 +1,96 @@
+[
+    {
+        "flag": 0,
+        "speakerName": "菲利希亚",
+        "char0id": "100501",
+        "char0motion": "300",
+        "char0face": "031",
+        "char2id": "302801",
+        "char2motion": "000",
+        "char2face": "030",
+        "text": "可恶...好强。",
+        "speakerDirection": 0,
+        "background": "11041"
+    },
+    {
+        "flag": 0,
+        "speakerName": "菖蒲",
+        "char0id": "100501",
+        "char2id": "302801",
+        "char2motion": "200",
+        "char2face": "030",
+        "text": "呜...好痛。",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "speakerName": "灯花",
+        "char1id": "100701",
+        "char1motion": "100",
+        "char1face": "011",
+        "text": "现在知道灯花大人的厉害了吧！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "菲利希亚",
+        "char1id": "100501",
+        "char1motion": "200",
+        "char1face": "021",
+        "text": "哼！下次碰到你们再和你们算账！菖蒲，佳子，我们走！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "佳子",
+        "char1id": "301101",
+        "char1motion": "200",
+        "char1face": "030",
+        "text": "三位实在对不起！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "菖蒲",
+        "text": "佳子！走啦！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "",
+        "text": "（三人走远了）",
+        "speakerDirection": -1
+    },
+    {
+        "flag": 0,
+        "speakerName": "灯花",
+        "char1id": "100701",
+        "char1motion": "200",
+        "char1face": "011",
+        "text": "哼哼，下次碰到我们记得绕着走哦！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "音梦",
+        "char1id": "101401",
+        "char1motion": "300",
+        "char1face": "011",
+        "text": "（灯花，你也好像也没比她们成熟多少）",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "（她们不会去打劫其他人了吧...要是能吸取教训收手就好了...）",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "text": "似乎获得了一张记忆。",
+        "speakerDirection": -1
+    }
+]

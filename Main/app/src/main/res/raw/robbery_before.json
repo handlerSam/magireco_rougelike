@@ -1,0 +1,328 @@
+[
+    {
+        "flag": 0,
+        "text": "站住！",
+        "speakerName": "???",
+        "speakerDirection": 1,
+        "background": "11041"
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "speakerName": "忧",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "...欸？",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "???",
+        "text": "对，说你们呢，站住！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "灯花",
+        "char1id": "100701",
+        "char1motion": "100",
+        "char1face": "050",
+        "text": "嗯？",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "菲利希亚",
+        "char0id": "100501",
+        "char0motion": "200",
+        "char0face": "011",
+        "char2id": "302801",
+        "char2motion": "000",
+        "char2face": "010",
+        "text": "打劫！把身上的钱交出来！",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "speakerName": "菖蒲",
+        "char0id": "100501",
+        "char2id": "302801",
+        "char2motion": "200",
+        "char2face": "010",
+        "text": "对！打劫，要过去就把钱交出来！",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "speakerName": "佳子",
+        "char1id": "301101",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "实...实在对不起！我拦住她们，你们三个快...",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "菲利希亚",
+        "char0id": "100501",
+        "char0motion": "200",
+        "char0face": "020",
+        "char2id": "302801",
+        "char2face": "020",
+        "text": "佳子！你打算站在她们这边吗！",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "speakerName": "菖蒲",
+        "char0id": "100501",
+        "char2id": "302801",
+        "char2motion": "200",
+        "text": "就是啊，不要我们了吗！",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "speakerName": "佳子",
+        "char1id": "301101",
+        "char1motion": "200",
+        "char1face": "030",
+        "text": "不是...我...对...对不起！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "灯花",
+        "char0id": "100701",
+        "char0motion": "100",
+        "char0face": "011",
+        "char2id": "101401",
+        "char2face": "010",
+        "char2motion": "000",
+        "text": "什么嘛，就是两个不懂事的小孩子。",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "speakerName": "音梦",
+        "char0id": "100701",
+        "char2id": "101401",
+        "char2motion": "100",
+        "char2face": "010",
+        "text": "再调皮，待会回家是要挨父母打的哦。",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "speakerName": "菲利希亚",
+        "char0id": "100501",
+        "char0motion": "200",
+        "char0face": "021",
+        "char2id": "302801",
+        "char2motion": "000",
+        "char2face": "020",
+        "text": "！唔...不管！先把钱交出来！",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "speakerName": "菖蒲",
+        "char0id": "100501",
+        "char2id": "302801",
+        "char2motion": "200",
+        "char2face": "020",
+        "text": "就是！你管不着我们！",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "（不给她们钱她们好像会一直闹下去...怎么办啊）",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "isChoice": 1,
+        "choose1": "交出身上一半的CC",
+        "choose1Flag": 1,
+        "choose2": "也许应该打一架？",
+        "choose2Flag": 2
+    },
+    {
+        "flag": 1,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "100",
+        "char1face": "041",
+        "text": "好啦好啦，我们把钱给你们就是。喏。",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "菲利希亚",
+        "char1id": "100501",
+        "char1motion": "100",
+        "char1face": "011",
+        "text": "嘿嘿，这才对嘛！走，我们去给小狗买点吃的！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "音梦",
+        "char1id": "101401",
+        "char1motion": "100",
+        "char1face": "000",
+        "text": "（小狗？）",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "佳子",
+        "char1id": "301101",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "实在对不起！刚才她们看见路边的纸箱里有只被主人抛弃的小狗肚子饿的汪汪叫",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "佳子",
+        "char1id": "301101",
+        "char1motion": "200",
+        "char1face": "030",
+        "text": "我们又没带钱出来，所以她们想了这么糟糕的主意...",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "100",
+        "char1face": "010",
+        "text": "原来是这样...没事没事，小狗饿肚子也很可怜的，去给它买点吃的吧！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "菖蒲",
+        "text": "佳子！快走啦！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "佳子",
+        "char1id": "301101",
+        "char1motion": "400",
+        "char1face": "011",
+        "text": "实在不好意思！下次如果还能见到我一定把钱还上！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "",
+        "text": "（三人走远了）",
+        "speakerDirection": -1
+    },
+    {
+        "flag": 1,
+        "speakerName": "灯花",
+        "char0id": "100701",
+        "char0motion": "200",
+        "char0face": "010",
+        "char2id": "101401",
+        "char2motion": "000",
+        "char2face": "000",
+        "text": "还真是不懂事的小孩呢，为了达到自己的手段都想的什么歪门邪道喵...",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 1,
+        "speakerName": "音梦",
+        "char0id": "100701",
+        "char2id": "101401",
+        "char2motion": "100",
+        "char2face": "011",
+        "text": "灯花你不会这样吗？",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 1,
+        "speakerName": "灯花",
+        "char0id": "100701",
+        "char0motion": "201",
+        "char0face": "020",
+        "char2id": "101401",
+        "text": "灯花大人才不会做这种事！",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 1,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "200",
+        "char1face": "011",
+        "text": "好啦好啦，我们走吧。",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "text": "似乎获得了一张记忆。",
+        "speakerDirection": -1
+    },
+    {
+        "flag": 2,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "200",
+        "char1face": "020",
+        "text": "唔...对调皮的小孩子，也许需要给点教训！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "speakerName": "菲利希亚",
+        "char0id": "100501",
+        "char0motion": "200",
+        "char0face": "011",
+        "char2id": "302801",
+        "char2motion": "000",
+        "char2face": "011",
+        "text": "哦？要打一架吗！随时奉陪！",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 2,
+        "speakerName": "菖蒲",
+        "char0id": "100501",
+        "char2id": "302801",
+        "char2motion": "200",
+        "char2face": "011",
+        "text": "哦！要上咯！",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 2,
+        "speakerName": "灯花",
+        "char0id": "100701",
+        "char0motion": "300",
+        "char0face": "020",
+        "char2id": "101401",
+        "char2motion": "000",
+        "char2face": "010",
+        "text": "真是粗鲁的人呢...一会可别扯坏了这身衣服，这可是很贵的！",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 2,
+        "speakerName": "音梦",
+        "char0id": "100701",
+        "char2id": "101401",
+        "char2motion": "100",
+        "char2face": "010",
+        "text": "回去我再给用魔力给你变一件好了。",
+        "speakerDirection": 2
+    }
+]

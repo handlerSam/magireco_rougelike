@@ -1,0 +1,319 @@
+[
+    {
+        "flag": 0,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "101",
+        "char1face": "011",
+        "text": "三位！中华饭店万万岁现在正在举办特价优惠活动，要不要来体验一下呢！",
+        "speakerDirection": 1,
+        "background": "12021"
+    },
+    {
+        "flag": 0,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "001",
+        "char1face": "050",
+        "text": "欸，中餐馆吗... 音梦，灯花，你们肚子饿吗？",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "speakerName": "灯花",
+        "char0id": "100701",
+        "char0motion": "000",
+        "char0face": "010",
+        "char2id": "101401",
+        "char2motion": "000",
+        "char2face": "010",
+        "text": "还好。",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "speakerName": "音梦",
+        "char0id": "100701",
+        "char2id": "101401",
+        "char2motion": "100",
+        "char2face": "010",
+        "text": "忧你来决定吧。",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "050",
+        "text": "唔...（要不要进去呢？）",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "isChoice": 1,
+        "choose1": "去吃吃看？",
+        "choose1Flag": 1,
+        "choose2": "还是算了",
+        "choose2Flag": 2
+    },
+    {
+        "flag": 1,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "100",
+        "char1face": "011",
+        "text": "那就去体验一下吧！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "101",
+        "char1face": "011",
+        "text": "好嘞，欢迎光临，里面请！老爸，三位！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "",
+        "text": "（用餐过后）",
+        "speakerDirection": -1,
+        "background":"00000"
+    },
+    {
+        "flag": 1,
+        "speakerName": "灯花",
+        "char1id": "100701",
+        "char1motion": "300",
+        "char1face": "060",
+        "text": "呜...好油腻的食物",
+        "speakerDirection": 1,
+        "background":"21211"
+    },
+    {
+        "flag": 1,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "100",
+        "char1face": "010",
+        "text": "三位！用餐的感受怎么样，能给我们店打个分吗！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "041",
+        "text": "（唔，打几分呢...）",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "isChoice": 1,
+        "choose1": "打100分...也不是不可以",
+        "choose1Flag": 3,
+        "choose2": "还是打50分吧",
+        "choose2Flag": 4
+    },
+    {
+        "flag": 3,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "200",
+        "char1face": "011",
+        "text": "我觉得可以打100分！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "text": "其中50分给这里的食物，另外50分给你的努力和乐观的心态！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "100",
+        "char1face": "011",
+        "text": "哇！谢谢你！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "201",
+        "char1face": "010",
+        "text": "(师傅...我终于得到了100分！)",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "200",
+        "char1face": "011",
+        "text": "我太开心了，决定——给你们这一单免单！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "欸，你太客气了，这怎么好意思...",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "100",
+        "char1face": "011",
+        "text": "不用在意！放心的接受吧！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "100",
+        "char1face": "041",
+        "text": "好吧，谢谢你！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "灯花",
+        "char1id": "100701",
+        "char1motion": "100",
+        "char1face": "050",
+        "text": "（可是不管总分怎么样，饭菜还是只有50分啊？）",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 3,
+        "speakerName": "",
+        "text": "（用餐过后，所有人的HP恢复了25%）",
+        "speakerDirection": -1
+    },
+    {
+        "flag": 4,
+        "speakerName": "音梦",
+        "char1id": "101401",
+        "char1motion": "000",
+        "char1face": "000",
+        "text": "50分。饭菜的量太大了，完全不考虑客人的情况。而且过于油腻了。",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 4,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "100",
+        "char1face": "050",
+        "text": "又是50分？",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 4,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "300",
+        "char1face": "032",
+        "text": "呜...谢谢你的反馈，我们会继续努力的！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 4,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "100",
+        "char1face": "011",
+        "text": "还是欢迎你们下次光临！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 4,
+        "speakerName": "",
+        "text": "（三人离开了店铺）",
+        "speakerDirection": -1,
+        "background":"00000"
+    },
+    {
+        "flag": 4,
+        "speakerName": "忧",
+        "char0id": "101503",
+        "char0motion": "300",
+        "char0face": "041",
+        "char2id": "100701",
+        "char2motion": "000",
+        "char2face": "000",
+        "text": "音梦，多给人家一点鼓励嘛。",
+        "speakerDirection": 0,
+        "background": "12021"
+    },
+    {
+        "flag": 4,
+        "speakerName": "灯花",
+        "char0id": "101503",
+        "char2id": "100701",
+        "char2motion": "100",
+        "char2face": "010",
+        "text": "我觉得音梦做的对哦，只有实话实说下次才有改进的可能性喵。",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 4,
+        "speakerName": "忧",
+        "char0id": "101503",
+        "char0motion": "100",
+        "char0face": "041",
+        "char2id": "100701",
+        "text": "好吧...",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 4,
+        "text": "（花费了500CC，所有角色恢复25%HP）",
+        "speakerDirection": -1
+    },
+    {
+        "flag": 2,
+        "speakerName": "忧",
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "041",
+        "text": "不好意思啊，我们现在不是很饿...",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "300",
+        "char1face": "032",
+        "text": "好吧...",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "speakerName": "鹤乃",
+        "char1id": "100301",
+        "char1motion": "100",
+        "char1face": "011",
+        "text": "那下次肚子饿的时候记得光临万万岁！量大管饱！",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "text": "（三人离开了。）",
+        "speakerDirection": -1
+    }
+]

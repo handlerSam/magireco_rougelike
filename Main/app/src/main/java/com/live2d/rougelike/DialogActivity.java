@@ -9,6 +9,7 @@ package com.live2d.rougelike;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -34,6 +35,11 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.live2d.rougelike.CharacterPlateView.ACCELE;
+import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
+import static com.live2d.rougelike.CharacterPlateView.BLAST_VERTICAL;
+import static com.live2d.rougelike.CharacterPlateView.CHARGE;
 /*
 storyJson格式：
 {story:[{char0id,char0motion,char0face,char1...,char2...,text,speakerName}]}
@@ -66,15 +72,16 @@ public class DialogActivity extends Activity {
     int storyResourceId = -1;
     float modelAlpha = 0;
     boolean isModelAlphaInc = true;
-    public static float ALPHASPEED = 0.15f;
-    public static float ALPHABACKGROUNDSPEED = 0.05f;
-    public static int plotFlag = 0; // 只读取flag标志和该标志相同的对话，对话默认flag=0
-    public static boolean canTouchNext = true;
+    
     boolean canTouchChoice = false;
 
     int stringCurrentLength = 0;
 
     boolean isIntentSend = false;
+
+    public boolean canTouchNext = true;
+    
+    Global global;
 
     Timer dialogTimer = null;
     Handler handler = new Handler(new Handler.Callback() {
@@ -119,10 +126,11 @@ public class DialogActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
         findView();
-        p = new Plot();
+        global = (Global)getApplicationContext();
+        p = new Plot(DialogActivity.this);
         loadPlot(p);
         isOver = false;
-        plotFlag = 0;
+        global.plotFlag = 0;
         JniBridgeJava.SetActivityInstance(this);
         JniBridgeJava.SetContext(this);
         GLRenderer _glRenderer = new GLRenderer();
@@ -141,7 +149,7 @@ public class DialogActivity extends Activity {
             public void run() {
                 setLive2d();
                 setAlpha(modelAlpha);
-                modelAlpha += ALPHASPEED;
+                modelAlpha += global.ALPHASPEED;
                 if(modelAlpha >= 1){
                     setAlpha(1.0f);
                     Message m = new Message();
@@ -176,7 +184,7 @@ public class DialogActivity extends Activity {
                             public void run() {
                                 if(isModelAlphaInc){
                                     setAlpha(modelAlpha);
-                                    modelAlpha += ALPHABACKGROUNDSPEED;
+                                    modelAlpha += global.ALPHABACKGROUNDSPEED;
                                     //使屏幕变亮
                                     blackMask.setAlpha(1-modelAlpha);
                                     if(modelAlpha >= 1){
@@ -189,7 +197,7 @@ public class DialogActivity extends Activity {
                                         canTouchNext = true;
                                     }
                                 }else{
-                                    modelAlpha -= ALPHABACKGROUNDSPEED;
+                                    modelAlpha -= global.ALPHABACKGROUNDSPEED;
                                     setAlpha(modelAlpha);
                                     //使屏幕变暗
                                     blackMask.setAlpha(1-modelAlpha);
@@ -294,7 +302,7 @@ public class DialogActivity extends Activity {
                                     @Override
                                     public void run() {
                                         if(isModelAlphaInc){
-                                            modelAlpha += p.getBackgroundId().equals("")? ALPHASPEED:ALPHABACKGROUNDSPEED;
+                                            modelAlpha += p.getBackgroundId().equals("")? global.ALPHASPEED:global.ALPHABACKGROUNDSPEED;
                                             setAlpha(modelAlpha);
                                             if(!p.getBackgroundId().equals("")){
                                                 //使屏幕变亮
@@ -310,7 +318,7 @@ public class DialogActivity extends Activity {
                                                 canTouchNext = true;
                                             }
                                         }else{
-                                            modelAlpha -= p.getBackgroundId().equals("")? ALPHASPEED:ALPHABACKGROUNDSPEED;
+                                            modelAlpha -= p.getBackgroundId().equals("")? global.ALPHASPEED:global.ALPHABACKGROUNDSPEED;
                                             setAlpha(modelAlpha);
                                             if(!p.getBackgroundId().equals("")){
                                                 //使屏幕变暗
@@ -368,7 +376,7 @@ public class DialogActivity extends Activity {
         InputStream stream;
         int mpEventId = getIntent().getIntExtra("mpEventId",-1);
         if(mpEventId != -1){
-            storyResourceId = MapActivity.mpEvent.get(mpEventId).randomEvent;
+            storyResourceId = global.mpEvent.get(mpEventId).randomEvent;
         }else{
             if(getIntent().getIntExtra("storyResourceId",-1) != -1){
                 storyResourceId = getIntent().getIntExtra("storyResourceId",-1);
@@ -414,7 +422,7 @@ public class DialogActivity extends Activity {
                         public void onClick(View view) {
                             if(canTouchChoice){
                                 canTouchChoice = false;
-                                plotFlag = p.getChoicesFlag(temp);
+                                global.plotFlag = p.getChoicesFlag(temp);
                                 //触发下一次点击
                                 if(!isOver){
                                     if(dialogTimer != null){
@@ -431,7 +439,7 @@ public class DialogActivity extends Activity {
                                             @Override
                                             public void run() {
                                                 if(isModelAlphaInc){
-                                                    modelAlpha += p.getBackgroundId().equals("")? ALPHASPEED:ALPHABACKGROUNDSPEED;
+                                                    modelAlpha += p.getBackgroundId().equals("")? global.ALPHASPEED:global.ALPHABACKGROUNDSPEED;
                                                     setAlpha(modelAlpha);
                                                     if(modelAlpha >= 1){
                                                         setAlpha(1.0f);
@@ -442,7 +450,7 @@ public class DialogActivity extends Activity {
                                                         canTouchNext = true;
                                                     }
                                                 }else{
-                                                    modelAlpha -= p.getBackgroundId().equals("")? ALPHASPEED:ALPHABACKGROUNDSPEED;
+                                                    modelAlpha -= p.getBackgroundId().equals("")? global.ALPHASPEED:global.ALPHABACKGROUNDSPEED;
                                                     setAlpha(modelAlpha);
                                                     if(modelAlpha <= 0){
                                                         setLive2d();
@@ -535,43 +543,37 @@ public class DialogActivity extends Activity {
         if(!isIntentSend){
             if(storyResourceId == R.raw.story1){
                 Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
-                intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
-                intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                 canTouchNext = false;
                 startActivity(intent1);
             }else if(storyResourceId == R.raw.promotion_of_bangbangzai){
-                if(plotFlag == 3 || plotFlag == 4){
+                if(global.plotFlag == 3 || global.plotFlag == 4){
                     //所有人的HP恢复了25%
-                    for(int i = 0; i < StartActivity.characterList.size(); i++){
-                        StartActivity.characterList.get(i).recoverProportionHp(0.25f);
+                    for(int i = 0; i < global.characterList.size(); i++){
+                        global.characterList.get(i).recoverProportionHp(0.25f);
                     }
                     //花费了500CC
-                    if(plotFlag == 4){
-                        StartActivity.ccNumber -= 500;
+                    if(global.plotFlag == 4){
+                        global.ccNumber -= 500;
                     }
                 }
-                MapActivity.mpEvent.clear();
+                global.mpEvent.clear();
+                global.randomEventList.remove(Integer.valueOf(R.raw.promotion_of_bangbangzai));
                 Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
-                intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
-                intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                 canTouchNext = false;
                 startActivity(intent1);
             }else if(storyResourceId == R.raw.robbery_before){
-                if(plotFlag == 1){
+                if(global.plotFlag == 1){
                     //交出身上一半的钱，获得交朋友记忆
-                    StartActivity.ccNumber -= (int)(StartActivity.ccNumber*0.5f);
-                    StartActivity.memoriaBag.add(new Memoria("1122",DialogActivity.this));
-                    MapActivity.mpEvent.clear();
+                    global.ccNumber -= (int)(global.ccNumber*0.5f);
+                    global.memoriaBag.add(new Memoria("1122",DialogActivity.this));
+                    global.mpEvent.clear();
+                    global.randomEventList.remove(Integer.valueOf(R.raw.robbery_before));
                     Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
-                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
-                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                     canTouchNext = false;
                     startActivity(intent1);
                 }else{
                     //开始战斗
                     Intent intent1 = new Intent(DialogActivity.this, TeamChooseActivity.class);
-                    intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
-                    intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
                     intent1.putExtra("isRandomBattle", false);
                     intent1.putExtra("battleInfo",0);
                     canTouchNext = false;
@@ -579,15 +581,66 @@ public class DialogActivity extends Activity {
                 }
             }else if(storyResourceId == R.raw.robbery_after){
                 //获得交朋友记忆
-                StartActivity.memoriaBag.add(new Memoria("1122",DialogActivity.this));
-                MapActivity.mpEvent.clear();
+                global.memoriaBag.add(new Memoria("1122",DialogActivity.this));
+                global.mpEvent.clear();
+                global.randomEventList.remove(Integer.valueOf(R.raw.robbery_before));
                 Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
-                intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
-                intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
+                canTouchNext = false;
+                startActivity(intent1);
+            }else if(storyResourceId == R.raw.after_first_doppel_remu || storyResourceId == R.raw.after_first_doppel_toca || storyResourceId == R.raw.after_first_doppel_ui){
+                global.mpEvent.clear();
+                global.gameTime += 0.5f;
+                global.randomEventList.add(R.raw.first_meet_yachiyo);
+                Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                canTouchNext = false;
+                startActivity(intent1);
+            }else if(storyResourceId == R.raw.first_meet_yachiyo){
+                // 与八千代第一次相遇
+                if(global.plotFlag == 2){
+                    //八千代暂时进队
+                    Character tempYachiyo = getCharacterYachiyo();
+                    global.characterList.add(tempYachiyo);
+                    for(int i = 0; i < global.characters.length; i++){
+                        if(global.characters[i] == null){
+                            global.characters[i] = tempYachiyo;
+                            break;
+                        }
+                    }
+                    //开始战斗
+                    Intent intent1 = new Intent(DialogActivity.this, TeamChooseActivity.class);
+                    intent1.putExtra("isRandomBattle", false);
+                    intent1.putExtra("battleInfo",1);
+                    canTouchNext = false;
+                    startActivity(intent1);
+                }else{
+                    //不进入八千代事件
+                    global.mpEvent.clear();
+                    Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                    canTouchNext = false;
+                    startActivity(intent1);
+                }
+            }else if(storyResourceId == R.raw.first_meet_yachiyo_after_battle){
+                //八千代离队
+                for(int i = 0; i < global.characters.length; i++){
+                    Character temp = global.characters[i];
+                    if(temp != null && temp.spriteName.equals("Yachiyo Nanami")){
+                        global.characters[i] = null;
+                        break;
+                    }
+                }
+
+                for(int i = 0; i < global.characterList.size(); i++){
+                    Character temp = global.characterList.get(i);
+                    if(temp != null && temp.spriteName.equals("Yachiyo Nanami")){
+                        global.characterList.remove(temp);
+                        break;
+                    }
+                }
+                global.mpEvent.clear();
+                Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
                 canTouchNext = false;
                 startActivity(intent1);
             }
-
             finish();
             overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             isIntentSend = true;
@@ -598,14 +651,82 @@ public class DialogActivity extends Activity {
     void changeBackground(String backgroundNumber){
         JniBridgeJava.nativeChangeBackground("bg_adv_"+backgroundNumber + ".png");
     }
+
+    Character getCharacterYachiyo(){
+        Character yachiyo = new Character();
+        yachiyo.breakThrough = 0;
+        yachiyo.element = "water";
+        yachiyo.name = "七海八千代";
+        yachiyo.choosingActivityImage = "team_choose_100200";
+        yachiyo.spriteName = "Yachiyo Nanami";
+        yachiyo.charIconImage = "card_10025_";
+        yachiyo.magiaSkillIconName = "icon_skill_1014";
+        yachiyo.doppelImageName = "mini_100200_dd";
+        yachiyo.miniImage = "mini_remu";
+        yachiyo.isLeader = false;
+        yachiyo.lv = 100;
+        yachiyo.star = 5;
+        yachiyo.realMP = 0;
+        yachiyo.plateList = new int[]{ACCELE, BLAST_HORIZONTAL, BLAST_HORIZONTAL, BLAST_HORIZONTAL, CHARGE};
+        yachiyo.mpAttackRatio = 1.2f;
+        yachiyo.mpDefendRatio = 1.0f;
+
+        yachiyo.fourStarMinHP = 5380;
+        yachiyo.fourStarMaxHP = 18948;
+        yachiyo.fourStarMinATK = 1726;
+        yachiyo.fourStarMaxATK = 6123;
+        yachiyo.fourStarMinDEF = 1795;
+        yachiyo.fourStarMaxDEF = 6695;
+        yachiyo.fiveStarMinHP = 6005;
+        yachiyo.fiveStarMaxHP = 23479;
+        yachiyo.fiveStarMinATK = 1926;
+        yachiyo.fiveStarMaxATK = 7588;
+        yachiyo.fiveStarMinDEF = 2004;
+        yachiyo.fiveStarMaxDEF = 8316;
+
+        yachiyo.connectOriginEffectList.add(new SkillEffect("Blast伤害UP", 70, "自", 1, 100));
+        yachiyo.connectOriginEffectList.add(new SkillEffect("暴击", 200, "自", 1, 60));
+
+        yachiyo.connectAfterEffectList.add(new SkillEffect("Blast伤害UP", 80, "自", 1, 100));
+        yachiyo.connectAfterEffectList.add(new SkillEffect("暴击", 200, "自", 1, 70));
+
+        yachiyo.magiaTarget = "敌全";
+        yachiyo.magiaOriginMagnification = 340;
+        yachiyo.magiaAfterMagnification = 360;
+        yachiyo.doppelMagnification = 836;
+        yachiyo.magiaOriginEffectList.add(new SkillEffect("Blast伤害UP", 35, "己全", 3, 100));
+        yachiyo.magiaOriginEffectList.add(new SkillEffect("攻击力UP", 25, "自", 3, 100));
+
+        yachiyo.magiaAfterEffectList.add(new SkillEffect("Blast伤害UP", 45, "己全", 3, 100));
+        yachiyo.magiaAfterEffectList.add(new SkillEffect("攻击力UP", 30, "自", 3, 100));
+
+        yachiyo.doppelEffectList.add(new SkillEffect("Blast伤害UP", 55, "己全", 3, 100));
+        yachiyo.doppelEffectList.add(new SkillEffect("攻击力UP", 35, "自", 3, 100));
+
+        yachiyo.initialEffectList.add(new Effect("暴击",200,999,70,0));
+        yachiyo.initialEffectList.add(new Effect("攻击力UP",100,999,100,0));
+        yachiyo.initialEffectList.add(new Effect("造成伤害UP",200,999,100,0));
+
+        yachiyo.updateAttributionBasedOnLv();
+
+        return yachiyo;
+    }
 }
 
 class Plot{
     JSONArray jsonArray;
     int id = 0;
-    Plot(){}
-    Plot(JSONArray jsonArray){
+    Context context;
+    Global global;
+
+    Plot(Context context){
+        this.context = context;
+        this.global = (Global)context.getApplicationContext();
+    }
+    Plot(JSONArray jsonArray, Context context){
         this.jsonArray = jsonArray;
+        this.context = context;
+        this.global = (Global)context.getApplicationContext();
     }
     public void setJsonArray(JSONArray jsonArray){
         this.jsonArray = jsonArray;
@@ -753,7 +874,7 @@ class Plot{
     boolean next(){
         while(id < (jsonArray.length()-1)) {
             id++;
-            if(getPlotFlag() == DialogActivity.plotFlag){
+            if(getPlotFlag() == global.plotFlag){
                 break;
             }
         }
@@ -766,7 +887,7 @@ class Plot{
             int temp = id;
             while(temp < (jsonArray.length()-1)) {
                 temp++;
-                if(getPlotFlag(temp) == DialogActivity.plotFlag){
+                if(getPlotFlag(temp) == global.plotFlag){
                     return true;
                 }
             }
@@ -778,7 +899,7 @@ class Plot{
         //false: 到末尾了; true: 停在选择处
         while(id < (jsonArray.length()-1)) {
             id++;
-            if(getPlotFlag() == DialogActivity.plotFlag && isChoice()){
+            if(getPlotFlag() == global.plotFlag && isChoice()){
                 return true;
             }else if(id >= (jsonArray.length()-1)){
                 return false;

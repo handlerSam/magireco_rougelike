@@ -14,20 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import static com.live2d.rougelike.StartActivity.characters;
-
 public class TeamChooseActivity extends AppCompatActivity {
-
-    public static int choseCharacter = -1;
-    public static int usingFormationId = 0;
-
+    
     CharacterIconAdapter adapter;
-
-
+    
     boolean isCheckMemoria = false;
     boolean isChangingToMemoria = false;
-
-
+    
     ConstraintLayout[] charFormation = new ConstraintLayout[5];
     ImageView[][][] formation = new ImageView[5][3][3];
     ImageView[] charAll = new ImageView[5];
@@ -53,13 +46,18 @@ public class TeamChooseActivity extends AppCompatActivity {
     ConstraintLayout[] char_largestFrame = new ConstraintLayout[5];
     ImageView[] chooseChar = new ImageView[5];
     ImageView back;
+    TextView cc_number;
+    TextView grief_seed_number;
 
     boolean isIntentSend = false;
+    
+    Global global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_choose);
+        global = (Global)getApplicationContext(); 
         findView();
         init();
     }
@@ -104,9 +102,12 @@ public class TeamChooseActivity extends AppCompatActivity {
         charRecyclerLayout = findViewById(R.id.charRecyclerLayout);
         charRecyclerView = findViewById(R.id.charRecyclerView);
         back = findViewById(R.id.back);
+        cc_number = findViewById(R.id.cc_number);
+        grief_seed_number = findViewById(R.id.grief_seed_number);
     }
 
     public void init(){
+        updateCCAndGriefSeedView();
         changeState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,9 +117,9 @@ public class TeamChooseActivity extends AppCompatActivity {
                     changeState.setImageResource(R.drawable.change_to_char);
                 }
                 isCheckMemoria = !isCheckMemoria;
-                if(choseCharacter != -1){
-                    chooseChar[choseCharacter].setVisibility(View.INVISIBLE);
-                    choseCharacter = -1;
+                if(global.choseCharacter != -1){
+                    chooseChar[global.choseCharacter].setVisibility(View.INVISIBLE);
+                    global.choseCharacter = -1;
                     charRecyclerLayout.setVisibility(View.GONE);
                 }
                 updateCheckingViews();
@@ -131,9 +132,9 @@ public class TeamChooseActivity extends AppCompatActivity {
                 charCard[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!isChangingToMemoria && characters[temp].breakThrough >= tempJ + 1){
+                        if(!isChangingToMemoria && global.characters[temp].breakThrough >= tempJ + 1){
                             isChangingToMemoria = true;
-                            MemoriaActivity.chooseCharacter = getCharacterIdInCharacterList(characters[temp]);
+                            global.chooseCharacter = getCharacterIdInCharacterList(global.characters[temp]);
                             Intent receivedIntent = getIntent();
                             int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                             boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
@@ -144,7 +145,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                                 intent1.putExtra("touchMemoriaId",tempJ);
                                 intent1.putExtra("eventX", getIntent().getIntExtra("eventX",-1));
                                 intent1.putExtra("eventY", getIntent().getIntExtra("eventY",-1));
-                                intent1.putExtra("HPRatio",1.0f*characters[temp].realHP/characters[temp].getRealMaxHP());
+                                intent1.putExtra("HPRatio",1.0f*global.characters[temp].realHP/global.characters[temp].getRealMaxHP());
                                 startActivity(intent1);
                                 finish();
                                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -159,22 +160,22 @@ public class TeamChooseActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if(!isCheckMemoria){
-                        if(choseCharacter == -1){
-                            choseCharacter = temp;
+                        if(global.choseCharacter == -1){
+                            global.choseCharacter = temp;
                             chooseChar[temp].setVisibility(View.VISIBLE);
-                            adapter.notifyItemRangeChanged(0,StartActivity.characterList.size());
+                            adapter.notifyItemRangeChanged(0,global.characterList.size());
                             charRecyclerLayout.setVisibility(View.VISIBLE);
                         }else{
-                            if(choseCharacter == temp){
-                                choseCharacter = -1;
+                            if(global.choseCharacter == temp){
+                                global.choseCharacter = -1;
                                 chooseChar[temp].setVisibility(View.INVISIBLE);
                                 charRecyclerLayout.setVisibility(View.GONE);
                             }else{
-                                Character c = characters[temp];
-                                characters[temp] = characters[choseCharacter];
-                                characters[choseCharacter] = c;
-                                chooseChar[choseCharacter].setVisibility(View.INVISIBLE);
-                                choseCharacter = -1;
+                                Character c = global.characters[temp];
+                                global.characters[temp] = global.characters[global.choseCharacter];
+                                global.characters[global.choseCharacter] = c;
+                                chooseChar[global.choseCharacter].setVisibility(View.INVISIBLE);
+                                global.choseCharacter = -1;
                                 charRecyclerLayout.setVisibility(View.GONE);
                             }
                         }
@@ -185,13 +186,13 @@ public class TeamChooseActivity extends AppCompatActivity {
             isLeader[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(characters[temp] != null && !characters[temp].isLeader){
+                    if(global.characters[temp] != null && !global.characters[temp].isLeader){
                         for(int j = 0; j < 5; j++){
-                            if(characters[j] != null){
-                                characters[j].isLeader = false;
+                            if(global.characters[j] != null){
+                                global.characters[j].isLeader = false;
                             }
                         }
-                        characters[temp].isLeader = true;
+                        global.characters[temp].isLeader = true;
                     }
                     updateCheckingViews();
                 }
@@ -207,31 +208,32 @@ public class TeamChooseActivity extends AppCompatActivity {
                 startBattle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 后续需要更改HP提升时候的realHP更新逻辑
-//                    for(int i = 0; i < 5; i++){
-//                        if(StartActivity.characters[i] != null){
-//                            StartActivity.characters[i].realHP = characters[i].getRealMaxHP();
-//                        }
-//                    }
-                        if(receivedIntent.getIntExtra("eventX", -1) != -1){
-                            StartActivity.PLAYER_ON_MAP_X = receivedIntent.getIntExtra("eventX", -1);
-                            StartActivity.PLAYER_ON_MAP_Y = receivedIntent.getIntExtra("eventY", -1);
+                        int characterInTeamNumber = 0;
+                        for(int i = 0; i < global.characters.length; i++){
+                            if(global.characters[i] != null){
+                                characterInTeamNumber++;
+                            }
                         }
-                        Log.d("Sam","PlayerX:"+StartActivity.PLAYER_ON_MAP_X+", PlayerY:"+StartActivity.PLAYER_ON_MAP_Y);
-                        if(!isIntentSend){
-                            boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
-                            Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
-                            intent1.putExtra("isRandomBattle", isRandomBattle);
-                            intent1.putExtra("battleInfo", battleId);
-                            intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
-                            intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
-                            intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
-                            startActivity(intent1);
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                            isIntentSend = true;
+                        if(characterInTeamNumber > 0){
+                            if(receivedIntent.getIntExtra("eventX", -1) != -1){
+                                global.PLAYER_ON_MAP_X = receivedIntent.getIntExtra("eventX", -1);
+                                global.PLAYER_ON_MAP_Y = receivedIntent.getIntExtra("eventY", -1);
+                            }
+                            Log.d("Sam","PlayerX:"+global.PLAYER_ON_MAP_X+", PlayerY:"+global.PLAYER_ON_MAP_Y);
+                            if(!isIntentSend){
+                                boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
+                                Intent intent1 = new Intent(TeamChooseActivity.this, BattleActivity.class);
+                                intent1.putExtra("isRandomBattle", isRandomBattle);
+                                intent1.putExtra("battleInfo", battleId);
+                                intent1.putExtra("eventX",getIntent().getIntExtra("eventX",-1));
+                                intent1.putExtra("eventY",getIntent().getIntExtra("eventY",-1));
+                                intent1.putExtra("extraMissionId", receivedIntent.getIntExtra("extraMissionId",0));
+                                startActivity(intent1);
+                                finish();
+                                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                isIntentSend = true;
+                            }
                         }
-
                     }
                 });
             }
@@ -295,46 +297,46 @@ public class TeamChooseActivity extends AppCompatActivity {
 
     public void updateCheckingViews(){
         for(int i = 0; i < 5; i++){
-            if(characters[i] != null){
+            if(global.characters[i] != null){
                 charFormation[i].setVisibility(isCheckMemoria? View.INVISIBLE:View.VISIBLE);
-                StartActivity.formationList.get(usingFormationId).setFormation(formation[i],charAll[i],i);
+                global.formationList.get(global.usingFormationId).setFormation(formation[i],charAll[i],i);
                 showCharacterLayout[i].setVisibility(isCheckMemoria? View.INVISIBLE:View.VISIBLE);
-                showCharacterLayout[i].setBackgroundResource(getResource(characters[i].choosingActivityImage));
-                isLeader[i].setImageResource(characters[i].isLeader? R.drawable.leader:R.drawable.empty_leader);
+                showCharacterLayout[i].setBackgroundResource(getResource(global.characters[i].choosingActivityImage));
+                isLeader[i].setImageResource(global.characters[i].isLeader? R.drawable.leader:R.drawable.empty_leader);
                 if(!isCheckMemoria){
-                    isLeader[i].setImageResource(characters[i].isLeader? R.drawable.leader:R.drawable.empty_leader);
-                    charAttribute[i].setImageResource(getResource(characters[i].element));
-                    lvView[i].setText("Lv "+characters[i].lv);
+                    isLeader[i].setImageResource(global.characters[i].isLeader? R.drawable.leader:R.drawable.empty_leader);
+                    charAttribute[i].setImageResource(getResource(global.characters[i].element));
+                    lvView[i].setText("Lv "+global.characters[i].lv);
                     for(int j = 0; j < 5; j++){
-                        if(j < characters[i].star){
+                        if(j < global.characters[i].star){
                             char_star[i][j].setVisibility(View.VISIBLE);
                         }else{
                             char_star[i][j].setVisibility(View.GONE);
                         }
                     }
-                    charHP[i].setText(characters[i].realHP+"/"+characters[i].getRealMaxHP());
-                    charATK[i].setText(""+characters[i].getRealATK());
-                    charDEF[i].setText(""+characters[i].getRealDEF());
-                    if(characters[i].getRealMaxHP() == characters[i].HP){
-                        charHP[i].setTextColor(getResources().getColor(R.color.shader));
+                    charHP[i].setText(global.characters[i].realHP+"/"+global.characters[i].getRealMaxHP());
+                    charATK[i].setText(""+global.characters[i].getRealATK());
+                    charDEF[i].setText(""+global.characters[i].getRealDEF());
+                    if(global.characters[i].getRealMaxHP() == global.characters[i].HP){
+                        charHP[i].setTextColor(getColor(R.color.shader));
                     }else{
-                        charHP[i].setTextColor(getResources().getColor(R.color.textPink));
+                        charHP[i].setTextColor(getColor(R.color.textPink));
                     }
-                    if(characters[i].getRealATK() == characters[i].ATK){
-                        charATK[i].setTextColor(getResources().getColor(R.color.shader));
+                    if(global.characters[i].getRealATK() == global.characters[i].ATK){
+                        charATK[i].setTextColor(getColor(R.color.shader));
                     }else{
-                        charATK[i].setTextColor(getResources().getColor(R.color.textPink));
+                        charATK[i].setTextColor(getColor(R.color.textPink));
                     }
-                    if(characters[i].getRealDEF() == characters[i].DEF){
-                        charDEF[i].setTextColor(getResources().getColor(R.color.shader));
+                    if(global.characters[i].getRealDEF() == global.characters[i].DEF){
+                        charDEF[i].setTextColor(getColor(R.color.shader));
                     }else{
-                        charDEF[i].setTextColor(getResources().getColor(R.color.textPink));
+                        charDEF[i].setTextColor(getColor(R.color.textPink));
                     }
                     for(int j = 0; j < 4; j++){
-                        if(characters[i].memoriaList[j] != null){
+                        if(global.characters[i].memoriaList[j] != null){
                             skillIcon_[i][j].setVisibility(View.VISIBLE);
-                            skillIcon_[i][j].setImageResource(getResource(characters[i].memoriaList[j].icon));
-                        }else if(j < characters[i].breakThrough){
+                            skillIcon_[i][j].setImageResource(getResource(global.characters[i].memoriaList[j].icon));
+                        }else if(j < global.characters[i].breakThrough){
                             skillIcon_[i][j].setVisibility(View.VISIBLE);
                             skillIcon_[i][j].setImageResource(R.drawable.add_memoria);
                         }else{
@@ -348,7 +350,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                 breakThoughLayout[i].setVisibility(isCheckMemoria? View.VISIBLE:View.INVISIBLE);
                 if(isCheckMemoria){
                     for(int j = 0; j < 3; j++){
-                        if(j+1 < characters[i].breakThrough){
+                        if(j+1 < global.characters[i].breakThrough){
                             breakThough_[i][j].setImageResource(R.drawable.filled_slot);
                         }else{
                             breakThough_[i][j].setImageResource(R.drawable.empty_slot);
@@ -357,12 +359,12 @@ public class TeamChooseActivity extends AppCompatActivity {
                 }
 
                 showMemoriaLayout[i].setVisibility(isCheckMemoria? View.VISIBLE:View.INVISIBLE);
-                showMemoriaLayout[i].setBackgroundResource(getResource(characters[i].choosingActivityImage));
+                showMemoriaLayout[i].setBackgroundResource(getResource(global.characters[i].choosingActivityImage));
                 if(isCheckMemoria){
                     for(int j = 0; j < 4; j++){
-                        if(characters[i].memoriaList[j] != null){
-                            charCard[i][j].setMemoria(characters[i].memoriaList[j]);
-                        }else if(j < characters[i].breakThrough){
+                        if(global.characters[i].memoriaList[j] != null){
+                            charCard[i][j].setMemoria(global.characters[i].memoriaList[j]);
+                        }else if(j < global.characters[i].breakThrough){
                             charCard[i][j].setEmpty();
                         }else{
                             charCard[i][j].setUnusable();
@@ -372,7 +374,7 @@ public class TeamChooseActivity extends AppCompatActivity {
             }else{
                 //该位置没人
                 charFormation[i].setVisibility(isCheckMemoria? View.INVISIBLE:View.VISIBLE);
-                StartActivity.formationList.get(usingFormationId).setFormation(formation[i],charAll[i],i);
+                global.formationList.get(global.usingFormationId).setFormation(formation[i],charAll[i],i);
                 showCharacterLayout[i].setVisibility(View.INVISIBLE);
                 breakThoughLayout[i].setVisibility(View.INVISIBLE);
                 showMemoriaLayout[i].setVisibility(View.INVISIBLE);
@@ -381,19 +383,25 @@ public class TeamChooseActivity extends AppCompatActivity {
         }
     }
 
+    void updateCCAndGriefSeedView(){
+        cc_number.setText(" " + global.ccNumber + " ");
+        grief_seed_number.setText(" " + global.griefSeedNumber + " ");
+    }
+
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
     }
 
     public int getCharacterIdInCharacterList(Character c){
-        for(int i = 0; i < StartActivity.characterList.size(); i++){
-            if(StartActivity.characterList.get(i) == c){
+        for(int i = 0; i < global.characterList.size(); i++){
+            if(global.characterList.get(i) == c){
                 return i;
             }
         }
         return -1;
     }
+
 
     public int getIDByStr(String idName){
         return getResources().getIdentifier(idName,"id", getPackageName());

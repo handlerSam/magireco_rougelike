@@ -19,6 +19,7 @@ public  class FormationAdapter extends RecyclerView.Adapter<FormationAdapter.Vie
     private List<Formation> mFormation;//用于存储传入的List<Person>
     private ArrayList<FormationAdapter.ViewHolder> holderList = new ArrayList<>();
     Context context;
+    Global global;
 
     //初始化ViewHolder，创建时直接绑定好两个布局
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -40,7 +41,8 @@ public  class FormationAdapter extends RecyclerView.Adapter<FormationAdapter.Vie
     //构造方法
     public FormationAdapter(Context context){
         this.context = context;
-        this.mFormation = StartActivity.formationList;
+        this.mFormation = ((Global)context.getApplicationContext()).formationList;
+        this.global = (Global)context.getApplicationContext();
     }
 
     //以下为三个必须重写的方法：
@@ -72,7 +74,7 @@ public  class FormationAdapter extends RecyclerView.Adapter<FormationAdapter.Vie
                 if(!f.isChose){
                     ((FormationActivity)context).choseFormation.isChose = false;
                     ((FormationActivity)context).choseFormation = f;
-                    TeamChooseActivity.usingFormationId = temp;
+                    global.usingFormationId = temp;
                     f.isChose = true;
                     ((FormationActivity)context).setBigFormation();
                     for(ViewHolder h: holderList){

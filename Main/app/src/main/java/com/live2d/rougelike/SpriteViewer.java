@@ -43,8 +43,6 @@ public class SpriteViewer extends ConstraintLayout {
     WebView webView;
 
     Context context;
-    public static int SHOWVIEW = 0;
-    public static int HIDEVIEW = 1;
 
     public Character c; //此character为只读！
 
@@ -56,6 +54,8 @@ public class SpriteViewer extends ConstraintLayout {
     public String prefix = "bg_quest_"; //对于背景:bg_quest_  对于人物:mini_
 
     public int canvasWidth = 1200;//恒定为1200，不改变
+
+    Global global;
 
     TypedArray ta;
 
@@ -77,7 +77,7 @@ public class SpriteViewer extends ConstraintLayout {
                             }else{
                                 ((BattleActivity)context).showPlate();
                             }
-                            if(StartActivity.collectionDict.get("等等力徽章").isOwn){
+                            if(global.collectionDict.get("等等力徽章").isOwn){
                                 ((BattleActivity)context).clickable = false;
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -133,6 +133,7 @@ public class SpriteViewer extends ConstraintLayout {
         super(context, attrs);
         isBattle = false;
         this.context = context;
+        this.global = (Global)context.getApplicationContext();
 
         //load canvasWide from attrs
         ta = context.obtainStyledAttributes(attrs,R.styleable.SpriteViewer);
@@ -203,6 +204,7 @@ public class SpriteViewer extends ConstraintLayout {
     public SpriteViewer(@NonNull Context context, boolean isEmpty) {
         super(context);
         isBattle = true;
+        this.global = (Global)context.getApplicationContext();
         if(!isEmpty){
             this.context = context;
             View v = LayoutInflater.from(context).inflate(R.layout.sprite_viewer_layout, SpriteViewer.this);

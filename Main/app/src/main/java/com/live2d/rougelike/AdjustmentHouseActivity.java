@@ -39,12 +39,12 @@ import static com.live2d.rougelike.CharacterPlateView.ACCELE;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_HORIZONTAL;
 import static com.live2d.rougelike.CharacterPlateView.BLAST_VERTICAL;
 import static com.live2d.rougelike.CharacterPlateView.CHARGE;
-import static com.live2d.rougelike.MemoriaActivity.isDesc;
-import static com.live2d.rougelike.MemoriaActivity.isOrderByLV;
 
 public class AdjustmentHouseActivity extends AppCompatActivity{
 
-    public static Collection DEFAULT_COLLECTION;
+    Global global;
+    
+    public Collection DEFAULT_COLLECTION;
     int changePlateTo = -1;
     GLSurfaceView _glSurfaceView;
     GLRenderer _glRenderer;
@@ -122,6 +122,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
         cm.setSaturation(0); // 设置饱和度
         grayColorFilter = new ColorMatrixColorFilter(cm);
 
+        global = (Global)getApplicationContext();
+        
         DEFAULT_COLLECTION = new Collection("", "", "", "", 0, "item_frame_3");
         DEFAULT_COLLECTION.isOwn = true;
 
@@ -144,8 +146,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                 right_item_container.setVisibility(View.VISIBLE);
                 memoria_list.setVisibility(View.GONE);
                 shop_frame.setVisibility(View.GONE);
-                for(int i = 0; i < StartActivity.characterList.size(); i++){
-                    final Character c = StartActivity.characterList.get(i);
+                for(int i = 0; i < global.characterList.size(); i++){
+                    final Character c = global.characterList.get(i);
                     View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_break_through_item, right_item_container, false);
                     right_item_container.addView(item);
                     ImageView charImage = item.findViewById(R.id.left_char_image);
@@ -185,13 +187,13 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                                 slot_list[j + 3].setBackgroundResource(R.drawable.character_empty_slot);
                             }
                         }
-                        item_price.setText("-" + StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1]);
+                        item_price.setText("-" + global.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1]);
                         starsLayout.setVisibility(View.VISIBLE);
                         for(int j = 0; j < 5; j++){
                             char_star[j].setVisibility(j < c.star ? View.VISIBLE : View.GONE);
                         }
 
-                        if(StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] > StartActivity.griefSeedNumber){
+                        if(global.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] > global.griefSeedNumber){
                             //买不起
                             purchase_button_background.setColorFilter(grayColorFilter);
                             purchase_button.setOnClickListener(null);
@@ -207,7 +209,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
 
                                     View dialog_frame = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.alert_dialog_frame, null);
                                     ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("魔力解放:" + c.name);
-                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗" + StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] + "个悲叹之种将魔力解放至" + (c.breakThrough + 1) + "级.");
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗" + global.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1] + "个悲叹之种将魔力解放至" + (c.breakThrough + 1) + "级.");
                                     ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
                                     //((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView();
                                     ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
@@ -215,7 +217,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                                         @Override
                                         public void onClick(View v){
                                             //正确逻辑
-                                            StartActivity.griefSeedNumber -= StartActivity.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1];
+                                            global.griefSeedNumber -= global.CHARACTER_BREAK_THROUGH_PRICE[c.breakThrough - 1];
                                             c.breakThrough++;
                                             updateCCAndGriefSeedView();
                                             character_breakthrough.performClick();
@@ -283,8 +285,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                     right_item_container.setVisibility(View.VISIBLE);
                     memoria_list.setVisibility(View.GONE);
                     shop_frame.setVisibility(View.GONE);
-                    for(int i = 0; i < StartActivity.characterList.size(); i++){
-                        final Character c = StartActivity.characterList.get(i);
+                    for(int i = 0; i < global.characterList.size(); i++){
+                        final Character c = global.characterList.get(i);
                         View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_plate_change_item, right_item_container, false);
                         right_item_container.addView(item);
                         ImageView charImage = item.findViewById(R.id.left_char_image);
@@ -296,7 +298,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                                 item.findViewById(R.id.left_char_star2), item.findViewById(R.id.left_char_star3), item.findViewById(R.id.left_char_star4)};
 
                         //init
-                        final int price = StartActivity.CHARACTER_CHANGE_PLATE_PRICE[StartActivity.plate_change_time < StartActivity.CHARACTER_CHANGE_PLATE_PRICE.length ? StartActivity.plate_change_time : (StartActivity.CHARACTER_CHANGE_PLATE_PRICE.length - 1)];
+                        final int price = global.CHARACTER_CHANGE_PLATE_PRICE[global.plate_change_time < global.CHARACTER_CHANGE_PLATE_PRICE.length ? global.plate_change_time : (global.CHARACTER_CHANGE_PLATE_PRICE.length - 1)];
                         charImage.setImageResource(getResourceByString(c.charIconImage + "d"));
                         charImage.setBackgroundResource(getResourceByString("bg_" + c.element));
                         charFrame.setBackgroundResource(getResourceByString("frame_rank_" + c.star));
@@ -404,15 +406,15 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                                     ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
                                     ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView(dialog_layout);
 
-                                    if(price <= StartActivity.griefSeedNumber){
+                                    if(price <= global.griefSeedNumber){
                                         ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗 " + price + " 个悲叹之种对行动盘进行如下替换：");
                                         ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
                                         (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
                                             @Override
                                             public void onClick(View v){
                                                 //正确逻辑
-                                                StartActivity.griefSeedNumber -= price;
-                                                StartActivity.plate_change_time++;
+                                                global.griefSeedNumber -= price;
+                                                global.plate_change_time++;
                                                 c.plateList[tempJ] = changePlateTo;
                                                 updateCCAndGriefSeedView();
                                                 character_plate_change.performClick();
@@ -457,8 +459,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                 right_item_container.setVisibility(View.VISIBLE);
                 memoria_list.setVisibility(View.GONE);
                 shop_frame.setVisibility(View.GONE);
-                for(int i = 0; i < StartActivity.characterList.size(); i++){
-                    final Character c = StartActivity.characterList.get(i);
+                for(int i = 0; i < global.characterList.size(); i++){
+                    final Character c = global.characterList.get(i);
                     View item = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.character_star_up_item, right_item_container, false);
                     right_item_container.addView(item);
 
@@ -511,10 +513,10 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                             char_star[j].setVisibility(j <= c.star ? View.VISIBLE : View.GONE);
                         }
 
-                        item_price.setText("-" + StartActivity.CHARACTER_STAR_UP_PRICE);
+                        item_price.setText("-" + global.CHARACTER_STAR_UP_PRICE);
                         starsLayout.setVisibility(View.VISIBLE);
 
-                        if(StartActivity.CHARACTER_STAR_UP_PRICE > StartActivity.griefSeedNumber){
+                        if(global.CHARACTER_STAR_UP_PRICE > global.griefSeedNumber){
                             //买不起
                             purchase_button_background.setColorFilter(grayColorFilter);
                             purchase_button.setOnClickListener(null);
@@ -530,7 +532,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
 
                                     View dialog_frame = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.alert_dialog_frame, null);
                                     ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("星级提升: " + c.name);
-                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗 " + StartActivity.CHARACTER_STAR_UP_PRICE + " 个悲叹之种将星级提升至 " + (c.star + 1) + " 星.");
+                                    ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将消耗 " + global.CHARACTER_STAR_UP_PRICE + " 个悲叹之种将星级提升至 " + (c.star + 1) + " 星.");
                                     ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
                                     //((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView();
                                     ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
@@ -538,7 +540,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                                         @Override
                                         public void onClick(View v){
                                             //正确逻辑
-                                            StartActivity.griefSeedNumber -= StartActivity.CHARACTER_STAR_UP_PRICE;
+                                            global.griefSeedNumber -= global.CHARACTER_STAR_UP_PRICE;
                                             c.star++;
                                             updateCCAndGriefSeedView();
                                             character_star_up.performClick();
@@ -599,34 +601,34 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                     memoria_list.setVisibility(View.VISIBLE);
                     shop_frame.setVisibility(View.GONE);
 
-                    memoriaAdapter = new ShopMemoriaAdapter(StartActivity.memoriaBag, AdjustmentHouseActivity.this);
+                    memoriaAdapter = new ShopMemoriaAdapter(global.memoriaBag, AdjustmentHouseActivity.this);
                     cardsRecyclerView.setAdapter(memoriaAdapter);
                     StaggeredGridLayoutManager m = new StaggeredGridLayoutManager(6, StaggeredGridLayoutManager.VERTICAL);
                     cardsRecyclerView.setLayoutManager(m);
 
-                    cardNumber.setText("" + StartActivity.memoriaBag.size() + "/400");
+                    cardNumber.setText("" + global.memoriaBag.size() + "/400");
 
                     //初始化排序按钮及排序效果
-                    orderBy.setImageResource(isOrderByLV ? R.drawable.order2 : R.drawable.order1);
+                    orderBy.setImageResource(global.isOrderByLV ? R.drawable.order2 : R.drawable.order1);
                     updateSortedOutcome();
-                    memoriaAdapter.notifyItemRangeChanged(0, StartActivity.memoriaBag.size());
+                    memoriaAdapter.notifyItemRangeChanged(0, global.memoriaBag.size());
 
                     orderBy.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view){
-                            isOrderByLV = !isOrderByLV;
-                            orderBy.setImageResource(isOrderByLV ? R.drawable.order2 : R.drawable.order1);
+                            global.isOrderByLV = !global.isOrderByLV;
+                            orderBy.setImageResource(global.isOrderByLV ? R.drawable.order2 : R.drawable.order1);
                             updateSortedOutcome();
-                            memoriaAdapter.notifyItemRangeChanged(0, StartActivity.memoriaBag.size());
+                            memoriaAdapter.notifyItemRangeChanged(0, global.memoriaBag.size());
                         }
                     });
                     order.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view){
-                            isDesc = !isDesc;
-                            order.setImageResource(isDesc ? R.drawable.desc : R.drawable.incr);
+                            global.isDesc = !global.isDesc;
+                            order.setImageResource(global.isDesc ? R.drawable.desc : R.drawable.incr);
                             updateSortedOutcome();
-                            memoriaAdapter.notifyItemRangeChanged(0, StartActivity.memoriaBag.size());
+                            memoriaAdapter.notifyItemRangeChanged(0, global.memoriaBag.size());
                         }
                     });
                 }
@@ -637,15 +639,15 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
         //随机取六个商品
         ArrayList<Collection> tempShopItemList = new ArrayList<>();
         int cnt = 6;
-        for(int i = 0; i < StartActivity.collectionList.size() && cnt > 0; i++){
-            if(!StartActivity.collectionList.get(i).isOwn){
-                tempShopItemList.add(StartActivity.collectionList.get(i));
+        for(int i = 0; i < global.collectionList.size() && cnt > 0; i++){
+            if(!global.collectionList.get(i).isOwn){
+                tempShopItemList.add(global.collectionList.get(i));
                 cnt--;
             }
         }
 //        while(tempShopItemList.size() < 6){
-//            int id = (int)(Math.random()*StartActivity.collectionList.size());
-//            Collection c = StartActivity.collectionList.get(id);
+//            int id = (int)(Math.random()*global.collectionList.size());
+//            Collection c = global.collectionList.get(id);
 //            if(!tempShopItemList.contains(c) && !c.isOwn){
 //                tempShopItemList.add(c);
 //            }
@@ -710,7 +712,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
 
                                     View dialog_frame = LayoutInflater.from(AdjustmentHouseActivity.this).inflate(R.layout.alert_dialog_frame, null);
                                     ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("购买");
-                                    if(StartActivity.ccNumber >= c.price){
+                                    if(global.ccNumber >= c.price){
                                         ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText("将花费 " + c.price + "cc 购买以下商品:");
                                         ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
                                         ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).addView(dialog_layout);
@@ -719,7 +721,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                                             @Override
                                             public void onClick(View v){
                                                 //正确逻辑
-                                                StartActivity.ccNumber -= c.price;
+                                                global.ccNumber -= c.price;
                                                 c.isOwn = true;
                                                 updateCCAndGriefSeedView();
                                                 shop_trade.performClick();
@@ -824,15 +826,15 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
     }
 
     public void updateSortedOutcome(){
-        Collections.sort(StartActivity.memoriaBag, new Comparator<Memoria>(){
+        Collections.sort(global.memoriaBag, new Comparator<Memoria>(){
             @Override
             public int compare(Memoria lhs, Memoria rhs){
                 // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
                 int weight = 0;
-                if(isOrderByLV){
-                    return lhs.lvNow > rhs.lvNow ? (isDesc ? -1 : 1) : (lhs.lvNow < rhs.lvNow) ? (isDesc ? 1 : -1) : (Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id) ? -1 : (Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1 : 0));
+                if(global.isOrderByLV){
+                    return lhs.lvNow > rhs.lvNow ? (global.isDesc ? -1 : 1) : (lhs.lvNow < rhs.lvNow) ? (global.isDesc ? 1 : -1) : (Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id) ? -1 : (Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1 : 0));
                 }else{
-                    return lhs.star > rhs.star ? (isDesc ? -1 : 1) : (lhs.star < rhs.star) ? (isDesc ? 1 : -1) : (Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id) ? -1 : (Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1 : 0));
+                    return lhs.star > rhs.star ? (global.isDesc ? -1 : 1) : (lhs.star < rhs.star) ? (global.isDesc ? 1 : -1) : (Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id) ? -1 : (Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1 : 0));
                 }
             }
         });
@@ -873,8 +875,8 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
 
 
     void updateCCAndGriefSeedView(){
-        cc_number.setText(" " + StartActivity.ccNumber + " ");
-        grief_seed_number.setText(" " + StartActivity.griefSeedNumber + " ");
+        cc_number.setText(" " + global.ccNumber + " ");
+        grief_seed_number.setText(" " + global.griefSeedNumber + " ");
     }
 
     void changeBackground(String backgroundNumber){

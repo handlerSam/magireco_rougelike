@@ -1,0 +1,376 @@
+[
+    {
+        "flag": 0,
+        "char0id": "101400",
+        "char0motion": "000",
+        "char0face": "000",
+        "char2id": "100700",
+        "char2motion": "400",
+        "char2face": "050",
+        "text": "(好强大的魔力...)",
+        "speakerName": "灯花",
+        "speakerDirection": 2,
+        "background":"11021"
+    },
+    {
+        "flag": 0,
+        "char0id": "101400",
+        "char0motion": "001",
+        "char0face": "000",
+        "char2id": "100700",
+        "text": "(不光如此。她的战斗技巧和经验也远比我们丰富。)",
+        "speakerName": "音梦",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "000",
+        "char1face": "042",
+        "text": "呼...全部解决了。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "200",
+        "char1face": "042",
+        "text": "你们三个，我有事情要问你们。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "你们知道这个世界的彩羽在哪里吗。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "姐姐？你认识姐姐吗？",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "201",
+        "char1face": "050",
+        "text": "等下，你说\"这个世界\"? 也就是说你来自其他世界？",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "100",
+        "char1face": "042",
+        "text": "请你先回答我的问题。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "char1motion": "300",
+        "char1face": "000",
+        "text": "彩羽姐姐应该在学校里上课。",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "200",
+        "char1face": "042",
+        "text": "...看来你们什么也不知道。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "我去过附中了，她不在那里。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "什么？姐姐...失踪了？",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "100",
+        "char1face": "030",
+        "text": "......不行。姐姐大人的电话也打不通。",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "char1motion": "000",
+        "char1face": "000",
+        "text": "不管怎么样，我们已经回答你了。",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "text": "你可以告诉我们发生了什么吗？",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "201",
+        "char1face": "010",
+        "text": "...好吧。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "首先，这里不是现实世界。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "欸？",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "201",
+        "char1face": "010",
+        "text": "这里是彩羽的内心世界。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "我是在御魂的帮助下才从现实世界里进到这里来的。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "其次，彩羽在一次...战斗后陷入了昏迷。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "在我进入这里之前她已经昏迷了快三天了。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "200",
+        "char1face": "010",
+        "text": "御魂告诉我，尽管彩羽在昏迷，她的彩羽的灵魂宝石却在持续消耗着能量。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "因此我来到这里，想要找到唤醒彩羽的办法。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "100700",
+        "char0motion": "000",
+        "char0face": "030",
+        "char1id": "101500",
+        "char1motion": "300",
+        "char1face": "031",
+        "char2id": "101400",
+        "char2motion": "200",
+        "char2face": "030",
+        "text": "姐姐她...",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "100700",
+        "char1id": "101500",
+        "char2id": "101400",
+        "text": "...",
+        "speakerName": "灯花",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "100700",
+        "char1id": "101500",
+        "char2id": "101400",
+        "text": "",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "100",
+        "char1face": "010",
+        "text": "看来你们还需要时间来理清现状。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "不过时间不等人，多等一分彩羽就会危险一分。我要去继续寻找线索了。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "...以及，下次碰面的时候希望我们不是敌人。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "text": "...",
+        "speakerName": "",
+        "speakerDirection": -1
+    },
+    {
+        "flag": 0,
+        "text": "（八千代离开了）",
+        "speakerName": "",
+        "speakerDirection": -1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "...",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "101400",
+        "char0motion": "300",
+        "char0face": "000",
+        "char2id": "100700",
+        "char2motion": "000",
+        "char2face": "000",
+        "text": "可疑。她说的所有话我们都没法证伪。",
+        "speakerName": "音梦",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "101400",
+        "char2id": "100700",
+        "char2motion": "100",
+        "char2face": "000",
+        "text": "是的。不过我最近也觉得这个世界有些不对劲。",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "100",
+        "char1face": "030",
+        "text": "音梦相信她刚才说的吗？",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "char1motion": "300",
+        "char1face": "000",
+        "text": "不。我希望我们自己调查这件事。",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "201",
+        "char1face": "020",
+        "text": "赞同！不过不管她说的别的什么，现在确实联系不上姐姐大人。",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "可是姐姐会在哪里呢...",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "char1motion": "000",
+        "char1face": "000",
+        "text": "我们在市内继续找找线索吧。",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "text": "如果这个世界是虚假的，一定会在哪里留下痕迹。",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "200",
+        "char1face": "020",
+        "text": "嗯，那我们出发吧！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "text": "(我也得打起精神来才行...为了尽快找到姐姐！)",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    }
+]

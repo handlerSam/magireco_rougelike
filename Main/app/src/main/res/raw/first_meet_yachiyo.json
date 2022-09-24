@@ -1,0 +1,175 @@
+[
+    {
+        "flag": 0,
+        "char1id": "100701",
+        "char1motion": "100",
+        "char1face": "050",
+        "text": " 嗯？有魔女的气息。",
+        "speakerName": "灯花",
+        "speakerDirection": 1,
+        "background":"11021"
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "200",
+        "char1face": "020",
+        "text": "在那里！有魔法少女在和魔女战斗，我们得去帮帮她！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "isChoice": 1,
+        "choose1": "拉住忧",
+        "choose1Flag": 1,
+        "choose2": "前去帮助",
+        "choose2Flag": 2
+    },
+    {
+        "flag": 1,
+        "char1id": "100701",
+        "char1motion": "201",
+        "char1face": "020",
+        "text": "忧，等等！先看看情况，不要冲动！",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "char1id": "101503",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "...欸？她两下就把魔女干掉了？",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "char0id": "101401",
+        "char0motion": "300",
+        "char0face": "000",
+        "char2id": "100701",
+        "char2motion": "000",
+        "char2face": "000",
+        "text": "强大的力量，娴熟的战斗技巧。",
+        "speakerName": "音梦",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 1,
+        "char0id": "101401",
+        "char2id": "100701",
+        "text": "看来没有我们帮忙的必要了呢。",
+        "speakerName": "音梦",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 1,
+        "char0id": "101401",
+        "char2id": "100701",
+        "char2motion": "100",
+        "char2face": "000",
+        "text": "被误会成要来抢悲叹之种就不好了。我们快走吧。",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 1,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "嗯...好吧。",
+        "speakerName": "忧",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 1,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "（那位大姐姐身上...总有种熟悉的感觉...)",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 1,
+        "char1id": "101503",
+        "text": "（是我的错觉吗？）",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "char1id": "101500",
+        "char1motion": "200",
+        "char1face": "020",
+        "text": "坚持住！我们来帮你！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "char1id": "100200",
+        "char1motion": "201",
+        "char1face": "051",
+        "text": "嗯？你们是...",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "char1id": "100200",
+        "text": "(里见灯花，柊音梦，还有一个孩子...粉头发，难道是...)",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "char1id": "101500",
+        "char1motion": "200",
+        "char1face": "020",
+        "text": "先对付魔女，其他的之后再说吧！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 2,
+        "char0id": "101401",
+        "char0motion": "000",
+        "char0face": "000",
+        "char2id": "100701",
+        "char2motion": "201",
+        "char2face": "020",
+        "text": "(音梦！你怎么不拉住忧啊！)",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 2,
+        "char0id": "101401",
+        "char2id": "100701",
+        "text": "(这人看着就不好惹...万一误会我们是来抢悲叹之种的怎么办！)",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 2,
+        "char0id": "101401",
+        "char0motion": "000",
+        "char0face": "000",
+        "char2id": "100701",
+        "text": "(忧动作太快了。你不是也没拉住她。)",
+        "speakerName": "音梦",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 2,
+        "char1id": "100200",
+        "char1motion": "200",
+        "char1face": "021",
+        "text": "嗯。我一会也有事情想问问你们。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    }
+]

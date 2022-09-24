@@ -43,40 +43,8 @@ import static com.live2d.rougelike.CharacterPlateView.MAGIA;
 
 public class BattleActivity extends AppCompatActivity {
 
-    final public static int CHARACTER_NORMAL_SIZE = 1200;
-    final public static int CHARACTER_MAGNIFIED_SIZE = 1200;
-
-    final public static int DOPPEL_NEED_MP = 1500;
-
-    final public static int PLATE_SHOW = 0;
-    final public static int SKILL_BAR_SHOW = 1;
-    final public static int MAGIA_BAR_SHOW = 2;
-
-    final public static int TEXT_RED = 0;
-    final public static int TEXT_BLUE = 1;
-    final public static int TEXT_GREEN = 2;
-
-    final public static int ACCELECOMBO = 0;
-    final public static int CHARGECOMBO = 1;
-    final public static int BLASTCOMBO = 2;
-    final public static int PUELLACOMBO = 3;
-
-    public static int winBattleCount1 = 0;
-
-    public static int winBattleCount2 = 0;
 
     public boolean isBossBattle = true;
-
-    final public static float[][] multiChargeTable = new float[][]{
-            /*ACCELE伤害*/{1.0f,1.1f,1.2f,1.3f,1.4f,1.5f,1.6f,1.7f,1.8f,1.9f,2.0f,2.1f,2.2f,2.3f,2.4f,2.5f,2.6f,2.7f,2.8f,2.9f,3.0f},
-            /*BLAST伤害*/ {1.0f,1.4f,1.7f,2.0f,2.3f,2.5f,2.7f,2.9f,3.1f,3.3f,3.5f,3.7f,3.9f,4.1f,4.3f,4.5f,4.6f,4.7f,4.8f,4.9f,5.0f},
-            /*ACCELE MP*/ {1.0f,1.3f,1.6f,1.9f,2.2f,2.5f,2.7f,2.9f,3.1f,3.3f,3.5f,3.9f,4.3f,4.7f,5.1f,5.5f,6.0f,6.5f,7.0f,7.5f,8.0f}
-    };
-
-    public static int DELTA_BETWEEN_ATTACK_AND_DAMAGE = 700;
-    public static int DELTA_BETWEEN_EFFECT_SHOW = 750;
-
-
 
     public Character[][] monsterFormation = new Character[3][3];
 
@@ -98,7 +66,7 @@ public class BattleActivity extends AppCompatActivity {
 
     public int loadedSpriteNumber = 0;
 
-    int barState = PLATE_SHOW;
+    int barState;
 
     int chooseMonsterX = -1;// 棋盘上选择了哪个monster
     int chooseMonsterY = -1;
@@ -109,13 +77,14 @@ public class BattleActivity extends AppCompatActivity {
     int monsterAttackerX = -1;
     int monsterAttackerY = -1;
 
-    static int chargeNumber = 0;
-    int enemyChargeNumber = 0;
+    int enemychargeNumber = 0;
 
     int extraMissionId;
     boolean achieveExtraMission = false;
 
-    int consumeChargeNumber = 0;
+    int consumechargeNumber = 0;
+
+    Character useDoppelCharacter = null;
 
     ColorMatrixColorFilter grayColorFilter;//用于灰度设置
     public Handler handler = new Handler(new Handler.Callback() {
@@ -181,9 +150,9 @@ public class BattleActivity extends AppCompatActivity {
                                             setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
                                             sendDamageNumber(damage,
                                                     smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
-                                                    (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c, true)>=0)? TEXT_RED:TEXT_BLUE,false,true);
+                                                    (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c, true)>=0)? global.TEXT_RED:global.TEXT_BLUE,false,true);
 
-                                            if(StartActivity.collectionDict.get("远足的传单").isOwn){
+                                            if(global.collectionDict.get("远足的传单").isOwn){
                                                 if(temp.plate == CharacterPlateView.CHARGE){
                                                     handler.postDelayed(new Runnable() {
                                                         @Override
@@ -192,7 +161,7 @@ public class BattleActivity extends AppCompatActivity {
                                                                 setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
                                                                 sendDamageNumber(damage,
                                                                         smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
-                                                                        (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c, true)>=0)? TEXT_RED:TEXT_BLUE,false,true);
+                                                                        (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c, true)>=0)? global.TEXT_RED:global.TEXT_BLUE,false,true);
                                                             }
 
                                                         }
@@ -221,7 +190,7 @@ public class BattleActivity extends AppCompatActivity {
                                                                 e2.name = e.name.substring(7);
                                                                 e2.time = e.valueTime;
                                                                 e2.value = e.value;
-                                                                if(StartActivity.collectionDict.get("\"死亡驯鹿\"").isOwn){
+                                                                if(global.collectionDict.get("\"死亡驯鹿\"").isOwn){
                                                                     e2.time *= 2;
                                                                 }
                                                                 leftEffectList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].add(e2);
@@ -265,12 +234,12 @@ public class BattleActivity extends AppCompatActivity {
                                             }
                                         }
                                         if(temp.plate == ACCELE){
-                                            consumeChargeNumber += chargeNumber;
-                                            chargeNumber = 0;
+                                            consumechargeNumber += global.chargeNumber;
+                                            global.chargeNumber = 0;
                                             updateChargeView();
                                         }
                                     }
-                                },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
+                                },global.DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                             }else if(temp.plate == CharacterPlateView.BLAST_VERTICAL || temp.plate == CharacterPlateView.BLAST_HORIZONTAL){
                                 rightCharList[c.formationX][c.formationY].spriteName = (temp.plate == CharacterPlateView.BLAST_VERTICAL)? "attackv_out":"attackh_out";
                                 changeSprite(c.formationX,c.formationY,true);
@@ -326,13 +295,13 @@ public class BattleActivity extends AppCompatActivity {
                                                     setMpOnCharacter(c, c.realMP + blastAttackMp, true);
                                                     //计算伤害
                                                     int damage = getDamage(c,sv.c,true);
-                                                    if(StartActivity.collectionDict.get("\"试刀先生\"").isOwn){
+                                                    if(global.collectionDict.get("\"试刀先生\"").isOwn){
                                                         if(attackTargetNumber == 1){
                                                             damage *= 3;
                                                         }
                                                     }
                                                     final int tempDamage = damage;
-                                                    if(StartActivity.collectionDict.get("《刀剑历史大全》").isOwn){
+                                                    if(global.collectionDict.get("《刀剑历史大全》").isOwn){
                                                             handler.postDelayed(new Runnable() {
                                                                 @Override
                                                                 public void run() {
@@ -340,7 +309,7 @@ public class BattleActivity extends AppCompatActivity {
                                                                         setDamageOnCharacter(sv.c,tempDamage,false,true);
                                                                         sendDamageNumber(tempDamage,
                                                                                 sv.c.formationX,sv.c.formationY,
-                                                                                (isRestrained(c,sv.c, true)>=0)? TEXT_RED:TEXT_BLUE,false,true);
+                                                                                (isRestrained(c,sv.c, true)>=0)? global.TEXT_RED:global.TEXT_BLUE,false,true);
 
                                                                     }
                                                                 }
@@ -350,11 +319,11 @@ public class BattleActivity extends AppCompatActivity {
                                                     if(temp.plate == CharacterPlateView.BLAST_VERTICAL){
                                                         sendDamageNumber(damage,
                                                                 i,smallPlateYList[smallPlateNumber],
-                                                                (isRestrained(c,sv.c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                                                (isRestrained(c,sv.c,true)>=0)?global.TEXT_RED:global.TEXT_BLUE,false,true);
                                                     }else{
                                                         sendDamageNumber(damage,
                                                                 smallPlateXList[smallPlateNumber],i,
-                                                                (isRestrained(c,sv.c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                                                (isRestrained(c,sv.c,true)>=0)?global.TEXT_RED:global.TEXT_BLUE,false,true);
                                                     }
 
                                                     //攻击时概率附带异常效果计算
@@ -448,23 +417,29 @@ public class BattleActivity extends AppCompatActivity {
                                             }
                                         }
                                         setMpOnCharacter(c,c.realMP,true);
-                                        consumeChargeNumber += chargeNumber;
-                                        chargeNumber = 0;
+                                        consumechargeNumber += global.chargeNumber;
+                                        global.chargeNumber = 0;
                                         updateChargeView();
                                     }
-                                },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
+                                },global.DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                             }
                             rightCharList[c.formationX][c.formationY].webView.loadUrl("javascript:setAnimationIndex(" + 2 + ")");
                         }else{
                             //是magia或者doppel
-                            final Character c = StartActivity.characters[smallPlateList[smallPlateNumber]-5];
+                            final Character c = global.characters[smallPlateList[smallPlateNumber]-5];
+
+                            if(c.realMP >= global.DOPPEL_NEED_MP){
+                                //说明是Doppel
+                                useDoppelCharacter = c;
+                            }
+
                             int waitTime = 0;
-                            final ArrayList<SkillEffect> effectList = (c.realMP >= DOPPEL_NEED_MP)? c.doppelEffectList:((c.star == 5)?c.magiaAfterEffectList:c.magiaOriginEffectList);
+                            final ArrayList<SkillEffect> effectList = (c.realMP >= global.DOPPEL_NEED_MP)? c.doppelEffectList:((c.star == 5)?c.magiaAfterEffectList:c.magiaOriginEffectList);
                             if(effectList.size() > 0){
                                 for(int i = 0; i < effectList.size(); i++){
                                     final int tempI = i;
                                     if(effectList.get(tempI).target.equals("敌单") || effectList.get(tempI).target.equals("敌全")){
-                                        waitTime += DELTA_BETWEEN_EFFECT_SHOW;
+                                        waitTime += global.DELTA_BETWEEN_EFFECT_SHOW;
                                     }
                                     handler.postDelayed(new Runnable() {
                                         @Override
@@ -500,7 +475,7 @@ public class BattleActivity extends AppCompatActivity {
                                 setDamageOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,damage,false,true);
                                 sendDamageNumber(damage,
                                         smallPlateXList[smallPlateNumber],smallPlateYList[smallPlateNumber],
-                                        (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                        (isRestrained(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,true)>=0)?global.TEXT_RED:global.TEXT_BLUE,false,true);
                                 if(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realHP > 0){
                                     int defendMP = getDefendMP(c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,false);
                                     setMpOnCharacter(leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c,leftCharList[smallPlateXList[smallPlateNumber]][smallPlateYList[smallPlateNumber]].c.realMP+defendMP,false);
@@ -522,7 +497,7 @@ public class BattleActivity extends AppCompatActivity {
                                             setDamageOnCharacter(leftCharList[i][j].c,damage,false,true);
                                             sendDamageNumber(damage,
                                                     i,j,
-                                                    (isRestrained(c,leftCharList[i][j].c,true)>=0)?TEXT_RED:TEXT_BLUE,false,true);
+                                                    (isRestrained(c,leftCharList[i][j].c,true)>=0)?global.TEXT_RED:global.TEXT_BLUE,false,true);
                                             if(leftCharList[i][j].c.realHP > 0){
                                                 int defendMP = getDefendMP(c,leftCharList[i][j].c,false);
                                                 setMpOnCharacter(leftCharList[i][j].c,leftCharList[i][j].c.realMP+defendMP,false);
@@ -537,19 +512,19 @@ public class BattleActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-                            if(StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP >= DOPPEL_NEED_MP){
+                            if(global.characters[smallPlateList[smallPlateNumber]-5].realMP >= global.DOPPEL_NEED_MP){
                                 //说明是Dp
-                                if(StartActivity.collectionDict.get("甜酒").isOwn){
-                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
+                                if(global.collectionDict.get("甜酒").isOwn){
+                                    global.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
                                 }else{
-                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= DOPPEL_NEED_MP;
+                                    global.characters[smallPlateList[smallPlateNumber]-5].realMP -= global.DOPPEL_NEED_MP;
                                 }
                             }else{
-                                if(StartActivity.collectionDict.get("汽水巧克力豆").isOwn){
-                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 750;
+                                if(global.collectionDict.get("汽水巧克力豆").isOwn){
+                                    global.characters[smallPlateList[smallPlateNumber]-5].realMP -= 750;
                                 }else{
 
-                                    StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
+                                    global.characters[smallPlateList[smallPlateNumber]-5].realMP -= 1000;
                                 }
                             }
                             setMpOnCharacter(c,c.realMP,true);
@@ -599,15 +574,15 @@ public class BattleActivity extends AppCompatActivity {
                                                 }
                                             },waitTime+200);
                                             if(effectList.get(tempI).target.equals("自") || effectList.get(tempI).target.equals("己全")){
-                                                waitTime += DELTA_BETWEEN_EFFECT_SHOW;
+                                                waitTime += global.DELTA_BETWEEN_EFFECT_SHOW;
                                             }
                                         }
                                     }
                                 }
-                            },waitTime+DELTA_BETWEEN_EFFECT_SHOW);
+                            },waitTime+global.DELTA_BETWEEN_EFFECT_SHOW);
 
                             //判断藏品效果
-                            if(StartActivity.collectionDict.get("小型的收藏盒").isOwn){
+                            if(global.collectionDict.get("小型的收藏盒").isOwn){
                                 for(int i = 0; i < 3; i++){
                                     for(int j = 0; j < 3; j++){
                                         ArrayList<Effect> efList = rightEffectList[i][j];
@@ -618,7 +593,7 @@ public class BattleActivity extends AppCompatActivity {
                                 }
                             }
                             //判断额外任务
-                            ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+                            ExtraMission em = global.extraMissionList.get(extraMissionId);
                             if(em.name.equals("释放一次Magia")){
                                 achieveExtraMission = true;
                             }
@@ -638,7 +613,7 @@ public class BattleActivity extends AppCompatActivity {
                     }
                     smallPlateNumber++;
                     if(smallPlateNumber < 3){
-                        Character c = (smallPlateList[smallPlateNumber] > 4)? StartActivity.characters[smallPlateList[smallPlateNumber]-5]:plateList[smallPlateList[smallPlateNumber]].c;
+                        Character c = (smallPlateList[smallPlateNumber] > 4)? global.characters[smallPlateList[smallPlateNumber]-5]:plateList[smallPlateList[smallPlateNumber]].c;
                         boolean tempIsCharacterAlive = c.realHP > 0;
                         while(smallPlateNumber < 3 && !tempIsCharacterAlive){
                             smallPlateNumber++;
@@ -667,17 +642,17 @@ public class BattleActivity extends AppCompatActivity {
                     magnifyCharacter(true);
                     int characterNumber = 0;
                     for(int i = 0; i < 5; i++){
-                        if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
+                        if(global.characters[i] != null && global.characters[i].realHP > 0){
                             characterNumber++;
                         }
                     }
                     int chooseCharacter = (int)(Math.random()*characterNumber);
                     int tempCount = 0;
                     for(int i = 0; i < 5; i++){
-                        if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
+                        if(global.characters[i] != null && global.characters[i].realHP > 0){
                             if(tempCount == chooseCharacter){
-                                int tempX = StartActivity.characters[i].formationX;
-                                int tempY = StartActivity.characters[i].formationY;
+                                int tempX = global.characters[i].formationX;
+                                int tempY = global.characters[i].formationY;
                                 //挑拨判定
                                 Character newTarget = judgeProvocation(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[tempX][tempY].c,false);
                                 if(newTarget != null){
@@ -715,10 +690,10 @@ public class BattleActivity extends AppCompatActivity {
                                                 setDamageOnCharacter(rightCharList[x][y].c,damage,true,true);
                                                 sendDamageNumber(damage,
                                                         x,y,
-                                                        (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c,false)>=0)?TEXT_RED:TEXT_BLUE,true,true);
+                                                        (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c,false)>=0)?global.TEXT_RED:global.TEXT_BLUE,true,true);
 
                                                 //藏品效果
-                                                if(StartActivity.collectionDict.get("饿肚子模小型").isOwn){
+                                                if(global.collectionDict.get("饿肚子模小型").isOwn){
                                                     if(colorToss(25)){
                                                         for(int i = 0; i < rightCharList[x][y].c.memoriaList.length; i++){
                                                             Memoria m = rightCharList[x][y].c.memoriaList[i];
@@ -778,10 +753,10 @@ public class BattleActivity extends AppCompatActivity {
                                             }
 
                                             if(monsterPlate == CharacterPlateView.CHARGE){
-                                                enemyChargeNumber++;
-                                                enemyChargeNumber = Math.min(20,enemyChargeNumber);
+                                                enemychargeNumber++;
+                                                enemychargeNumber = Math.min(20,enemychargeNumber);
                                             }else{
-                                                enemyChargeNumber = 0;
+                                                enemychargeNumber = 0;
                                             }
                                             if(rightCharList[x][y].c.realHP > 0){
                                                 int defendMP = getDefendMP(leftCharList[monsterAttackerX][monsterAttackerY].c,rightCharList[x][y].c,true);
@@ -793,7 +768,7 @@ public class BattleActivity extends AppCompatActivity {
                                                 }
                                             }
                                         }
-                                    },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
+                                    },global.DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                                 }else if(monsterPlate == CharacterPlateView.BLAST_VERTICAL || monsterPlate == CharacterPlateView.BLAST_HORIZONTAL){
                                     if(!isBossBattle){
                                         leftCharList[monsterAttackerX][monsterAttackerY].spriteName = (monsterPlate == CharacterPlateView.BLAST_VERTICAL)?"attackv_out":"attackh_out";
@@ -847,13 +822,13 @@ public class BattleActivity extends AppCompatActivity {
                                                         int damage = getDamage(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false);
                                                         setDamageOnCharacter(sv.c, damage, true,true);
                                                         if ((monsterPlate == CharacterPlateView.BLAST_VERTICAL)) {
-                                                            sendDamageNumber(damage, i, y, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false) >= 0)?TEXT_RED:TEXT_BLUE, true, true);
+                                                            sendDamageNumber(damage, i, y, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false) >= 0)?global.TEXT_RED:global.TEXT_BLUE, true, true);
                                                         } else {
-                                                            sendDamageNumber(damage, x, i, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false) >= 0)?TEXT_RED:TEXT_BLUE, true, true);
+                                                            sendDamageNumber(damage, x, i, (isRestrained(leftCharList[monsterAttackerX][monsterAttackerY].c, sv.c, false) >= 0)?global.TEXT_RED:global.TEXT_BLUE, true, true);
                                                         }
 
                                                         //藏品效果
-                                                        if(StartActivity.collectionDict.get("饿肚子模小型").isOwn){
+                                                        if(global.collectionDict.get("饿肚子模小型").isOwn){
                                                             if(colorToss(25)){
                                                                 for(int j = 0; j < sv.c.memoriaList.length; j++){
                                                                     Memoria m = sv.c.memoriaList[j];
@@ -929,7 +904,7 @@ public class BattleActivity extends AppCompatActivity {
                                                         }
                                                     }
 
-                                                    enemyChargeNumber = 0;
+                                                    enemychargeNumber = 0;
                                                     if(sv.c.realHP > 0){
                                                         int defendMP = getDefendMP(leftCharList[monsterAttackerX][monsterAttackerY].c,sv.c,true);
                                                         setMpOnCharacter(sv.c,sv.c.realMP+defendMP,true);
@@ -947,7 +922,7 @@ public class BattleActivity extends AppCompatActivity {
                                             }
                                             setMpOnCharacter(leftCharList[monsterAttackerX][monsterAttackerY].c,leftCharList[monsterAttackerX][monsterAttackerY].c.realMP,false);
                                         }
-                                    },DELTA_BETWEEN_ATTACK_AND_DAMAGE);
+                                    },global.DELTA_BETWEEN_ATTACK_AND_DAMAGE);
                                 }
                                 if(!isBossBattle){
                                     //对某些角色，限制其动画播放时间
@@ -1091,7 +1066,7 @@ public class BattleActivity extends AppCompatActivity {
     StrokeTextView charge_number_view;
     ImageView charge_frame;
     Plate[] plateList = new Plate[]{null,null,null,null,null};
-    int[] smallPlateList = new int[]{-1,-1,-1}; // 对应plateList的下标,当值>4时说明是m/d盘，是StartActivity.characters[值-4]个角色的M/D盘
+    int[] smallPlateList = new int[]{-1,-1,-1}; // 对应plateList的下标,当值>4时说明是m/d盘，是global.characters[值-4]个角色的M/D盘
     int[] smallPlateXList = new int[]{-1,-1,-1}; // 被攻击者的位置X
     int[] smallPlateYList = new int[]{-1,-1,-1}; // 被攻击者的位置Y
     Character[] smallPlateConnectToList = new Character[]{null, null, null}; // 记录小盘子的连携情况
@@ -1151,11 +1126,14 @@ public class BattleActivity extends AppCompatActivity {
     ImageView[] skillCharacter = new ImageView[5];
     ImageView[][] skill_ = new ImageView[5][2];
 
+    Global global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle);
+        global = (Global)getApplicationContext();
+
         findView();
         initView();
     }
@@ -1252,47 +1230,51 @@ public class BattleActivity extends AppCompatActivity {
         //    }
         //});
 
+        barState = global.PLATE_SHOW;
+
         //设置战斗背景
         BattleInfo bi;
         boolean isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
         if(isRandomBattle){
-            bi = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
+            bi = global.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
         }else{
-            bi = StartActivity.battleInfoList.get(getIntent().getIntExtra("battleInfo",0));
+            bi = global.battleInfoList.get(getIntent().getIntExtra("battleInfo",0));
             for(int i = 0; i < bi.monsterList.size(); i++){
                 Character c = bi.monsterList.get(i);
-                if(StartActivity.gameTime < 8.01f){
+                if(global.gameTime < 8.01f){
                     c.lv = 1;
-                }else if(StartActivity.gameTime < 10.01f){
+                }else if(global.gameTime < 10.01f){
                     c.lv = 20;
-                }else if(StartActivity.gameTime < 12.01f){
+                }else if(global.gameTime < 12.01f){
                     c.lv = 40;
-                }else if(StartActivity.gameTime < 14.01f){
+                }else if(global.gameTime < 14.01f){
                     c.lv = 60;
-                }else if(StartActivity.gameTime < 16.01f){
+                }else if(global.gameTime < 16.01f){
                     c.lv = 80;
-                }else if(StartActivity.gameTime < 18.01f){
+                }else if(global.gameTime < 18.01f){
                     c.lv = 100;
                 }
-                c.updateAttributionBasedOnLv();
-                c.realHP = c.HP;
+                if(c.spriteName.equals("Mitsuki Felicia") || c.spriteName.equals("Natsume Kako") || c.spriteName.equals("Mikuri Ayame")){
+                    c.updateAttributionBasedOnLv();
+                    c.realHP = c.HP;
+                }
             }
         }
         if(bi.backgroundType == BattleInfo.JUNCTION){
-            underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
-            backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
-            backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            underlay.setImageResource(global.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(global.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(global.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
         }else if(bi.backgroundType == BattleInfo.DAY){
-            underlay.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
-            backgroundLeft.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
-            backgroundRight.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            underlay.setImageResource(global.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(global.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(global.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
         }
 
         //加载额外任务
         if(isRandomBattle){
-            extraMissionId = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi.extraMissionId;
+            extraMissionId = global.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi.extraMissionId;
         }else{
-            extraMissionId = (int)(Math.random()*StartActivity.extraMissionList.size());
+            extraMissionId = (int)(Math.random()*global.extraMissionList.size());
         }
 
 
@@ -1335,7 +1317,7 @@ public class BattleActivity extends AppCompatActivity {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if(clickable){
-                        if(barState == PLATE_SHOW){
+                        if(barState == global.PLATE_SHOW){
                             switch(event.getAction()){
                                 case MotionEvent.ACTION_UP:
                                     if(!isDrag){
@@ -1406,7 +1388,7 @@ public class BattleActivity extends AppCompatActivity {
                                     }
                                     break;
                             }
-                        }else if(barState == MAGIA_BAR_SHOW){
+                        }else if(barState == global.MAGIA_BAR_SHOW){
                             switch(event.getAction()){
                                 case MotionEvent.ACTION_UP:
                                     if(smallPlateNumber < 3){
@@ -1530,14 +1512,14 @@ public class BattleActivity extends AppCompatActivity {
         magiaPlate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(barState == PLATE_SHOW){
-                    barState = MAGIA_BAR_SHOW;
+                if(barState == global.PLATE_SHOW){
+                    barState = global.MAGIA_BAR_SHOW;
                     showPlate();
                     magiaPlate.setBackgroundResource(R.drawable.magia_plate_back);
                     skillPlate.setVisibility(INVISIBLE);
                 }else{
                     //收起magiaPlate栏
-                    barState = PLATE_SHOW;
+                    barState = global.PLATE_SHOW;
                     magiaPlate.setBackgroundResource(R.drawable.magia_plate);
                     skillPlate.setVisibility(VISIBLE);
                     showPlate();
@@ -1547,25 +1529,25 @@ public class BattleActivity extends AppCompatActivity {
 
 
 
-        StartActivity.clearCharBattleInfo();//重置行动盘积累数和顺序
+        global.clearCharBattleInfo();//重置行动盘积累数和顺序
 
         //技能栏设置
         skillPlate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(clickable){
-                    if(barState == PLATE_SHOW){
+                    if(barState == global.PLATE_SHOW){
                         //展开技能栏
-                        barState = SKILL_BAR_SHOW;
+                        barState = global.SKILL_BAR_SHOW;
                         showPlate();
                         skillPlate.setBackgroundResource(R.drawable.skill_plate_back);
                         characterPlatesLayout.setVisibility(GONE);
                         skillBar.setVisibility(VISIBLE);
                         magiaPlate.setVisibility(INVISIBLE);
                         for(int i = 0; i < 5; i++){
-                            if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
+                            if(global.characters[i] != null && global.characters[i].realHP > 0){
                                 skillLayout[i].setVisibility(VISIBLE);
-                                Character c = StartActivity.characters[i];
+                                Character c = global.characters[i];
                                 skillCharacter[i].setBackgroundResource(getImageByString(c.charIconImage+"s"));
                                 int memoriaNumber = 0;
                                 Memoria m1 = null;
@@ -1627,9 +1609,9 @@ public class BattleActivity extends AppCompatActivity {
                                 skillLayout[i].setVisibility(INVISIBLE);
                             }
                         }
-                    }else if(barState == SKILL_BAR_SHOW){
+                    }else if(barState == global.SKILL_BAR_SHOW){
                         //收起技能栏
-                        barState = PLATE_SHOW;
+                        barState = global.PLATE_SHOW;
                         showPlate();
                         skillPlate.setBackgroundResource(R.drawable.skill_plate);
                         characterPlatesLayout.setVisibility(VISIBLE);
@@ -1661,20 +1643,20 @@ public class BattleActivity extends AppCompatActivity {
 
         //角色被动记忆效果添加
         for(int i = 0; i < 5; i++){
-            if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0) {
+            if(global.characters[i] != null && global.characters[i].realHP > 0) {
                 for(int j = 0; j < 4; j++){
-                    Memoria m = StartActivity.characters[i].memoriaList[j];
+                    Memoria m = global.characters[i].memoriaList[j];
                     if(m != null && !m.isSkill()){
                         //说明是被动记忆
-                        for(SkillEffect se : (StartActivity.characters[i].breakThrough == 4? m.effectAfterList:m.effectOriginList)){
+                        for(SkillEffect se : (global.characters[i].breakThrough == 4? m.effectAfterList:m.effectOriginList)){
                             Effect e = convertSkillEffectToEffect(se, 0);
                             if (e != null){
                                 switch(e.name){
                                         case "以MP积累状态开始战斗":
-                                            setMpOnCharacter(StartActivity.characters[i],(int)(1.0f*e.value*StartActivity.characters[i].getMaxMp()/100),true);
+                                            setMpOnCharacter(global.characters[i],(int)(1.0f*e.value*global.characters[i].getMaxMp()/100),true);
                                             break;
                                     default:
-                                        rightEffectList[StartActivity.characters[i].formationX][StartActivity.characters[i].formationY].add(e);
+                                        rightEffectList[global.characters[i].formationX][global.characters[i].formationY].add(e);
                                 }
                             }
                         }
@@ -1684,7 +1666,7 @@ public class BattleActivity extends AppCompatActivity {
         }
 
         //阵形效果添加
-        Formation f = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
+        Formation f = global.formationList.get(global.usingFormationId);
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 if(f.gridAllEffectList[i][j].size() > 0 && rightEffectList[i][j] != null && rightCharList[i][j].c.realHP > 0){
@@ -1709,7 +1691,7 @@ public class BattleActivity extends AppCompatActivity {
         skillDetailCD.setText(""+(characterMemoria[c][skill].breakthrough == 4? characterMemoria[c][skill].CDAfter:characterMemoria[c][skill].CDOrigin));
         skillDetailDescription.setText(characterMemoria[c][skill].getEffectDescription());
         skillDetailLayout.setVisibility(VISIBLE);
-        if(characterMemoria[c][skill].CDNow == 0 && !hasAbnormalState(rightEffectList[StartActivity.characters[c].formationX][StartActivity.characters[c].formationY],new String[]{"技能封印"})){
+        if(characterMemoria[c][skill].CDNow == 0 && !hasAbnormalState(rightEffectList[global.characters[c].formationX][global.characters[c].formationY],new String[]{"技能封印"})){
             final Memoria m = characterMemoria[c][skill];
             final int tempC = c;
             final int tempSkill = skill;
@@ -1729,7 +1711,7 @@ public class BattleActivity extends AppCompatActivity {
                         skill_[tempC][tempSkill].setImageResource(getImageByString(characterMemoria[tempC][tempSkill].icon));
                         setCharacterSkillTime(tempC,tempSkill,characterMemoria[tempC][tempSkill].CDNow);
 
-                        final Character c = StartActivity.characters[tempC];
+                        final Character c = global.characters[tempC];
                         rightCharList[c.formationX][c.formationY].spriteName = "activate";
                         changeSprite(c.formationX,c.formationY,true);
                         for(int i = 0; i < (m.breakthrough == 4? m.effectAfterList.size():m.effectOriginList.size()); i++){
@@ -1820,13 +1802,13 @@ public class BattleActivity extends AppCompatActivity {
                                         }, 1500);
                                     }
                                 }
-                            }, DELTA_BETWEEN_EFFECT_SHOW*(i+1));
+                            }, global.DELTA_BETWEEN_EFFECT_SHOW*(i+1));
                         }
 
-                        if(StartActivity.collectionDict.get("一盒草莓牛奶").isOwn){
+                        if(global.collectionDict.get("一盒草莓牛奶").isOwn){
                             int recoverHP = (int)(1.0f*(rightCharList[c.formationX][c.formationY].c.getRealMaxHP())*0.05f);
                             setDamageOnCharacter(rightCharList[c.formationX][c.formationY].c,-recoverHP,true,false);
-                            sendDamageNumber(recoverHP,c.formationX,c.formationY,TEXT_GREEN,true,false);
+                            sendDamageNumber(recoverHP,c.formationX,c.formationY,global.TEXT_GREEN,true,false);
                         }
                     }
                 }
@@ -1839,14 +1821,14 @@ public class BattleActivity extends AppCompatActivity {
     }
 
     public void loadCharacter(){
-        Formation formation = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
+        Formation formation = global.formationList.get(global.usingFormationId);
         BattleInfo bi;
         Intent receivedIntent = getIntent();
         boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",false);
         if(isRandomBattle){
-            bi = MapActivity.mpEvent.get(receivedIntent.getIntExtra("battleInfo",-1)).bi;
+            bi = global.mpEvent.get(receivedIntent.getIntExtra("battleInfo",-1)).bi;
         }else{
-            bi = StartActivity.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
+            bi = global.battleInfoList.get(receivedIntent.getIntExtra("battleInfo",0));
         }
 
         monsterFormation = bi.monsterFormation;
@@ -1856,53 +1838,53 @@ public class BattleActivity extends AppCompatActivity {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 if(formation.grid[i][j] >= 1){
-                    if(StartActivity.characters[count] != null && StartActivity.characters[count].realHP > 0){
-                        StartActivity.characters[count].formationX = i;
-                        StartActivity.characters[count].formationY = j;
+                    if(global.characters[count] != null && global.characters[count].realHP > 0){
+                        global.characters[count].formationX = i;
+                        global.characters[count].formationY = j;
                         createNewSprite(i,j, true,false);
-                        rightCharList[i][j].charName = StartActivity.characters[count].spriteName;
+                        rightCharList[i][j].charName = global.characters[count].spriteName;
                         rightCharList[i][j].spriteName = "wait";
                         rightCharList[i][j].prefix = "mini_";
-                        rightCharList[i][j].c = StartActivity.characters[count];
+                        rightCharList[i][j].c = global.characters[count];
                         rightStateBarList[i][j].updateHp(rightCharList[i][j].c.getRealMaxHP(),rightCharList[i][j].c.realHP);
                         rightStateBarList[i][j].updateMp(rightCharList[i][j].c.realMP);
-                        rightStateBarList[i][j].setAttr(StartActivity.characters[count].element);
+                        rightStateBarList[i][j].setAttr(global.characters[count].element);
 //                        rightEffectList[i][j] = new ArrayList<>();
-                        rightEffectList[i][j] = StartActivity.characters[count].initialEffectList;
-                        if(StartActivity.collectionDict.get("南凪海双人观光券").isOwn){
+                        rightEffectList[i][j] = global.characters[count].initialEffectList;
+                        if(global.collectionDict.get("南凪海双人观光券").isOwn){
                             rightEffectList[i][j].add(new Effect("异常状态耐性UP",15,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("三个黄铜戒指").isOwn){
+                        if(global.collectionDict.get("三个黄铜戒指").isOwn){
                             rightEffectList[i][j].add(new Effect("防御力UP",15,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("鲸鱼先生的菜刀").isOwn){
+                        if(global.collectionDict.get("鲸鱼先生的菜刀").isOwn){
                             rightEffectList[i][j].add(new Effect("攻击力UP",15,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("日本刀的拓片").isOwn){
+                        if(global.collectionDict.get("日本刀的拓片").isOwn){
                             rightEffectList[i][j].add(new Effect("造成伤害UP",15,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("防御力很低的泳装").isOwn){
+                        if(global.collectionDict.get("防御力很低的泳装").isOwn){
                             rightEffectList[i][j].add(new Effect("回避",0,1,75,0));
                         }
-                        if(StartActivity.collectionDict.get("超高级的体重计").isOwn){
-                            rightEffectList[i][j].add(new Effect("防御力UP",winBattleCount1,999,100,0));
+                        if(global.collectionDict.get("超高级的体重计").isOwn){
+                            rightEffectList[i][j].add(new Effect("防御力UP",global.winBattleCount1,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("从未间断的日记").isOwn){
-                            rightEffectList[i][j].add(new Effect("攻击力UP",winBattleCount2,999,100,0));
+                        if(global.collectionDict.get("从未间断的日记").isOwn){
+                            rightEffectList[i][j].add(new Effect("攻击力UP",global.winBattleCount2,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("12色彩色铅笔套装").isOwn){
+                        if(global.collectionDict.get("12色彩色铅笔套装").isOwn){
                             int characterNumber = 0;
-                            for(int k = 0; k < StartActivity.characters.length; k++){
-                                if(StartActivity.characters[k] != null){
+                            for(int k = 0; k < global.characters.length; k++){
+                                if(global.characters[k] != null){
                                     characterNumber++;
                                 }
                             }
                             rightEffectList[i][j].add(new Effect("造成伤害UP",characterNumber*12,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("神滨传闻档案").isOwn){
+                        if(global.collectionDict.get("神滨传闻档案").isOwn){
                             int characterNumber = 0;
-                            for(int k = 0; k < StartActivity.characters.length; k++){
-                                if(StartActivity.characters[k] != null){
+                            for(int k = 0; k < global.characters.length; k++){
+                                if(global.characters[k] != null){
                                     characterNumber++;
                                 }
                             }
@@ -1911,13 +1893,13 @@ public class BattleActivity extends AppCompatActivity {
                                 rightEffectList[i][j].add(new Effect("防御力UP",50,999,100,0));
                             }
                         }
-                        if(StartActivity.collectionDict.get("歌词笔记本").isOwn){
+                        if(global.collectionDict.get("歌词笔记本").isOwn){
                             rightEffectList[i][j].add(new Effect("异常状态耐性UP",25,999,100,0));
                         }
-                        if(StartActivity.collectionDict.get("卡通巧克力").isOwn){
+                        if(global.collectionDict.get("卡通巧克力").isOwn){
                             int characterNumber = 0;
-                            for(int k = 0; k < StartActivity.characters.length; k++){
-                                if(StartActivity.characters[k] != null){
+                            for(int k = 0; k < global.characters.length; k++){
+                                if(global.characters[k] != null){
                                     characterNumber++;
                                 }
                             }
@@ -1928,29 +1910,29 @@ public class BattleActivity extends AppCompatActivity {
                             @Override
                             public boolean onLongClick(View v) {
                                 if(clickable){
-                                    effectDetailCharAttr.setBackgroundResource(getImageByString(StartActivity.characters[tempCount].element));
-                                    effectDetailCharName.setText(StartActivity.characters[tempCount].name);
-                                    effectDetailHP.setText(StartActivity.characters[tempCount].realHP + "/" + StartActivity.characters[tempCount].getRealMaxHP());
-                                    int realHp = StartActivity.characters[tempCount].realHP;
-                                    if(((int)(1.0f*realHp/StartActivity.characters[tempCount].getRealMaxHP()*240)) <= 0){
+                                    effectDetailCharAttr.setBackgroundResource(getImageByString(global.characters[tempCount].element));
+                                    effectDetailCharName.setText(global.characters[tempCount].name);
+                                    effectDetailHP.setText(global.characters[tempCount].realHP + "/" + global.characters[tempCount].getRealMaxHP());
+                                    int realHp = global.characters[tempCount].realHP;
+                                    if(((int)(1.0f*realHp/global.characters[tempCount].getRealMaxHP()*240)) <= 0){
                                         effectDetailHPBar.setVisibility(INVISIBLE);
                                     }else{
                                         effectDetailHPBar.setVisibility(VISIBLE);
                                         ConstraintLayout.LayoutParams p = (ConstraintLayout.LayoutParams) effectDetailHPBar.getLayoutParams();
-                                        p.width = (int)(1.0f*realHp/StartActivity.characters[tempCount].getRealMaxHP()*240);
+                                        p.width = (int)(1.0f*realHp/global.characters[tempCount].getRealMaxHP()*240);
                                         effectDetailHPBar.setLayoutParams(p);
                                     }
                                     effectDetailEffectList.removeAllViews();
-                                    if(rightEffectList[StartActivity.characters[tempCount].formationX][StartActivity.characters[tempCount].formationY].size() > 0){
-                                        for(int i = 0; i < rightEffectList[StartActivity.characters[tempCount].formationX][StartActivity.characters[tempCount].formationY].size(); i++){
-                                            Effect e = rightEffectList[StartActivity.characters[tempCount].formationX][StartActivity.characters[tempCount].formationY].get(i);
+                                    if(rightEffectList[global.characters[tempCount].formationX][global.characters[tempCount].formationY].size() > 0){
+                                        for(int i = 0; i < rightEffectList[global.characters[tempCount].formationX][global.characters[tempCount].formationY].size(); i++){
+                                            Effect e = rightEffectList[global.characters[tempCount].formationX][global.characters[tempCount].formationY].get(i);
                                             EffectDetailLayout edl = new EffectDetailLayout(BattleActivity.this,e);
                                             effectDetailEffectList.addView(edl);
                                         }
                                     }
                                     for(int i = 0; i < 3; i++){
                                         for(int j = 0; j < 3; j++){
-                                            if(StartActivity.characters[tempCount].formationX == i && StartActivity.characters[tempCount].formationY == j){
+                                            if(global.characters[tempCount].formationX == i && global.characters[tempCount].formationY == j){
                                                 formation_[i][j].setImageResource(R.drawable.red_block);
                                             }else{
                                                 formation_[i][j].setImageResource(R.drawable.empty_block);
@@ -1982,13 +1964,13 @@ public class BattleActivity extends AppCompatActivity {
                     }
                     leftEffectList[i][j] = monsterFormation[i][j].initialEffectList;
 
-                    if(StartActivity.collectionDict.get("漫画\"侦探少女女仆梅伊\"").isOwn){
+                    if(global.collectionDict.get("漫画\"侦探少女女仆梅伊\"").isOwn){
                         leftEffectList[i][j].add(new Effect("异常状态耐性DOWN", 25,999,100,0));
                     }
-                    if(StartActivity.collectionDict.get("杰克死亡之镰").isOwn){
+                    if(global.collectionDict.get("杰克死亡之镰").isOwn){
                         leftEffectList[i][j].add(new Effect("造成伤害DOWN", 20,999,100,0));
                     }
-                    if(StartActivity.collectionDict.get("\"占卜结果\"").isOwn){
+                    if(global.collectionDict.get("\"占卜结果\"").isOwn){
                         if(!isBossBattle){
                             leftEffectList[i][j].add(new Effect("毒", 5,3,100,0));
                         }else if(i == 1 && j == 1){
@@ -2050,12 +2032,12 @@ public class BattleActivity extends AppCompatActivity {
             }
         }
 
-        if(StartActivity.collectionDict.get("巧克力戒指").isOwn){
-            for(int i = 0; i < StartActivity.characters.length; i++){
-                Character c = StartActivity.characters[i];
+        if(global.collectionDict.get("巧克力戒指").isOwn){
+            for(int i = 0; i < global.characters.length; i++){
+                Character c = global.characters[i];
                 if(c != null){
-                    for(int j = 0; j < StartActivity.characters.length; j++){
-                        Character tempC = StartActivity.characters[j];
+                    for(int j = 0; j < global.characters.length; j++){
+                        Character tempC = global.characters[j];
                         if(tempC != null && i != j){
                             if(Math.abs(c.formationX - tempC.formationX) + Math.abs(c.formationY - tempC.formationY) <= 1){
                                 rightEffectList[c.formationX][c.formationY].add(new Effect("防御力UP",25,999,100,0));
@@ -2072,16 +2054,16 @@ public class BattleActivity extends AppCompatActivity {
         //返回false时说明没有可行动角色
         ArrayList<Character> chosenCharacterList = new ArrayList<>();
         for(int i = 0; i < 5; i++){
-            Character c = StartActivity.characters[i];
+            Character c = global.characters[i];
             if(c != null && c.realHP > 0 && !hasAbnormalState(rightEffectList[c.formationX][c.formationY],new String[]{"魅惑","眩晕","拘束"})){
-                chosenCharacterList.add(StartActivity.characters[i]);
+                chosenCharacterList.add(global.characters[i]);
             }
         }
         if(chosenCharacterList.size() == 0){
             //说明没有可行动角色
             return false;
         }
-        if(StartActivity.collectionDict.get("\"正史的断章\"").isOwn){
+        if(global.collectionDict.get("\"正史的断章\"").isOwn){
             if(chosenCharacterList.size() > 2){
                 Collections.shuffle(chosenCharacterList);
                 while(chosenCharacterList.size() > 2){
@@ -2139,13 +2121,13 @@ public class BattleActivity extends AppCompatActivity {
     }
 
     public void showPlate(){
-        if(barState == MAGIA_BAR_SHOW){
+        if(barState == global.MAGIA_BAR_SHOW){
             for(int i = 0; i < charPlateViewList.length; i++){
                 charPlateViewList[i].cancelShader();
-                if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
-                    if(StartActivity.characters[i].realMP >= 1000 && !hasAbnormalState(rightEffectList[StartActivity.characters[i].formationX][StartActivity.characters[i].formationY],new String[]{"magia封印"})){
+                if(global.characters[i] != null && global.characters[i].realHP > 0){
+                    if(global.characters[i].realMP >= 1000 && !hasAbnormalState(rightEffectList[global.characters[i].formationX][global.characters[i].formationY],new String[]{"magia封印"})){
                         charPlateViewList[i].setVisibility(VISIBLE);
-                        charPlateViewList[i].setPlate(StartActivity.characters[i],(StartActivity.characters[i].realMP >= DOPPEL_NEED_MP)? DOPPEL:MAGIA);
+                        charPlateViewList[i].setPlate(global.characters[i],(global.characters[i].realMP >= global.DOPPEL_NEED_MP)? DOPPEL:MAGIA);
                     }else{
                         charPlateViewList[i].setVisibility(INVISIBLE);
                     }
@@ -2162,11 +2144,11 @@ public class BattleActivity extends AppCompatActivity {
         }
 
         for(int i = 0; i < smallPlateList.length; i++){
-            if(barState == PLATE_SHOW){
+            if(barState == global.PLATE_SHOW){
                 if(smallPlateList[i] <= 4 && smallPlateList[i] != -1){
                     charPlateViewList[smallPlateList[i]].setShader();
                 }
-            }else if(barState == MAGIA_BAR_SHOW){
+            }else if(barState == global.MAGIA_BAR_SHOW){
                 if(smallPlateList[i] > 4){
                     charPlateViewList[smallPlateList[i] - 5].setShader();
                 }
@@ -2181,11 +2163,11 @@ public class BattleActivity extends AppCompatActivity {
             if(connectArrowView[i].getAnimation() != null){
                 connectArrowView[i].getAnimation().setAnimationListener(null);
                 connectArrowView[i].clearAnimation();
-                if(barState == MAGIA_BAR_SHOW || barState == SKILL_BAR_SHOW){
+                if(barState == global.MAGIA_BAR_SHOW || barState == global.SKILL_BAR_SHOW){
                     connectArrowView[i].setVisibility(INVISIBLE);
                 }
             }
-            if(barState == PLATE_SHOW){
+            if(barState == global.PLATE_SHOW){
                 if(plateList[i].c.diamondNumber == 3){
                     for(int j = 0; j < smallPlateList.length; j++){
                         if(smallPlateList[j] != -1 && smallPlateConnectToList[j] != null && smallPlateList[j] <= 4 && smallPlateConnectToList[j].realHP > 0){
@@ -2237,16 +2219,16 @@ public class BattleActivity extends AppCompatActivity {
             }
             SpriteViewer sp = new SpriteViewer(this, false);
             sp.setZ(x);
-            ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(CHARACTER_NORMAL_SIZE,CHARACTER_NORMAL_SIZE);
+            ConstraintLayout.LayoutParams p = new ConstraintLayout.LayoutParams(global.CHARACTER_NORMAL_SIZE,global.CHARACTER_NORMAL_SIZE);
             sp.setLayoutParams(p);
             sp.setId(View.generateViewId());
             characterLayout.addView(sp);
             ConstraintSet sampleSet = new ConstraintSet();
             sampleSet.clone(characterLayout);
             if(isRight){
-                sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1));
+                sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1));
             }else{
-                sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1));
+                sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1));
             }
             sampleSet.connect(sp.getId(),ConstraintSet.BOTTOM,characterLayout.getId(),ConstraintSet.BOTTOM,130*(2-x));
             sampleSet.applyTo(characterLayout);
@@ -2269,8 +2251,8 @@ public class BattleActivity extends AppCompatActivity {
                 characterTouchLayout.addView(sb);
                 ConstraintSet set = new ConstraintSet();
                 set.clone(characterTouchLayout);
-                set.connect(sb.getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+CHARACTER_NORMAL_SIZE*3/7);
-                set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9+270);
+                set.connect(sb.getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+global.CHARACTER_NORMAL_SIZE*3/7);
+                set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+global.CHARACTER_NORMAL_SIZE*2/9+270);
                 set.applyTo(characterTouchLayout);
 //            imageView.setBackgroundResource(R.color.colorPurple);
                 rightStateBarList[x][y] = sb;
@@ -2284,8 +2266,8 @@ public class BattleActivity extends AppCompatActivity {
                 characterTouchLayout.addView(sb);
                 ConstraintSet set = new ConstraintSet();
                 set.clone(characterTouchLayout);
-                set.connect(sb.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-170)/2);
-                set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9+270);
+                set.connect(sb.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(global.CHARACTER_NORMAL_SIZE-170)/2);
+                set.connect(sb.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+global.CHARACTER_NORMAL_SIZE*2/9+270);
                 set.applyTo(characterTouchLayout);
 //            imageView.setBackgroundResource(R.color.colorPurple);
                 leftStateBarList[x][y] = sb;
@@ -2306,8 +2288,8 @@ public class BattleActivity extends AppCompatActivity {
             characterTouchLayout.addView(imageView);
             ConstraintSet set = new ConstraintSet();
             set.clone(characterTouchLayout);
-            set.connect(imageView.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-170)/2);
-            set.connect(imageView.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9);
+            set.connect(imageView.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(global.CHARACTER_NORMAL_SIZE-170)/2);
+            set.connect(imageView.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+global.CHARACTER_NORMAL_SIZE*2/9);
             set.applyTo(characterTouchLayout);
 //            imageView.setBackgroundResource(R.color.colorPurple);
             leftTouchListLayout[x][y] = imageView;
@@ -2321,8 +2303,8 @@ public class BattleActivity extends AppCompatActivity {
             characterTouchLayout.addView(imageView2);
             ConstraintSet set2 = new ConstraintSet();
             set2.clone(characterTouchLayout);
-            set2.connect(imageView2.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-105)/2);
-            set2.connect(imageView2.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9+340);
+            set2.connect(imageView2.getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(global.CHARACTER_NORMAL_SIZE-105)/2);
+            set2.connect(imageView2.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+global.CHARACTER_NORMAL_SIZE*2/9+340);
             set2.applyTo(characterTouchLayout);
             imageView2.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.character_chosen_plate));
             touchImageListLayout[x][y] = imageView2;
@@ -2336,8 +2318,8 @@ public class BattleActivity extends AppCompatActivity {
             characterTouchLayout.addView(imageView);
             ConstraintSet set = new ConstraintSet();
             set.clone(characterTouchLayout);
-            set.connect(imageView.getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(CHARACTER_NORMAL_SIZE-170)/2);
-            set.connect(imageView.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9);
+            set.connect(imageView.getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(global.CHARACTER_NORMAL_SIZE-170)/2);
+            set.connect(imageView.getId(),ConstraintSet.BOTTOM,characterTouchLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+global.CHARACTER_NORMAL_SIZE*2/9);
             set.applyTo(characterTouchLayout);
 //            imageView.setBackgroundResource(R.color.colorPurple);
             rightTouchListLayout[x][y] = imageView;
@@ -2358,7 +2340,7 @@ public class BattleActivity extends AppCompatActivity {
                     if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                         rightStateBarList[i][j].setVisibility(VISIBLE);
                         rightCharList[i][j].setVisibility(View.INVISIBLE);
-                        setCharacterSize(i,j,CHARACTER_MAGNIFIED_SIZE,true);
+                        setCharacterSize(i,j,global.CHARACTER_MAGNIFIED_SIZE,true);
                         changeCharacterPosition(i,j, true,true);
                     }
                 }else{
@@ -2370,7 +2352,7 @@ public class BattleActivity extends AppCompatActivity {
                         if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
                             leftStateBarList[i][j].setVisibility(VISIBLE);
                             leftCharList[i][j].setVisibility(View.INVISIBLE);
-                            setCharacterSize(i,j,CHARACTER_MAGNIFIED_SIZE,false);
+                            setCharacterSize(i,j,global.CHARACTER_MAGNIFIED_SIZE,false);
                             changeCharacterPosition(i,j,false,true);
                         }
                     }
@@ -2381,7 +2363,7 @@ public class BattleActivity extends AppCompatActivity {
         //移动背景
         ConstraintSet sampleSet = new ConstraintSet();
         sampleSet.clone((ConstraintLayout)(backgroundLeft.getParent()));
-        sampleSet.connect(backgroundLeft.getId(),ConstraintSet.END,((ConstraintLayout)(backgroundLeft.getParent())).getId(),ConstraintSet.END,isRight? StartActivity.SCREEN_WIDTH/4:StartActivity.SCREEN_WIDTH*3/4);
+        sampleSet.connect(backgroundLeft.getId(),ConstraintSet.END,((ConstraintLayout)(backgroundLeft.getParent())).getId(),ConstraintSet.END,isRight? global.SCREEN_WIDTH/4:global.SCREEN_WIDTH*3/4);
         sampleSet.applyTo((ConstraintLayout)(backgroundLeft.getParent()));
     }
 
@@ -2395,7 +2377,7 @@ public class BattleActivity extends AppCompatActivity {
                     if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                         rightStateBarList[i][j].setVisibility(VISIBLE);
                         //rightCharList[i][j].setVisibility(View.INVISIBLE);
-                        setCharacterSize(i,j,CHARACTER_NORMAL_SIZE,true);
+                        setCharacterSize(i,j,global.CHARACTER_NORMAL_SIZE,true);
                         changeCharacterPosition(i,j, true,false);
                     }
                 }else{
@@ -2406,7 +2388,7 @@ public class BattleActivity extends AppCompatActivity {
                         if(!isBossBattle || (isBossBattle && (i == 1) && (j == 1))){
                             leftStateBarList[i][j].setVisibility(VISIBLE);
                             //leftCharList[i][j].setVisibility(View.INVISIBLE);
-                            setCharacterSize(i,j,CHARACTER_NORMAL_SIZE,false);
+                            setCharacterSize(i,j,global.CHARACTER_NORMAL_SIZE,false);
                             changeCharacterPosition(i,j,false,false);
                         }
                     }
@@ -2449,34 +2431,34 @@ public class BattleActivity extends AppCompatActivity {
         if(isMagnify){
             if(isRight){
                 sampleSet.clear(sp.getId(),ConstraintSet.END);
-                sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/2-CHARACTER_MAGNIFIED_SIZE/2+70*(x-1)+250*(y-1));
+                sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/2-global.CHARACTER_MAGNIFIED_SIZE/2+70*(x-1)+250*(y-1));
                 set.clone(characterTouchLayout);
                 set.clear(rightStateBarList[x][y].getId(),ConstraintSet.END);
-                set.connect(rightStateBarList[x][y].getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/2-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+CHARACTER_NORMAL_SIZE*3/7);
+                set.connect(rightStateBarList[x][y].getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/2-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+global.CHARACTER_NORMAL_SIZE*3/7);
                 set.applyTo(characterTouchLayout);
             }else{
                 sampleSet.clear(sp.getId(),ConstraintSet.START);
-                sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/2-CHARACTER_MAGNIFIED_SIZE/2+70*(x-1)-250*(y-1));
+                sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/2-global.CHARACTER_MAGNIFIED_SIZE/2+70*(x-1)-250*(y-1));
                 set.clone(characterTouchLayout);
                 set.clear(leftStateBarList[x][y].getId(),ConstraintSet.START);
-                set.connect(leftStateBarList[x][y].getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/2-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+CHARACTER_NORMAL_SIZE*3/7);
+                set.connect(leftStateBarList[x][y].getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/2-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+global.CHARACTER_NORMAL_SIZE*3/7);
                 set.applyTo(characterTouchLayout);
             }
             sampleSet.connect(sp.getId(),ConstraintSet.BOTTOM,characterLayout.getId(),ConstraintSet.BOTTOM,130*(2-x));
         }else{
             if(isRight){
                 sampleSet.clear(sp.getId(),ConstraintSet.END);
-                sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1));
+                sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1));
                 set.clone(characterTouchLayout);
                 set.clear(rightStateBarList[x][y].getId(),ConstraintSet.END);
-                set.connect(rightStateBarList[x][y].getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+CHARACTER_NORMAL_SIZE*3/7);
+                set.connect(rightStateBarList[x][y].getId(),ConstraintSet.START,characterTouchLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+global.CHARACTER_NORMAL_SIZE*3/7);
                 set.applyTo(characterTouchLayout);
             }else{
                 sampleSet.clear(sp.getId(),ConstraintSet.START);
-                sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1));
+                sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1));
                 set.clone(characterTouchLayout);
                 set.clear(leftStateBarList[x][y].getId(),ConstraintSet.START);
-                set.connect(leftStateBarList[x][y].getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+CHARACTER_NORMAL_SIZE*3/7);
+                set.connect(leftStateBarList[x][y].getId(),ConstraintSet.END,characterTouchLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+global.CHARACTER_NORMAL_SIZE*3/7);
                 set.applyTo(characterTouchLayout);
             }
             sampleSet.connect(sp.getId(),ConstraintSet.BOTTOM,characterLayout.getId(),ConstraintSet.BOTTOM,130*(2-x));
@@ -2534,12 +2516,12 @@ public class BattleActivity extends AppCompatActivity {
         smallPlateConnectToList[smallPlateId] = connectTo;
         Character c;
         if(largePlateId >= 5){
-            c = StartActivity.characters[largePlateId-5];
+            c = global.characters[largePlateId-5];
         }else{
             c = plateList[largePlateId].c;
         }
         small_plate_attribute[smallPlateId].setBackgroundResource(getImageByString(c.element));
-        if(largePlateId >= 5 && c.realMP >= DOPPEL_NEED_MP){
+        if(largePlateId >= 5 && c.realMP >= global.DOPPEL_NEED_MP){
             small_plate_character[smallPlateId].setBackgroundResource(getImageByString(c.doppelImageName));
         }else{
             small_plate_character[smallPlateId].setBackgroundResource(getImageByString(c.charIconImage+"d"));
@@ -2550,7 +2532,7 @@ public class BattleActivity extends AppCompatActivity {
         }else{
             small_plate_small_character[smallPlateId].setVisibility(GONE);
         }
-        switch((largePlateId >= 5)? (c.realMP >= DOPPEL_NEED_MP? DOPPEL:MAGIA):plateList[largePlateId].plate){
+        switch((largePlateId >= 5)? (c.realMP >= global.DOPPEL_NEED_MP? DOPPEL:MAGIA):plateList[largePlateId].plate){
             case ACCELE:
                 small_plate_arrow[smallPlateId].setVisibility(GONE);
                 small_plate_background[smallPlateId].setBackgroundResource(R.drawable.accele_plate);
@@ -2601,7 +2583,7 @@ public class BattleActivity extends AppCompatActivity {
                 break;
             default:
         }
-        if(barState == MAGIA_BAR_SHOW){
+        if(barState == global.MAGIA_BAR_SHOW){
             if(largePlateId > 4){
                 charPlateViewList[largePlateId - 5].setShader();
             }
@@ -2669,7 +2651,7 @@ public class BattleActivity extends AppCompatActivity {
             sampleSet.clone(characterLayout);
             sampleSet.clear(sp.getId(),ConstraintSet.START);
             sampleSet.clear(sp.getId(),ConstraintSet.TOP);
-            sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/2-CHARACTER_MAGNIFIED_SIZE*2/3+70*(lx-1)-250*(ly-1));
+            sampleSet.connect(sp.getId(),ConstraintSet.END,characterLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/2-global.CHARACTER_MAGNIFIED_SIZE*2/3+70*(lx-1)-250*(ly-1));
             sampleSet.connect(sp.getId(),ConstraintSet.BOTTOM,characterLayout.getId(),ConstraintSet.BOTTOM,130*(2-lx));
             sampleSet.applyTo(characterLayout);
         }else{
@@ -2679,7 +2661,7 @@ public class BattleActivity extends AppCompatActivity {
             sampleSet.clone(characterLayout);
             sampleSet.clear(sp.getId(),ConstraintSet.END);
             sampleSet.clear(sp.getId(),ConstraintSet.TOP);
-            sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/2-CHARACTER_MAGNIFIED_SIZE*2/3+70*(rx-1)+250*(ry-1));
+            sampleSet.connect(sp.getId(),ConstraintSet.START,characterLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/2-global.CHARACTER_MAGNIFIED_SIZE*2/3+70*(rx-1)+250*(ry-1));
             sampleSet.connect(sp.getId(),ConstraintSet.BOTTOM,characterLayout.getId(),ConstraintSet.BOTTOM,130*(2-rx));
             sampleSet.applyTo(characterLayout);
         }
@@ -2722,7 +2704,7 @@ public class BattleActivity extends AppCompatActivity {
                     if(smallPlateList[i] <= 4){
                         c = plateList[smallPlateList[i]].c;
                     }else{
-                        c = StartActivity.characters[i-5];
+                        c = global.characters[i-5];
                     }
                     if(c.formationX == x && c.formationY == y){
                         return "stance_con";
@@ -2805,16 +2787,16 @@ public class BattleActivity extends AppCompatActivity {
             }
         }
         if(isChargeCombo){
-            chargeNumber += 2;
-            if(StartActivity.collectionDict.get("陈旧的绘本").isOwn){
-                chargeNumber += 2;
+            global.chargeNumber += 2;
+            if(global.collectionDict.get("陈旧的绘本").isOwn){
+                global.chargeNumber += 2;
             }
-            if(chargeNumber > 20){
-                chargeNumber = 20;
+            if(global.chargeNumber > 20){
+                global.chargeNumber = 20;
             }
             updateChargeView();
-            showCombo(CHARGECOMBO);
-            ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+            showCombo(global.CHARGECOMBO);
+            ExtraMission em = global.extraMissionList.get(extraMissionId);
             if(em.name.equals("发动一次3CCombo")){
                 achieveExtraMission = true;
             }
@@ -2823,7 +2805,7 @@ public class BattleActivity extends AppCompatActivity {
                 for(int j = 0; j < 3; j++){
                     if(rightCharList[i][j] != null && rightCharList[i][j].c.realHP > 0){
                         rightCharList[i][j].c.realMP += 200;
-                        if(StartActivity.collectionDict.get("调整屋特制能量饮料").isOwn){
+                        if(global.collectionDict.get("调整屋特制能量饮料").isOwn){
                             rightCharList[i][j].c.realMP += 150;
                         }
                         setMpOnCharacter(rightCharList[i][j].c,rightCharList[i][j].c.realMP,true);
@@ -2832,13 +2814,13 @@ public class BattleActivity extends AppCompatActivity {
             }
             showCombo(ACCELE);
         }else if(isBlastCombo){
-            showCombo(BLASTCOMBO);
-            ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+            showCombo(global.BLASTCOMBO);
+            ExtraMission em = global.extraMissionList.get(extraMissionId);
             if(em.name.equals("发动一次3BCombo")){
                 achieveExtraMission = true;
             }
         }else if(isPuella){
-            showCombo(PUELLACOMBO);
+            showCombo(global.PUELLACOMBO);
         }
 
         //更新角色diamond数量
@@ -2858,10 +2840,10 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
-        if(StartActivity.collectionDict.get("巧克力蛋糕").isOwn){
+        if(global.collectionDict.get("巧克力蛋糕").isOwn){
             if(turn % 2 == 1){
-                for(int i = 0; i < StartActivity.characters.length; i++){
-                    Character c = StartActivity.characters[i];
+                for(int i = 0; i < global.characters.length; i++){
+                    Character c = global.characters[i];
                     if(c != null && c.diamondNumber < 3){
                         c.diamondNumber++;
                     }
@@ -2872,23 +2854,18 @@ public class BattleActivity extends AppCompatActivity {
 
     public void showCombo(int comboType){
         View comboView = null;
-        switch(comboType){
-            case ACCELECOMBO:
-                comboView = acceleCombo;
-                comboText.setText("magia蓄能条增加");
-                break;
-            case CHARGECOMBO:
-                comboView = chargeCombo;
-                comboText.setText("charge数+2");
-                break;
-            case BLASTCOMBO:
-                comboView = blastCombo;
-                comboText.setText("伤害大幅提升");
-                break;
-            case PUELLACOMBO:
-                comboView = puellaCombo;
-                comboText.setText("伤害大幅提升");
-                break;
+        if(comboType == global.ACCELECOMBO){
+            comboView = acceleCombo;
+            comboText.setText("magia蓄能条增加");
+        }else if(comboType == global.CHARGECOMBO){
+            comboView = chargeCombo;
+            comboText.setText("charge数+2");
+        }else if(comboType == global.BLASTCOMBO){
+            comboView = blastCombo;
+            comboText.setText("伤害大幅提升");
+        }else if(comboType == global.PUELLACOMBO){
+            comboView = puellaCombo;
+            comboText.setText("伤害大幅提升");
         }
         final View tempComboView = comboView;
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.combo_move);
@@ -2919,11 +2896,11 @@ public class BattleActivity extends AppCompatActivity {
         //判断是否是Charge盘
         if(smallPlateList[smallPlateNumber] <= 4){
             if(plateList[smallPlateList[smallPlateNumber]].plate == CHARGE){
-                chargeNumber++;
-                if(StartActivity.collectionDict.get("台词抄本").isOwn){
-                    chargeNumber++;
+                global.chargeNumber++;
+                if(global.collectionDict.get("台词抄本").isOwn){
+                    global.chargeNumber++;
                 }
-                if(chargeNumber > 20)chargeNumber = 20;
+                if(global.chargeNumber > 20)global.chargeNumber = 20;
             }
             updateChargeView();
         }
@@ -3022,7 +2999,7 @@ public class BattleActivity extends AppCompatActivity {
                                     }, 1500);
                                 }
                             }
-                        }, DELTA_BETWEEN_EFFECT_SHOW*(i+1));
+                        }, global.DELTA_BETWEEN_EFFECT_SHOW*(i+1));
                     }
 //                    handler.postDelayed(new Runnable() {
 //                        @Override
@@ -3078,19 +3055,19 @@ public class BattleActivity extends AppCompatActivity {
         sampleSet.clone(skillEffectLayout);
         if(isMagnified){
             if(isRight){
-                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/2-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/2-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }else{
-                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/2-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/2-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }
         }else{
             if(isRight){
-                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }else{
-                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }
         }
 
-        sampleSet.connect(ef.getId(),ConstraintSet.BOTTOM,skillEffectLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*1/9);
+        sampleSet.connect(ef.getId(),ConstraintSet.BOTTOM,skillEffectLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+global.CHARACTER_NORMAL_SIZE*1/9);
         sampleSet.applyTo(skillEffectLayout);
 
         //SkillEffectView ef2 = new SkillEffectView(BattleActivity.this, skillEffectLayout, " 攻击力UP! ", R.anim.skill_positive_effect, R.color.white, R.color.skillTextPink);
@@ -3098,9 +3075,9 @@ public class BattleActivity extends AppCompatActivity {
 
     public void sendDamageNumber(int number, int x, int y, int textColor, boolean isRight, boolean isMagnified){
         SkillEffectView ef;
-        if(textColor == TEXT_RED){
+        if(textColor == global.TEXT_RED){
             ef = new SkillEffectView(BattleActivity.this, skillEffectLayout, " "+number+" ", R.anim.damage_number, R.color.skillTextPink, R.color.white, true);
-        }else if(textColor == TEXT_BLUE){
+        }else if(textColor == global.TEXT_BLUE){
             ef = new SkillEffectView(BattleActivity.this, skillEffectLayout, " "+number+" ", R.anim.damage_number, R.color.lightBlue, R.color.white, true);
         }else{
             ef = new SkillEffectView(BattleActivity.this, skillEffectLayout, " "+number+" ", R.anim.damage_number, R.color.skillTextGreen, R.color.white, true);
@@ -3111,19 +3088,19 @@ public class BattleActivity extends AppCompatActivity {
         sampleSet.clone(skillEffectLayout);
         if(isMagnified){
             if(isRight){
-                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/2-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/2-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }else{
-                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/2-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/2-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }
         }else{
             if(isRight){
-                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.START,skillEffectLayout.getId(),ConstraintSet.START,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)+250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }else{
-                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,StartActivity.SCREEN_WIDTH/4*3-CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(CHARACTER_NORMAL_SIZE-500)/2);
+                sampleSet.connect(ef.getId(),ConstraintSet.END,skillEffectLayout.getId(),ConstraintSet.END,global.SCREEN_WIDTH/4*3-global.CHARACTER_NORMAL_SIZE/2+70*(x-1)-250*(y-1)+(global.CHARACTER_NORMAL_SIZE-500)/2);
             }
         }
 
-        sampleSet.connect(ef.getId(),ConstraintSet.BOTTOM,skillEffectLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+CHARACTER_NORMAL_SIZE*2/9);
+        sampleSet.connect(ef.getId(),ConstraintSet.BOTTOM,skillEffectLayout.getId(),ConstraintSet.BOTTOM,130*(2-x)+global.CHARACTER_NORMAL_SIZE*2/9);
         sampleSet.applyTo(skillEffectLayout);
 
         //SkillEffectView ef2 = new SkillEffectView(BattleActivity.this, skillEffectLayout, " 攻击力UP! ", R.anim.skill_positive_effect, R.color.white, R.color.skillTextPink);
@@ -3279,7 +3256,7 @@ public class BattleActivity extends AppCompatActivity {
             if(smallPlateList[smallPlateNumber] <= 4){
                 plateType = plateList[smallPlateList[smallPlateNumber]].plate;
             }else{
-                plateType = StartActivity.characters[smallPlateList[smallPlateNumber]-5].realMP >= DOPPEL_NEED_MP ? DOPPEL:MAGIA;
+                plateType = global.characters[smallPlateList[smallPlateNumber]-5].realMP >= global.DOPPEL_NEED_MP ? DOPPEL:MAGIA;
             }
         }else{
             plateType = CHARGE;
@@ -3291,7 +3268,7 @@ public class BattleActivity extends AppCompatActivity {
         //阵形ATK
         int formationATK = 0;
         if(isPlayerAttack){
-            Formation f = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
+            Formation f = global.formationList.get(global.usingFormationId);
             if(f.gridAllEffectList[attacker.formationX][attacker.formationY].size() > 0){
                 for(int i = 0; i < f.gridAllEffectList[attacker.formationX][attacker.formationY].size(); i++){
                     SkillEffect se = f.gridAllEffectList[attacker.formationX][attacker.formationY].get(i);
@@ -3318,13 +3295,13 @@ public class BattleActivity extends AppCompatActivity {
 
         //攻击力Buff
         int atkBuff = 0;
-        if(StartActivity.collectionDict.get("等等力徽章").isOwn){
+        if(global.collectionDict.get("等等力徽章").isOwn){
             if(turn == 1){
                 atkBuff += 100;
             }
         }
         ArrayList<Effect> efList = isPlayerAttack? rightEffectList[attacker.formationX][attacker.formationY]:leftEffectList[attacker.formationX][attacker.formationY];
-        if(StartActivity.collectionDict.get("圣诞科学14号").isOwn){
+        if(global.collectionDict.get("圣诞科学14号").isOwn){
             if(isPlayerAttack){
                 atkBuff += 5 * efList.size();
             }
@@ -3362,7 +3339,7 @@ public class BattleActivity extends AppCompatActivity {
         //阵形DEF
         int formationDEF = 0;
         if(!isPlayerAttack){
-            Formation f = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
+            Formation f = global.formationList.get(global.usingFormationId);
             if(f.gridAllEffectList[defender.formationX][defender.formationY].size() > 0){
                 for(int i = 0; i < f.gridAllEffectList[defender.formationX][defender.formationY].size(); i++){
                     SkillEffect se = f.gridAllEffectList[defender.formationX][defender.formationY].get(i);
@@ -3378,7 +3355,7 @@ public class BattleActivity extends AppCompatActivity {
         //防御力Buff
         int DEFBuff = 0;
         efList = isPlayerAttack? leftEffectList[defender.formationX][defender.formationY]:rightEffectList[defender.formationX][defender.formationY];
-        if(StartActivity.collectionDict.get("粘贴文件夹").isOwn){
+        if(global.collectionDict.get("粘贴文件夹").isOwn){
             if(isPlayerAttack){
                 DEFBuff -= 5 * efList.size();
             }
@@ -3482,7 +3459,7 @@ public class BattleActivity extends AppCompatActivity {
                         break;
                     }
                 }else{
-                    if(StartActivity.characters[smallPlateList[i]-5] != attacker){
+                    if(global.characters[smallPlateList[i]-5] != attacker){
                         isPuella = false;
                         break;
                     }
@@ -3521,7 +3498,7 @@ public class BattleActivity extends AppCompatActivity {
                 default:
             }
 
-            if(StartActivity.collectionDict.get("知古辣屋的可可块").isOwn){
+            if(global.collectionDict.get("知古辣屋的可可块").isOwn){
                 if(isPuella){
                     fundamentalPlateCoefficient *= 1.5f;
                 }
@@ -3533,7 +3510,7 @@ public class BattleActivity extends AppCompatActivity {
         if(plateType == BLAST_HORIZONTAL || plateType == BLAST_VERTICAL){
             //为b盘
             BlastPositionCoefficient = (smallPlateNumber == 0)? 1.0f:((smallPlateNumber == 1)? 1.1f:1.2f);
-            if(StartActivity.collectionDict.get("龙真流秘籍").isOwn){
+            if(global.collectionDict.get("龙真流秘籍").isOwn){
                 BlastPositionCoefficient *= 1.5f;
             }
         }
@@ -3542,9 +3519,9 @@ public class BattleActivity extends AppCompatActivity {
         float chargeCoefficient = 1.0f;
         if(plateType == ACCELE || plateType == BLAST_VERTICAL || plateType == BLAST_HORIZONTAL){
             if(plateType == ACCELE){
-                chargeCoefficient = multiChargeTable[0][isPlayerAttack? chargeNumber:enemyChargeNumber];
+                chargeCoefficient = global.multiChargeTable[0][isPlayerAttack? global.chargeNumber:enemychargeNumber];
             }else if(plateType == BLAST_VERTICAL || plateType == BLAST_HORIZONTAL){
-                chargeCoefficient = multiChargeTable[1][isPlayerAttack? chargeNumber:enemyChargeNumber];
+                chargeCoefficient = global.multiChargeTable[1][isPlayerAttack? global.chargeNumber:enemychargeNumber];
             }
             //charge后伤害提升buff
             int chargeDamageUp = 0;
@@ -3581,7 +3558,7 @@ public class BattleActivity extends AppCompatActivity {
                 break;
             default:
         }
-        if(StartActivity.collectionDict.get("小型游泳圈").isOwn){
+        if(global.collectionDict.get("小型游泳圈").isOwn){
             if(isPlayerAttack){
                 if(attacker.element.equals("fire") || attacker.element.equals("water") || attacker.element.equals("tree")){
                     elementRestrainedCoefficient = Math.max(1.0f, elementRestrainedCoefficient);
@@ -3592,7 +3569,7 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
-        if(StartActivity.collectionDict.get("木雕的坠饰").isOwn){
+        if(global.collectionDict.get("木雕的坠饰").isOwn){
             if(isPlayerAttack){
                 if(attacker.element.equals("light") || attacker.element.equals("dark")){
                     elementRestrainedCoefficient = Math.max(1.0f, elementRestrainedCoefficient);
@@ -3740,7 +3717,7 @@ public class BattleActivity extends AppCompatActivity {
                         * chargeCoefficient * elementRestrainedCoefficient * StateAbnormalCoefficient
                         * 1.0f * (100 + damageBuff) / 100);
 
-                if(StartActivity.collectionDict.get("胡桃西餐厅餐券").isOwn){
+                if(global.collectionDict.get("胡桃西餐厅餐券").isOwn){
                     if(isPlayerAttack){
                         finalDamage += defender.getRealMaxHP() * 0.05f;
                     }
@@ -3759,10 +3736,10 @@ public class BattleActivity extends AppCompatActivity {
     }
 
     public void updateChargeView(){
-        if(chargeNumber > 0){
+        if(global.chargeNumber > 0){
             charge_number_view.setVisibility(VISIBLE);
             charge_frame.setVisibility(VISIBLE);
-            charge_number_view.setText(""+chargeNumber);
+            charge_number_view.setText(""+global.chargeNumber);
         }else{
             charge_number_view.setVisibility(GONE);
             charge_frame.setVisibility(GONE);
@@ -3904,7 +3881,7 @@ public class BattleActivity extends AppCompatActivity {
         //叠C倍率
         float multiChargeCoefficient = 1.0f;
         if(isPlayerAttack){
-            multiChargeCoefficient = multiChargeTable[2][chargeNumber];
+            multiChargeCoefficient = global.multiChargeTable[2][global.chargeNumber];
         }
 
         //角色攻击MP率
@@ -4103,7 +4080,7 @@ public class BattleActivity extends AppCompatActivity {
                                 public void run() {
                                     int damage = (int)(1.0f*(rightCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
                                     setDamageOnCharacter(rightCharList[tempI][tempJ].c,damage,true,false);
-                                    sendDamageNumber(damage,tempI,tempJ,TEXT_RED,true,false);
+                                    sendDamageNumber(damage,tempI,tempJ,global.TEXT_RED,true,false);
                                     if(rightCharList[tempI][tempJ].c.realHP > 0){
                                         rightCharList[tempI][tempJ].spriteName = "damage";
                                         changeSprite(tempI, tempJ,true);
@@ -4112,7 +4089,7 @@ public class BattleActivity extends AppCompatActivity {
                                     sendEffect(e,tempI,tempJ,true,false);
                                 }
                             }, tempWaitTime);
-                            tempWaitTime += DELTA_BETWEEN_EFFECT_SHOW;
+                            tempWaitTime += global.DELTA_BETWEEN_EFFECT_SHOW;
                             if(maxWaitTime < tempWaitTime){
                                 maxWaitTime = tempWaitTime;
                             }
@@ -4124,11 +4101,11 @@ public class BattleActivity extends AppCompatActivity {
                                     public void run() {
                                         int recoverHP = (int)(1.0f*(rightCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
                                         setDamageOnCharacter(rightCharList[tempI][tempJ].c,-recoverHP,true,false);
-                                        sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,true,false);
+                                        sendDamageNumber(recoverHP,tempI,tempJ,global.TEXT_GREEN,true,false);
                                         sendEffect(e,tempI,tempJ,true,false);
                                     }
                                 }, tempWaitTime);
-                                tempWaitTime += DELTA_BETWEEN_EFFECT_SHOW;
+                                tempWaitTime += global.DELTA_BETWEEN_EFFECT_SHOW;
                                 if(maxWaitTime < tempWaitTime){
                                     maxWaitTime = tempWaitTime;
                                 }
@@ -4148,7 +4125,7 @@ public class BattleActivity extends AppCompatActivity {
                                     public void run() {
                                         int damage = (int)(1.0f*(leftCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
                                         setDamageOnCharacter(leftCharList[tempI][tempJ].c,damage,false,false);
-                                        sendDamageNumber(damage,tempI,tempJ,TEXT_RED,false,false);
+                                        sendDamageNumber(damage,tempI,tempJ,global.TEXT_RED,false,false);
                                         if(leftCharList[tempI][tempJ].c.realHP > 0){
                                             leftCharList[tempI][tempJ].spriteName = "damage";
                                             changeSprite(tempI, tempJ,false);
@@ -4157,7 +4134,7 @@ public class BattleActivity extends AppCompatActivity {
                                         sendEffect(e,tempI,tempJ,false,false);
                                     }
                                 }, tempWaitTime);
-                                tempWaitTime += DELTA_BETWEEN_EFFECT_SHOW;
+                                tempWaitTime += global.DELTA_BETWEEN_EFFECT_SHOW;
                                 if(maxWaitTime < tempWaitTime){
                                     maxWaitTime = tempWaitTime;
                                 }
@@ -4168,11 +4145,11 @@ public class BattleActivity extends AppCompatActivity {
                                         public void run() {
                                             int recoverHP = (int)(1.0f*(leftCharList[tempI][tempJ].c.getRealMaxHP())*e.value/100);
                                             setDamageOnCharacter(leftCharList[tempI][tempJ].c,-recoverHP,false,false);
-                                            sendDamageNumber(recoverHP,tempI,tempJ,TEXT_GREEN,false,false);
+                                            sendDamageNumber(recoverHP,tempI,tempJ,global.TEXT_GREEN,false,false);
                                             sendEffect(e,tempI,tempJ,false,false);
                                         }
                                     }, tempWaitTime);
-                                    tempWaitTime += DELTA_BETWEEN_EFFECT_SHOW;
+                                    tempWaitTime += global.DELTA_BETWEEN_EFFECT_SHOW;
                                     if(maxWaitTime < tempWaitTime){
                                         maxWaitTime = tempWaitTime;
                                     }
@@ -4235,26 +4212,26 @@ public class BattleActivity extends AppCompatActivity {
         turn++;
 
         //更新藏品效果
-        if(StartActivity.collectionDict.get("珍贵的明信片").isOwn){
-            chargeNumber++;
-            chargeNumber = Math.min(20,chargeNumber);
+        if(global.collectionDict.get("珍贵的明信片").isOwn){
+            global.chargeNumber++;
+            global.chargeNumber = Math.min(20,global.chargeNumber);
             updateChargeView();
         }
 
         //更新主动技能cd
         for(int i = 0; i < 5; i++){
-            if(StartActivity.characters[i] != null && StartActivity.characters[i].realHP > 0){
+            if(global.characters[i] != null && global.characters[i].realHP > 0){
                 boolean isSkillCDAccelerated = false;
-                if(isTriggerEffect(rightEffectList[StartActivity.characters[i].formationX][StartActivity.characters[i].formationY],"技能冷却加速")){
+                if(isTriggerEffect(rightEffectList[global.characters[i].formationX][global.characters[i].formationY],"技能冷却加速")){
                     isSkillCDAccelerated = true;
                 }
                 for(int j = 0; j < 4; j++){
-                    if(StartActivity.characters[i].memoriaList[j] != null){
-                        if(StartActivity.characters[i].memoriaList[j].CDNow > 0){
-                            StartActivity.characters[i].memoriaList[j].CDNow--;
+                    if(global.characters[i].memoriaList[j] != null){
+                        if(global.characters[i].memoriaList[j].CDNow > 0){
+                            global.characters[i].memoriaList[j].CDNow--;
                         }
-                        if(isSkillCDAccelerated && StartActivity.characters[i].memoriaList[j].CDNow > 0){
-                            StartActivity.characters[i].memoriaList[j].CDNow--;
+                        if(isSkillCDAccelerated && global.characters[i].memoriaList[j].CDNow > 0){
+                            global.characters[i].memoriaList[j].CDNow--;
                         }
                     }
                 }
@@ -4307,8 +4284,8 @@ public class BattleActivity extends AppCompatActivity {
 
         platesLayout.setVisibility(View.VISIBLE);
         //收回magia盘
-        if(barState == MAGIA_BAR_SHOW){
-            barState = PLATE_SHOW;
+        if(barState == global.MAGIA_BAR_SHOW){
+            barState = global.PLATE_SHOW;
             magiaPlate.setBackgroundResource(R.drawable.magia_plate);
             skillPlate.setVisibility(VISIBLE);
             showPlate();
@@ -4383,7 +4360,7 @@ public class BattleActivity extends AppCompatActivity {
             case "HP回复":
                 int recoverHP = (int)(1.0f * e.value * c.getRealMaxHP() / 100);
                 setDamageOnCharacter(c,-recoverHP,isRight,isMagnified);
-                sendDamageNumber(recoverHP,x,y,TEXT_GREEN,isRight,isMagnified);
+                sendDamageNumber(recoverHP,x,y,global.TEXT_GREEN,isRight,isMagnified);
                 break;
             case "MP回复":
                 //MP获得量 Buff
@@ -4400,7 +4377,7 @@ public class BattleActivity extends AppCompatActivity {
                 boolean isMpRecoverForbidden = isTriggerEffect(efList, "MP回复禁止");
                 if(!isMpRecoverForbidden){
                     setMpOnCharacter(c, c.realMP + recoverMP,isRight);
-                    sendDamageNumber(recoverMP/10,x,y,TEXT_BLUE,isRight,isMagnified);
+                    sendDamageNumber(recoverMP/10,x,y,global.TEXT_BLUE,isRight,isMagnified);
                     sendEffect(e,x,y,isRight,isMagnified);
                 }else{
                     Effect e2 = new Effect();
@@ -4411,7 +4388,7 @@ public class BattleActivity extends AppCompatActivity {
             case "MP伤害":
                 int reduceMP = e.value * 10;
                 setMpOnCharacter(c,c.realMP - reduceMP,isRight);
-                sendDamageNumber(e.value,x,y,TEXT_BLUE,isRight,isMagnified);
+                sendDamageNumber(e.value,x,y,global.TEXT_BLUE,isRight,isMagnified);
                 sendEffect(e,x,y,isRight,isMagnified);
                 break;
             default:
@@ -4566,16 +4543,16 @@ public class BattleActivity extends AppCompatActivity {
         //Toast.makeText(this,"胜利",Toast.LENGTH_LONG).show();
 
         //判断部分额外任务条件
-        ExtraMission em = StartActivity.extraMissionList.get(extraMissionId);
+        ExtraMission em = global.extraMissionList.get(extraMissionId);
         if(em.name.equals("3回合内通关")){
             achieveExtraMission = turn <= 3;
         }else if(em.name.equals("5回合内通关")){
             achieveExtraMission = turn <= 5;
         }else if(em.name.equals("至少一人血量大于80%")){
             achieveExtraMission = false;
-            for(int i = 0; i < StartActivity.characters.length; i++){
-                if(StartActivity.characters[i] != null){
-                    Character c = StartActivity.characters[i];
+            for(int i = 0; i < global.characters.length; i++){
+                if(global.characters[i] != null){
+                    Character c = global.characters[i];
                     if(1.0f * c.realHP / c.getRealMaxHP() >= 0.8f){
                         achieveExtraMission = true;
                         break;
@@ -4584,9 +4561,9 @@ public class BattleActivity extends AppCompatActivity {
             }
         }else if(em.name.equals("至少一人血量大于60%")){
             achieveExtraMission = false;
-            for(int i = 0; i < StartActivity.characters.length; i++){
-                if(StartActivity.characters[i] != null){
-                    Character c = StartActivity.characters[i];
+            for(int i = 0; i < global.characters.length; i++){
+                if(global.characters[i] != null){
+                    Character c = global.characters[i];
                     if(1.0f * c.realHP / c.getRealMaxHP() >= 0.6f){
                         achieveExtraMission = true;
                         break;
@@ -4595,9 +4572,9 @@ public class BattleActivity extends AppCompatActivity {
             }
         }else if(em.name.equals("全员血量大于60%")){
             achieveExtraMission = true;
-            for(int i = 0; i < StartActivity.characters.length; i++){
-                if(StartActivity.characters[i] != null){
-                    Character c = StartActivity.characters[i];
+            for(int i = 0; i < global.characters.length; i++){
+                if(global.characters[i] != null){
+                    Character c = global.characters[i];
                     if(1.0f * c.realHP / c.getRealMaxHP() < 0.6f){
                         achieveExtraMission = false;
                         break;
@@ -4605,14 +4582,14 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }else if(em.name.equals("消耗5个charge")){
-            achieveExtraMission = consumeChargeNumber >= 5;
+            achieveExtraMission = consumechargeNumber >= 5;
         }
 
         //判断收藏品效果
-        if(StartActivity.collectionDict.get("失窃的珊瑚项链").isOwn){
+        if(global.collectionDict.get("失窃的珊瑚项链").isOwn){
             ArrayList<Character> tempCList = new ArrayList<>();
-            for(int i = 0; i < StartActivity.characters.length; i++){
-                Character c = StartActivity.characters[i];
+            for(int i = 0; i < global.characters.length; i++){
+                Character c = global.characters[i];
                 if(c != null){
                     for(int j = 0; j < c.memoriaList.length; j++){
                         Memoria m = c.memoriaList[j];
@@ -4635,23 +4612,23 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
-        if(StartActivity.collectionDict.get("粉碎的珍珠发饰").isOwn){
-            int rnd = (int)(Math.random()*StartActivity.characterList.size());
-            Character c = StartActivity.characterList.get(rnd);
+        if(global.collectionDict.get("粉碎的珍珠发饰").isOwn){
+            int rnd = (int)(Math.random()*global.characterList.size());
+            Character c = global.characterList.get(rnd);
             c.realMP += 1000;
             if(c.realMP >= c.getMaxMp()){
                 c.realMP = c.getMaxMp();
             }
         }
-        if(StartActivity.collectionDict.get("超高级的体重计").isOwn){
-            winBattleCount1++;
+        if(global.collectionDict.get("超高级的体重计").isOwn){
+            global.winBattleCount1++;
         }
-        if(StartActivity.collectionDict.get("从未间断的日记").isOwn){
-            winBattleCount2++;
+        if(global.collectionDict.get("从未间断的日记").isOwn){
+            global.winBattleCount2++;
         }
-        if(StartActivity.collectionDict.get("五公斤名牌大米").isOwn){
-            for(int i = 0; i < StartActivity.characters.length; i++){
-                Character c = StartActivity.characters[i];
+        if(global.collectionDict.get("五公斤名牌大米").isOwn){
+            for(int i = 0; i < global.characters.length; i++){
+                Character c = global.characters[i];
                 if(c != null){
                     c.realHP += c.getRealMaxHP()*0.05f;
                     c.realHP = Math.min(c.getRealMaxHP(), c.realHP);
@@ -4669,6 +4646,10 @@ public class BattleActivity extends AppCompatActivity {
                 intent1.putExtra("achieveExtraMission", achieveExtraMission);
                 intent1.putExtra("isRandomBattle", isRandomBattle);
                 intent1.putExtra("extraMissionId", extraMissionId);
+                if(useDoppelCharacter != null && !global.hasTriggerFirstDoppelEvent){
+                    intent1.putExtra("useDoppelCharName", useDoppelCharacter.spriteName);
+                    global.hasTriggerFirstDoppelEvent = true;
+                }
                 startActivity(intent1);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -4701,7 +4682,7 @@ public class BattleActivity extends AppCompatActivity {
                 break;
             default:
         }
-        if(StartActivity.collectionDict.get("小型游泳圈").isOwn){
+        if(global.collectionDict.get("小型游泳圈").isOwn){
             if(isPlayerAttack){
                 if(attacker.element.equals("fire") || attacker.element.equals("water") || attacker.element.equals("tree")){
                     tempReturn = Math.max(0, tempReturn);
@@ -4712,7 +4693,7 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
-        if(StartActivity.collectionDict.get("木雕的坠饰").isOwn){
+        if(global.collectionDict.get("木雕的坠饰").isOwn){
             if(isPlayerAttack){
                 if(attacker.element.equals("light") || attacker.element.equals("dark")){
                     tempReturn = Math.max(0, tempReturn);

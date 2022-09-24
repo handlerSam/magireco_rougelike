@@ -1,0 +1,117 @@
+[
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "200",
+        "char1face": "030",
+        "text": "灯花！",
+        "speakerName": "忧",
+        "speakerDirection": 1,
+        "background":"11021"
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "char1motion": "100",
+        "char1face": "050",
+        "text": "身体有哪里不舒服吗？",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "100700",
+        "char0motion": "100",
+        "char0face": "060",
+        "char2id": "101400",
+        "char2motion": "000",
+        "char2face": "050",
+        "text": "唔...我刚才怎么了？",
+        "speakerName": "灯花",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "100700",
+        "char2id": "101400",
+        "char2motion": "300",
+        "char2face": "050",
+        "text": "你刚才突然失去了意识，整个人变得和魔女一样。",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "（魔女？...咦，我的灵魂宝石变清澈了？...这是怎么回事）",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "200",
+        "char1face": "011",
+        "text": "你刚才爆发出了好强的力量呢，把魔女和使魔一下子都打倒了！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "001",
+        "char1face": "050",
+        "text": "什么？我完全不记得了...（力量？）",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "text": "(之前查资料的时候从来没看到过魔法少女可以做到这种事情...)",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "100",
+        "text": "(不，理论上似乎是可行的...只要能把灵魂宝石里的污秽转化成力量)",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "text": "(问题是什么东西能做到这一点？)",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "char1motion": "100",
+        "char1face": "000",
+        "text": "灯花？",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "100",
+        "char1face": "010",
+        "text": "啊，我有了一些想法，但是现在还没法求证。",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "text": "我们走吧，在这里干想也想不出什么来。",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    }
+]

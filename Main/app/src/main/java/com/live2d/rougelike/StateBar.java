@@ -27,9 +27,12 @@ public class StateBar extends ConstraintLayout {
 
     int fullHp = 1000;
 
+    Global global;
+
     public StateBar(@NonNull Context context) {
         super(context);
         this.context = context;
+        this.global = (Global)context.getApplicationContext();
         View v = LayoutInflater.from(context).inflate(R.layout.status_bar, StateBar.this);
         findView(v);
         updateHp();
@@ -109,10 +112,10 @@ public class StateBar extends ConstraintLayout {
             }
 
             if(realMp > 1000){
-                if(((int)(1.0f * (realMp - 1000) * 80 / (BattleActivity.DOPPEL_NEED_MP - 1000))) > 0){
+                if(((int)(1.0f * (realMp - 1000) * 80 / (global.DOPPEL_NEED_MP - 1000))) > 0){
                     dpBar.setVisibility(VISIBLE);
                     ConstraintLayout.LayoutParams p2 = (ConstraintLayout.LayoutParams) dpBar.getLayoutParams();
-                    p2.width = (int)(1.0f * (realMp - 1000) * 80 / (BattleActivity.DOPPEL_NEED_MP - 1000));
+                    p2.width = (int)(1.0f * (realMp - 1000) * 80 / (global.DOPPEL_NEED_MP - 1000));
                     dpBar.setLayoutParams(p2);
                 }else{
                     dpBar.setVisibility(INVISIBLE);

@@ -37,14 +37,7 @@ public class MemoriaActivity extends AppCompatActivity {
 
     public ArrayList<Memoria> memoriaBag;
 
-    public static int chooseCharacter = 0;
-
-    public static int chooseEquipSlot = -1;
-
-    public static boolean isOrderByLV = false;
-    public static boolean isDesc = true;
-
-    public static boolean canSetMemoria = false;
+    
 
     ImageView charAttrView; // charAttribute
     TextView charNameView; // charName
@@ -77,16 +70,19 @@ public class MemoriaActivity extends AppCompatActivity {
     ImageView back;
 
     boolean isIntentSend = false;
+    
+    Global global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memoria);
+        global = (Global)getApplicationContext();
 
-        characterList = StartActivity.characterList;
+        characterList = global.characterList;
 
-        memoriaBag = StartActivity.memoriaBag;
+        memoriaBag = global.memoriaBag;
 
         findView();
 
@@ -138,19 +134,19 @@ public class MemoriaActivity extends AppCompatActivity {
 
     public void initView(){
         cardNumberView.setText(""+memoriaBag.size()+"/400");
-        charAttrView.setImageResource(getResourceByString(characterList.get(chooseCharacter).element));
-        charNameView.setText(characterList.get(chooseCharacter).name);
+        charAttrView.setImageResource(getResourceByString(characterList.get(global.chooseCharacter).element));
+        charNameView.setText(characterList.get(global.chooseCharacter).name);
 
         //初始化排序按钮及排序效果
-        orderByView.setImageResource(isOrderByLV? R.drawable.order2:R.drawable.order1);
+        orderByView.setImageResource(global.isOrderByLV? R.drawable.order2:R.drawable.order1);
         updateSortedOutcome();
         memoriaAdapter.notifyItemRangeChanged(0,memoriaBag.size());
 
         orderByView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isOrderByLV = !isOrderByLV;
-                orderByView.setImageResource(isOrderByLV? R.drawable.order2:R.drawable.order1);
+                global.isOrderByLV = !global.isOrderByLV;
+                orderByView.setImageResource(global.isOrderByLV? R.drawable.order2:R.drawable.order1);
                 updateSortedOutcome();
                 memoriaAdapter.notifyItemRangeChanged(0,memoriaBag.size());
             }
@@ -158,8 +154,8 @@ public class MemoriaActivity extends AppCompatActivity {
         orderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isDesc = !isDesc;
-                orderView.setImageResource(isDesc? R.drawable.desc:R.drawable.incr);
+                global.isDesc = !global.isDesc;
+                orderView.setImageResource(global.isDesc? R.drawable.desc:R.drawable.incr);
                 updateSortedOutcome();
                 memoriaAdapter.notifyItemRangeChanged(0,memoriaBag.size());
             }
@@ -171,13 +167,13 @@ public class MemoriaActivity extends AppCompatActivity {
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(id < characterList.get(chooseCharacter).breakThrough){
-                        if(chooseEquipSlot == -1){
-                            chooseEquipSlot = id;
+                    if(id < characterList.get(global.chooseCharacter).breakThrough){
+                        if(global.chooseEquipSlot == -1){
+                            global.chooseEquipSlot = id;
                             cv.setChoose(true);
-                        }else if(chooseEquipSlot == id){
+                        }else if(global.chooseEquipSlot == id){
                             //取消对自己的选择
-                            chooseEquipSlot = -1;
+                            global.chooseEquipSlot = -1;
                             cv.setChoose(false);
                             showingMemoriaView.setUnusable();
                             HPShowingView.setText("");
@@ -194,11 +190,11 @@ public class MemoriaActivity extends AppCompatActivity {
                             updateEquippingState();
                             return;
                         }else{
-                            equipMemoriaViewList.get(chooseEquipSlot).setChoose(false);
-                            chooseEquipSlot = id;
+                            equipMemoriaViewList.get(global.chooseEquipSlot).setChoose(false);
+                            global.chooseEquipSlot = id;
                             cv.setChoose(true);
                         }
-                        Memoria m = characterList.get(chooseCharacter).memoriaList[id];
+                        Memoria m = characterList.get(global.chooseCharacter).memoriaList[id];
                         if(m != null){
                             showingMemoriaView.setMemoria(m.id);
                             showingMemoriaView.setLv(m.lvNow,m.lvMax);
@@ -237,7 +233,7 @@ public class MemoriaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 for(int i = 0; i < 4; i++){
-                    Character ch = characterList.get(chooseCharacter);
+                    Character ch = characterList.get(global.chooseCharacter);
                     if(i < ch.breakThrough){
                         //说明已经开孔
                         if(ch.memoriaList[i] != null){
@@ -254,13 +250,13 @@ public class MemoriaActivity extends AppCompatActivity {
         setView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if((chooseEquipSlot != -1) && (memoriaAdapter.choosingMemoria != null)){
+                if((global.chooseEquipSlot != -1) && (memoriaAdapter.choosingMemoria != null)){
                     //set状态
-                    Character ch = characterList.get(chooseCharacter);
-                    if(ch.memoriaList[chooseEquipSlot] != null){
+                    Character ch = characterList.get(global.chooseCharacter);
+                    if(ch.memoriaList[global.chooseEquipSlot] != null){
                         //把自己装备的这张记忆卸下来
-                        ch.memoriaList[chooseEquipSlot].characterId = -1;
-                        ch.memoriaList[chooseEquipSlot] = null;
+                        ch.memoriaList[global.chooseEquipSlot].characterId = -1;
+                        ch.memoriaList[global.chooseEquipSlot] = null;
                     }
                     if(memoriaAdapter.choosingMemoria.characterId != -1){
                         //把别人装备的这张记忆卸下来
@@ -272,15 +268,15 @@ public class MemoriaActivity extends AppCompatActivity {
                         }
                         memoriaAdapter.choosingMemoria.characterId = -1;
                     }
-                    ch.memoriaList[chooseEquipSlot] = memoriaAdapter.choosingMemoria;
-                    memoriaAdapter.choosingMemoria.characterId = chooseCharacter;
+                    ch.memoriaList[global.chooseEquipSlot] = memoriaAdapter.choosingMemoria;
+                    memoriaAdapter.choosingMemoria.characterId = global.chooseCharacter;
                 }else{
                     //取下状态
-                    Character ch = characterList.get(chooseCharacter);
-                    if(ch.memoriaList[chooseEquipSlot] != null){
+                    Character ch = characterList.get(global.chooseCharacter);
+                    if(ch.memoriaList[global.chooseEquipSlot] != null){
                         //把自己装备的这张记忆卸下来
-                        ch.memoriaList[chooseEquipSlot].characterId = -1;
-                        ch.memoriaList[chooseEquipSlot] = null;
+                        ch.memoriaList[global.chooseEquipSlot].characterId = -1;
+                        ch.memoriaList[global.chooseEquipSlot] = null;
                     }
                 }
                 clearAllChoose();
@@ -298,10 +294,10 @@ public class MemoriaActivity extends AppCompatActivity {
 
                 // 按照百分比增加血量
                 float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
-                characterList.get(chooseCharacter).realHP = (int)(1.0f*characterList.get(chooseCharacter).getRealMaxHP()*HPRatio);
-                //Log.d("Sam","realMaxHp:"+characterList.get(chooseCharacter).getRealMaxHP());
-                if(characterList.get(chooseCharacter).realHP <= 1){
-                    characterList.get(chooseCharacter).realHP = 1;
+                characterList.get(global.chooseCharacter).realHP = (int)(1.0f*characterList.get(global.chooseCharacter).getRealMaxHP()*HPRatio);
+                //Log.d("Sam","realMaxHp:"+characterList.get(global.chooseCharacter).getRealMaxHP());
+                if(characterList.get(global.chooseCharacter).realHP <= 1){
+                    characterList.get(global.chooseCharacter).realHP = 1;
                 }
                 if(!isIntentSend){
                     Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
@@ -327,10 +323,10 @@ public class MemoriaActivity extends AppCompatActivity {
                 boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
                 // 按照百分比增加血量
                 float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
-                characterList.get(chooseCharacter).realHP = (int)(1.0f*characterList.get(chooseCharacter).getRealMaxHP()*HPRatio);
-                //Log.d("Sam","realMaxHp:"+characterList.get(chooseCharacter).getRealMaxHP());
-                if(characterList.get(chooseCharacter).realHP <= 1){
-                    characterList.get(chooseCharacter).realHP = 1;
+                characterList.get(global.chooseCharacter).realHP = (int)(1.0f*characterList.get(global.chooseCharacter).getRealMaxHP()*HPRatio);
+                //Log.d("Sam","realMaxHp:"+characterList.get(global.chooseCharacter).getRealMaxHP());
+                if(characterList.get(global.chooseCharacter).realHP <= 1){
+                    characterList.get(global.chooseCharacter).realHP = 1;
                 }
                 if(!isIntentSend){
                     Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
@@ -365,7 +361,7 @@ public class MemoriaActivity extends AppCompatActivity {
         int addDEF = 0;
         for(int i = 0; i < 4; i++){
             CardView cv = equipMemoriaViewList.get(i);
-            Character ch = characterList.get(chooseCharacter);
+            Character ch = characterList.get(global.chooseCharacter);
             if(i < ch.breakThrough){
                 //说明已经开孔
                 if(ch.memoriaList[i] == null){
@@ -377,7 +373,7 @@ public class MemoriaActivity extends AppCompatActivity {
                     addATK += (ch.memoriaList[i].breakthrough == 4)? ch.memoriaList[i].ATKAfter:ch.memoriaList[i].ATKOrigin;
                     addDEF += (ch.memoriaList[i].breakthrough == 4)? ch.memoriaList[i].DEFAfter:ch.memoriaList[i].DEFOrigin;
                 }
-                if(i == chooseEquipSlot){
+                if(i == global.chooseEquipSlot){
                     cv.setChoose(true);
                 }else{
                     cv.setChoose(false);
@@ -406,9 +402,9 @@ public class MemoriaActivity extends AppCompatActivity {
 
     public void clearAllChoose(){
         clearBagChoose();
-        if(chooseEquipSlot != -1){
-            equipMemoriaViewList.get(chooseEquipSlot).setChoose(false);
-            chooseEquipSlot = -1;
+        if(global.chooseEquipSlot != -1){
+            equipMemoriaViewList.get(global.chooseEquipSlot).setChoose(false);
+            global.chooseEquipSlot = -1;
         }
         clearShowing();
     }
@@ -436,12 +432,12 @@ public class MemoriaActivity extends AppCompatActivity {
             public int compare(Memoria lhs, Memoria rhs) {
                 // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
                 int weight = 0;
-                if(lhs.characterId == MemoriaActivity.chooseCharacter){
+                if(lhs.characterId == global.chooseCharacter){
                     weight -= 2;
                 }else if(lhs.characterId != -1){
                     weight -= 1;
                 }
-                if(rhs.characterId == MemoriaActivity.chooseCharacter){
+                if(rhs.characterId == global.chooseCharacter){
                     weight += 2;
                 }else if(rhs.characterId != -1){
                     weight += 1;
@@ -449,10 +445,10 @@ public class MemoriaActivity extends AppCompatActivity {
                 if(weight != 0){
                     return weight;
                 }
-                if(isOrderByLV){
-                    return lhs.lvNow > rhs.lvNow ? (isDesc? -1:1) : (lhs.lvNow < rhs.lvNow ) ? (isDesc? 1:-1):(Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id)? -1:(Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1:0));
+                if(global.isOrderByLV){
+                    return lhs.lvNow > rhs.lvNow ? (global.isDesc? -1:1) : (lhs.lvNow < rhs.lvNow ) ? (global.isDesc? 1:-1):(Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id)? -1:(Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1:0));
                 }else{
-                    return lhs.star > rhs.star ? (isDesc? -1:1) : (lhs.star < rhs.star ) ? (isDesc? 1:-1) :(Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id)? -1:(Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1:0));
+                    return lhs.star > rhs.star ? (global.isDesc? -1:1) : (lhs.star < rhs.star ) ? (global.isDesc? 1:-1) :(Integer.parseInt(lhs.id) > Integer.parseInt(rhs.id)? -1:(Integer.parseInt(lhs.id) < Integer.parseInt(rhs.id) ? 1:0));
                 }
             }
         });
@@ -844,7 +840,7 @@ class Character{
     }
 
     public int getMaxMp(){
-        return star == 5? 2000:1000;
+        return star == 5? 1500:1000;
     }
 
     public int getRealMaxHP(){

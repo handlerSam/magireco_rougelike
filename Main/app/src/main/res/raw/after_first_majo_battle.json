@@ -1,0 +1,52 @@
+[
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "(总感觉最近魔女出现的更加频繁了呢...)",
+        "speakerName": "忧",
+        "speakerDirection": 1,
+        "background":"11021"
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "(上星期医院里也出现了一只，明明之前要更加平和的)",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "(是我的错觉吗)",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char0motion": "300",
+        "char0face": "030",
+        "char2id": "100701",
+        "char2motion": "001",
+        "char2face": "050",
+        "text": "忧？在想什么吗。",
+        "speakerName": "灯花",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char0id": "101503",
+        "char0motion": "100",
+        "char0face": "041",
+        "char2id": "100701",
+        "text": "啊，没事！我们走吧。",
+        "speakerName": "忧",
+        "speakerDirection": 0
+    }
+]

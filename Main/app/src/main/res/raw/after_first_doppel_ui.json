@@ -1,0 +1,125 @@
+[
+    {
+        "flag": 0,
+        "char0id": "100700",
+        "char0motion": "201",
+        "char0face": "050",
+        "char2id": "101400",
+        "char2motion": "000",
+        "char2face": "030",
+        "text": "忧！身体没事吧！",
+        "speakerName": "灯花",
+        "speakerDirection": 0,
+        "background":"11021"
+    },
+    {
+        "flag": 0,
+        "char0id": "100700",
+        "char0face": "050",
+        "char2id": "101400",
+        "char2motion": "300",
+        "char2face": "030",
+        "text": "有没有感觉哪里不舒服？",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "001",
+        "char1face": "050",
+        "text": "啊？没有...反而觉得身体很清爽...我刚才怎么了？",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "100",
+        "char1face": "050",
+        "text": "(确实，忧的灵魂宝石也很清澈...这是怎么回事？)",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "101500",
+        "char0motion": "001",
+        "char0face": "050",
+        "char2id": "101400",
+        "char2motion": "000",
+        "char2face": "030",
+        "text": "刚才你突然间失去了意识，身体变得和魔女一般...",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char0id": "101500",
+        "char0motion": "400",
+        "char0face": "050",
+        "char2id": "101400",
+        "text": "什么？我...",
+        "speakerName": "忧",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "100",
+        "char1face": "050",
+        "text": "(之前查资料的时候从来没看到过魔法少女可以做到这种事情...)",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "text": "(不，理论上是可行的...只要能把灵魂宝石里的污秽转化成力量)",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "text": "(问题是什么东西能做到这一点？)",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101400",
+        "char1motion": "100",
+        "char1face": "000",
+        "text": "灯花？你想到了什么吗。",
+        "speakerName": "音梦",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "200",
+        "char1face": "010",
+        "text": "嗯，我有了一些想法，但是现在还没有办法验证。",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100700",
+        "char1motion": "201",
+        "char1face": "052",
+        "text": "忧，身体要紧吗?",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101500",
+        "char1motion": "200",
+        "char1face": "011",
+        "text": "没事没事，我们走吧！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    }
+]

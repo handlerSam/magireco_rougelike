@@ -4,7 +4,7 @@
         "text": "站住！",
         "speakerName": "???",
         "speakerDirection": 1,
-        "background": "11041"
+        "background": "12041"
     },
     {
         "flag": 0,
@@ -47,8 +47,8 @@
         "speakerName": "菖蒲",
         "char0id": "100501",
         "char2id": "302801",
-        "char2motion": "200",
-        "char2face": "010",
+        "char2motion": "100",
+        "char2face": "011",
         "text": "对！打劫，要过去就把钱交出来！",
         "speakerDirection": 2
     },
@@ -58,7 +58,7 @@
         "char1id": "301101",
         "char1motion": "400",
         "char1face": "050",
-        "text": "实...实在对不起！我拦住她们，你们三个快...",
+        "text": "三位，实...实在对不起！我拦住她们，你们三个快...",
         "speakerDirection": 1
     },
     {
@@ -68,7 +68,7 @@
         "char0motion": "200",
         "char0face": "020",
         "char2id": "302801",
-        "char2face": "020",
+        "char2face": "030",
         "text": "佳子！你打算站在她们这边吗！",
         "speakerDirection": 0
     },
@@ -78,6 +78,7 @@
         "char0id": "100501",
         "char2id": "302801",
         "char2motion": "200",
+        "char2face": "030",
         "text": "就是啊，不要我们了吗！",
         "speakerDirection": 2
     },
@@ -87,7 +88,7 @@
         "char1id": "301101",
         "char1motion": "200",
         "char1face": "030",
-        "text": "不是...我...对...对不起！",
+        "text": "不是...我...",
         "speakerDirection": 1
     },
     {
@@ -193,7 +194,7 @@
         "char1id": "301101",
         "char1motion": "200",
         "char1face": "030",
-        "text": "我们又没带钱出来，所以她们想了这么糟糕的主意...",
+        "text": "我们又没带钱出来，所以她们才想了个这么糟糕的主意...",
         "speakerDirection": 1
     },
     {

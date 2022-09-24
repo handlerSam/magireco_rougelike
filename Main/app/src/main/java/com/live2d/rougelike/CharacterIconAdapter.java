@@ -19,6 +19,7 @@ public class CharacterIconAdapter extends RecyclerView.Adapter<CharacterIconAdap
     //直接把ViewHolder与xml文件适配
     ArrayList<Character> mPerson;//用于存储传入的List<Person>
     private Context context;
+    Global global;
 
     //初始化ViewHolder，创建时直接绑定好两个布局
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -45,7 +46,8 @@ public class CharacterIconAdapter extends RecyclerView.Adapter<CharacterIconAdap
     //构造方法
     public CharacterIconAdapter(Context context){
         this.context = context;
-        mPerson = StartActivity.characterList;
+        global = (Global)context.getApplicationContext();
+        mPerson = global.characterList;
     }
 
     //以下为三个必须重写的方法：
@@ -67,8 +69,8 @@ public class CharacterIconAdapter extends RecyclerView.Adapter<CharacterIconAdap
         holder.charFrame.setBackgroundResource(getResourceByString("frame_rank_"+c.star));
         holder.charAttr.setImageResource(getResourceByString(c.element));
         holder.lvView.setText("Lv "+c.lv);
-        if(StartActivity.characters[TeamChooseActivity.choseCharacter] != null){
-            if(StartActivity.characters[TeamChooseActivity.choseCharacter] == c){
+        if(global.characters[global.choseCharacter] != null){
+            if(global.characters[global.choseCharacter] == c){
                 //说明该角色是当前选中的角色
                 holder.retreat.setVisibility(View.VISIBLE);
                 holder.starsLayout.setVisibility(View.INVISIBLE);
@@ -77,21 +79,21 @@ public class CharacterIconAdapter extends RecyclerView.Adapter<CharacterIconAdap
                     public void onClick(View view) {
                         TeamChooseActivity t = (TeamChooseActivity)context;
                         for(int i = 0; i < 5; i++){
-                            if(StartActivity.characters[i] == c){
-                                StartActivity.characters[i] = null;
+                            if(global.characters[i] == c){
+                                global.characters[i] = null;
                             }
                         }
                         if(c.isLeader){
                             c.isLeader = false;
                             for(int i = 0; i < 5; i++){
-                                if(StartActivity.characters[i] != null){
-                                    StartActivity.characters[i].isLeader = true;
+                                if(global.characters[i] != null){
+                                    global.characters[i].isLeader = true;
                                     break;
                                 }
                             }
                         }
-                        t.chooseChar[TeamChooseActivity.choseCharacter].setVisibility(View.INVISIBLE);
-                        TeamChooseActivity.choseCharacter = -1;
+                        t.chooseChar[global.choseCharacter].setVisibility(View.INVISIBLE);
+                        global.choseCharacter = -1;
                         t.charRecyclerLayout.setVisibility(View.GONE);
                         t.updateCheckingViews();
                     }
@@ -110,17 +112,17 @@ public class CharacterIconAdapter extends RecyclerView.Adapter<CharacterIconAdap
             public void onClick(View view) {
                 TeamChooseActivity t = (TeamChooseActivity)context;
                 for(int i = 0; i < 5; i++){
-                    if(StartActivity.characters[i] == c){
+                    if(global.characters[i] == c){
                         c.isLeader = false;
-                        StartActivity.characters[i] = null;
+                        global.characters[i] = null;
                     }
                 }
 
-                StartActivity.characters[TeamChooseActivity.choseCharacter] = c;
+                global.characters[global.choseCharacter] = c;
 
                 boolean isTeamNoLeader = true;
                 for(int i = 0; i < 5; i++){
-                    if(StartActivity.characters[i] != null && StartActivity.characters[i].isLeader) {
+                    if(global.characters[i] != null && global.characters[i].isLeader) {
                         isTeamNoLeader = false;
                         break;
                     }
@@ -130,8 +132,8 @@ public class CharacterIconAdapter extends RecyclerView.Adapter<CharacterIconAdap
                 }
 
 
-                t.chooseChar[TeamChooseActivity.choseCharacter].setVisibility(View.INVISIBLE);
-                TeamChooseActivity.choseCharacter = -1;
+                t.chooseChar[global.choseCharacter].setVisibility(View.INVISIBLE);
+                global.choseCharacter = -1;
                 t.charRecyclerLayout.setVisibility(View.GONE);
                 t.updateCheckingViews();
             }

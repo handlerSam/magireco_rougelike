@@ -17,6 +17,8 @@ public class MemoriaAdapter extends RecyclerView.Adapter<MemoriaAdapter.ViewHold
     Memoria choosingMemoria = null;
     ArrayList<MemoriaAdapter.ViewHolder> holderList = new ArrayList<>();
 
+    Global global;
+
     static class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         public ViewHolder(View view, CardView cardView){
@@ -27,6 +29,7 @@ public class MemoriaAdapter extends RecyclerView.Adapter<MemoriaAdapter.ViewHold
     public MemoriaAdapter(List<Memoria> mList, Context context){
         this.mlist = mList;
         this.context = context;
+        this.global = (Global)context.getApplicationContext();
     }
 
     @NonNull
@@ -95,7 +98,7 @@ public class MemoriaAdapter extends RecyclerView.Adapter<MemoriaAdapter.ViewHold
                 mActivity.skillIcon.setVisibility(View.VISIBLE);
                 mActivity.skillDescriptionView.setText(m.getEffectDescription());
                 mActivity.setView.setImageResource(R.drawable.set);
-                mActivity.setView.setVisibility((m.canSet && MemoriaActivity.chooseEquipSlot != -1)? View.VISIBLE:View.INVISIBLE);
+                mActivity.setView.setVisibility((m.canSet && global.chooseEquipSlot != -1)? View.VISIBLE:View.INVISIBLE);
             }
         });
         return holder;
@@ -111,16 +114,16 @@ public class MemoriaAdapter extends RecyclerView.Adapter<MemoriaAdapter.ViewHold
         holder.cardView.setChoose(m.isChoosed);
         if(m.characterId != -1){
             holder.cardView.equippingView.setVisibility(View.VISIBLE);
-            holder.cardView.setEquippingResource(!(m.characterId == MemoriaActivity.chooseCharacter));
+            holder.cardView.setEquippingResource(!(m.characterId == global.chooseCharacter));
         }else{
             holder.cardView.equippingView.setVisibility(View.INVISIBLE);
         }
-        if(MemoriaActivity.chooseEquipSlot != -1){
+        if(global.chooseEquipSlot != -1){
             boolean temp;
             if(m.isSkill()){
-                temp = StartActivity.characterList.get(MemoriaActivity.chooseCharacter).canEquipSkill(MemoriaActivity.chooseEquipSlot);
+                temp = global.characterList.get(global.chooseCharacter).canEquipSkill(global.chooseEquipSlot);
             }else{
-                temp = StartActivity.characterList.get(MemoriaActivity.chooseCharacter).canEquipNormalcy(MemoriaActivity.chooseEquipSlot);
+                temp = global.characterList.get(global.chooseCharacter).canEquipNormalcy(global.chooseEquipSlot);
             }
             holder.cardView.setUnableToEquip(!temp);
             m.canSet = temp;

@@ -29,60 +29,22 @@ import static com.live2d.rougelike.CharacterPlateView.CHARGE;
 
 public class StartActivity extends AppCompatActivity{
 
-    final public static int[] CHARACTER_BREAK_THROUGH_PRICE = new int[]{1, 1, 2};
-    //选中的formation：StartActivity.formationList.get(TeamChooseActivity.usingFormationId)
-    final public static int CHARACTER_STAR_UP_PRICE = 5;
 
-    //    public static ArrayList<Character> monsterList = new ArrayList<>();
-    final public static int[] CHARACTER_CHANGE_PLATE_PRICE = new int[]{1, 1, 2, 3, 5, 8};
-    final public static int[] MEMORIA_LV_UP_PRICE = new int[]{1000, 2000, 4000};
-    final public static int[] MEMORIA_PURCHASE_PRICE = new int[]{0, 3000, 6000};
-    public static ArrayList<Formation> formationList = new ArrayList<>();
-    public static Character[] characters = {null, null, null, null, null};
-    public static Dictionary<String, Collection> collectionDict = new Hashtable<>();
-    public static ArrayList<Collection> collectionList = new ArrayList<>();
-    public static ArrayList<Integer>[] USEDMEMORIA = new ArrayList[3];
-    public static ArrayList<Character> characterList = new ArrayList<>();
-    public static ArrayList<Memoria> memoriaBag = new ArrayList<>();
-    public static ArrayList<BattleInfo> battleInfoList = new ArrayList<>();
-    public static ArrayList<ExtraMission> extraMissionList = new ArrayList<>();
-    public static ArrayList<BackgroundImage> DAY_BACKGROUND_IMAGE_LIST = new ArrayList<>();
-    public static ArrayList<BackgroundImage> DUSK_BACKGROUND_IMAGE_LIST = new ArrayList<>();
-    public static ArrayList<BackgroundImage> JUNCTION_BACKGROUND_IMAGE_LIST = new ArrayList<>();
-    public static int[][] mapRandomPoint;
-    public static int SCREEN_WIDTH = 0;
-    public static int SCREEN_HEIGHT = 0;
-    public static int plate_change_time = 0;
-    public static int griefSeedNumber = 3;
-    public static int ccNumber = 4000;
-    public static float gameTime = 7.0f;
-    public static int PLAYER_ON_MAP_X = 760;// 改动后要调用MapActivity.eventX.clear();MapActivity.eventY.clear();，地图才会更新
-    public static int PLAYER_ON_MAP_Y = 471;
-    public static int COST_FOR_SUMMON_ADJUSTMENT_HOUSE = 2000;
-    public static Dictionary<Integer, ArrayList<String>> ENEMY_RANDOM_BUFF_DICT = new Hashtable();
-    public static int[] preloadMemoria = {1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1037, 1038, 1039, 1041, 1042, 1043, 1044, 1045, 1046, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1059, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1103, 1105, 1106, 1107, 1112, 1113, 1115, 1117, 1119, 1120, 1121, 1122, 1124, 1126, 1127, 1130, 1131, 1132, 1133, 1134, 1136, 1137, 1138, 1140, 1142, 1144, 1145, 1146, 1151, 1152, 1154, 1155, 1156, 1160, 1161, 1162, 1163, 1164, 1166, 1167, 1168, 1169, 1171, 1174, 1176, 1177, 1179, 1180, 1182, 1186, 1187, 1188, 1189, 1192, 1193, 1195, 1196, 1197, 1199, 1200, 1202, 1207, 1209, 1210, 1214, 1215, 1216, 1218, 1219, 1221, 1222, 1224, 1225, 1226, 1227, 1229, 1230, 1231, 1232, 1234, 1235, 1236, 1237, 1239, 1240, 1241, 1243, 1244, 1246, 1247, 1250, 1251, 1252, 1253, 1255, 1259, 1260, 1261, 1262, 1264, 1265, 1266, 1267, 1268, 1270, 1271, 1272, 1273, 1274, 1277, 1278, 1280, 1283, 1284, 1285, 1286, 1288, 1289, 1290, 1291, 1293, 1294, 1295, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1309, 1310, 1311, 1313, 1316, 1317, 1318, 1320, 1321, 1322, 1324, 1326, 1327, 1329, 1330, 1331, 1332, 1334, 1336, 1337, 1339, 1340, 1341, 1342, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1353, 1354, 1355, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1367, 1368, 1369, 1370, 1371, 1374, 1376, 1377, 1378, 1379, 1381, 1382, 1383, 1384, 1386, 1387, 1388, 1390, 1391, 1392, 1393, 1394, 1395, 1396, 1397, 1398, 1400, 1401, 1403, 1404, 1405, 1406, 1407, 1409, 1411, 1412, 1417, 1418, 1419, 1420, 1421, 1423, 1424, 1428, 1429, 1430, 1431, 1432, 1434, 1435, 1437, 1438, 1439, 1440, 1441, 1443, 1444, 1445, 1446, 1449, 1450, 1453, 1454, 1456, 1457, 1458, 1460, 1461, 1465, 1466, 1469, 1472, 1473, 1474, 1475, 1476, 1477, 1478, 1479, 1481, 1482, 1483, 1486, 1487, 1489, 1490, 1491, 1492, 1494, 1495, 1496, 1497, 1501, 1502, 1503, 1504, 1505, 1509, 1510, 1511, 1512, 1515, 1516, 1519, 1520, 1521, 1522, 1524, 1525, 1526, 1529, 1530, 1531, 1532, 1534, 1535, 1536, 1537, 1541, 1542, 1543, 1545, 1546, 1547, 1548, 1550, 1551, 1552, 1553, 1555, 1557, 1558, 1559, 1561, 1562, 1564, 1565, 1566, 1568, 1569, 1570, 1571, 1572, 1574, 1575, 1576, 1577, 1578, 1579, 1580, 1582, 1583, 1584, 1585, 1587, 1588, 1590, 1591, 1592, 1593, 1594, 1595, 1597, 1599, 1600, 1601, 1602, 1604, 1605, 1606, 1607, 1609, 1610, 1611, 1612, 1613, 1614, 1616, 1617, 1619, 1620, 1621, 1624, 1625, 1626, 1627, 1629, 1630, 1631, 1632, 1634, 1635, 1636, 1637, 1639, 1640, 1641, 1642, 1643, 1645, 1646, 1647, 1648, 1650, 1651, 1652, 1653, 1655, 1656, 1657, 1659, 1660, 1661, 1663, 1664, 1665, 1666, 1668, 1669, 1670, 1671, 1673, 1674, 1675, 1676, 1677, 1678, 1679, 1681, 1682, 1683, 1684, 1686, 1687, 1688, 1689, 1691, 1692, 1693, 1696, 1697, 1699, 1702, 1703, 1704, 1706, 1707, 1708, 1709, 1712, 1713, 1714, 1715, 1719, 1720, 1723, 1724, 1726, 1728, 1729, 1730, 1731, 1732};
-
-    public static int[] randomEventList = {R.raw.robbery_before, R.raw.promotion_of_bangbangzai};
-
-
-    public static void clearCharBattleInfo(){
-        for(int i = 0; i < characterList.size(); i++){
-//            characterList.get(i).diamondNumber = 0;
-            characterList.get(i).actionOrder = 2;
-        }
-    }
+    Global global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        global = (Global)getApplicationContext();
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
-        SCREEN_HEIGHT = Math.min(metric.widthPixels, metric.heightPixels);  // 屏幕宽度（像素）
-        SCREEN_WIDTH = Math.max(metric.widthPixels, metric.heightPixels);  // 屏幕高度（像素）
-        JniBridgeJava.setScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        Log.d("sam", "screenWidth:" + SCREEN_WIDTH + ", Height:" + SCREEN_HEIGHT);
+        global.SCREEN_HEIGHT = Math.min(metric.widthPixels, metric.heightPixels);  // 屏幕宽度（像素）
+        global.SCREEN_WIDTH = Math.max(metric.widthPixels, metric.heightPixels);  // 屏幕高度（像素）
+        JniBridgeJava.setScreenSize(global.SCREEN_WIDTH, global.SCREEN_HEIGHT);
+        Log.d("sam", "screenWidth:" + global.SCREEN_WIDTH + ", Height:" + global.SCREEN_HEIGHT);
 
+        initRandomEvent();
 
         initMemoria();
         initCollection();
@@ -103,10 +65,16 @@ public class StartActivity extends AppCompatActivity{
         //finish();
         //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 
-        Intent intent1 = new Intent(StartActivity.this, MapActivity.class);
+        Intent intent1 = new Intent(StartActivity.this, DialogActivity.class);
+        intent1.putExtra("storyResourceId",R.raw.story1);
         startActivity(intent1);
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    public void initRandomEvent(){
+        global.randomEventList.add(R.raw.promotion_of_bangbangzai);
+        global.randomEventList.add(R.raw.robbery_before);
     }
 
     public void initCharacterList(){
@@ -122,8 +90,8 @@ public class StartActivity extends AppCompatActivity{
         remu.miniImage = "mini_remu";
         remu.isLeader = false;
         remu.lv = 1;
-        remu.star = 4;
-        remu.realMP = 0;
+        remu.star = 5;
+        remu.realMP = 1500;
         remu.plateList = new int[]{ACCELE, ACCELE, ACCELE, BLAST_VERTICAL, CHARGE};
         remu.mpAttackRatio = 1.2f;
         remu.mpDefendRatio = 1.0f;
@@ -185,8 +153,8 @@ public class StartActivity extends AppCompatActivity{
         toca.isLeader = false;
         toca.spriteName = "Satomi Touka";
         toca.lv = 1;
-        toca.star = 4;
-        toca.realMP = 0;
+        toca.star = 5;
+        toca.realMP = 1500;
         toca.plateList = new int[]{ACCELE, ACCELE, BLAST_HORIZONTAL, BLAST_VERTICAL, CHARGE};
         toca.mpAttackRatio = 1.2f;
         toca.mpDefendRatio = 1.2f;
@@ -242,8 +210,8 @@ public class StartActivity extends AppCompatActivity{
         ui.isLeader = false;
         ui.spriteName = "Tamaki Ui";
         ui.lv = 1;
-        ui.star = 4;
-        ui.realMP = 0;
+        ui.star = 5;
+        ui.realMP = 1500;
         ui.plateList = new int[]{ACCELE, ACCELE, BLAST_HORIZONTAL, CHARGE, CHARGE};
         ui.mpAttackRatio = 0.9f;
         ui.mpDefendRatio = 0.9f;
@@ -287,11 +255,11 @@ public class StartActivity extends AppCompatActivity{
         ui.updateAttributionBasedOnLv();
         //ui.initialEffectList.add(new Effect("眩晕",0,1,100,0));
 
-        characterList.add(remu);
-        characterList.add(toca);
-        characterList.add(ui);
+        global.characterList.add(remu);
+        global.characterList.add(toca);
+        global.characterList.add(ui);
 
-        characterList.get(1).isLeader = true;
+        global.characterList.get(1).isLeader = true;
 
 //        characterList.get(0).setMemoria(0,memoriaBag.get(0));
 //        characterList.get(0).setMemoria(1,memoriaBag.get(1));
@@ -301,9 +269,9 @@ public class StartActivity extends AppCompatActivity{
 //        memoriaBag.get(1).setCarrier(0);
 //        memoriaBag.get(2).setCarrier(1);
 
-        characters[1] = characterList.get(0);
-        characters[2] = characterList.get(2);
-        characters[3] = characterList.get(1);
+        global.characters[1] = global.characterList.get(0);
+        global.characters[2] = global.characterList.get(2);
+        global.characters[3] = global.characterList.get(1);
     }
 
     public void initBattleInfoList(){
@@ -386,7 +354,35 @@ public class StartActivity extends AppCompatActivity{
         bi.monsterFormation[0][0] = felicia;
         bi.monsterFormation[1][1] = kako;
         bi.monsterFormation[2][2] = ayame;
-        battleInfoList.add(bi);
+        global.battleInfoList.add(bi);
+
+        // 与八千代第一次相遇时的战斗
+        bi = new BattleInfo();
+        bi.isBossBattle = true;
+
+        bi.monsterNumber = 1;
+        bi.recommendLV = "??";
+        bi.backgroundId = 2;
+        bi.backgroundType = BattleInfo.JUNCTION;
+
+        Character monster1 = new Character();
+        monster1.element = "fire";
+        monster1.spriteName = "monster_沙地的魔女";
+        monster1.name = "沙地的魔女";
+        monster1.lv = 80;
+        monster1.HP = 180000;
+        monster1.realHP = monster1.HP;
+        monster1.ATK = 12000;
+        monster1.DEF = 3000;
+        monster1.mpAttackRatio = 0f;
+        monster1.mpDefendRatio = 0f;
+        monster1.plateList = new int[]{BLAST_HORIZONTAL, BLAST_VERTICAL, BLAST_HORIZONTAL, BLAST_VERTICAL, CHARGE};
+        bi.monsterList.add(monster1);
+
+        bi.monsterFormation[1][1] = monster1;
+        bi.monsterFormation[1][0] = monster1;
+        bi.monsterFormation[1][2] = monster1;
+        global.battleInfoList.add(bi);
     }
 
     public void initBossList(){
@@ -415,7 +411,7 @@ public class StartActivity extends AppCompatActivity{
         bi.monsterFormation[2][1] = monster1;
         bi.monsterFormation[1][0] = monster1;
         bi.monsterFormation[1][2] = monster1;
-        battleInfoList.add(bi);
+        global.battleInfoList.add(bi);
     }
 
     public void initMonsterList(){
@@ -489,78 +485,78 @@ public class StartActivity extends AppCompatActivity{
         //monster4.initialEffectList.add(new Effect("攻击时给予状态诅咒",0,999,100,1));
         bi.monsterList.add(monster4);
         bi.monsterFormation[2][0] = monster4;
-        battleInfoList.add(bi);
+        global.battleInfoList.add(bi);
     }
 
     public void initFormation(){
-        formationList.add(new Formation(new int[][]{{1, 0, 1}, {0, 2, 0}, {1, 0, 1}}, "英勇梯队"));
-        formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
-        formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{1, 0, 1}, {0, 2, 0}, {1, 0, 1}}, "英勇梯队"));
+        global.formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
+        global.formationList.get(0).gridAllEffectList[1][1].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{1, 0, 0}, {2, 1, 2}, {1, 0, 0}}, "光明方阵"));
-        formationList.get(1).gridAllEffectList[1][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
-        formationList.get(1).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{1, 0, 0}, {2, 1, 2}, {1, 0, 0}}, "光明方阵"));
+        global.formationList.get(1).gridAllEffectList[1][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
+        global.formationList.get(1).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{0, 1, 0}, {2, 1, 2}, {0, 1, 0}}, "强力十字"));
-        formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
-        formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("攻击力DOWN", 10, "自", 0, 100));
-        formationList.get(2).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{0, 1, 0}, {2, 1, 2}, {0, 1, 0}}, "强力十字"));
+        global.formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
+        global.formationList.get(2).gridAllEffectList[1][0].add(new SkillEffect("攻击力DOWN", 10, "自", 0, 100));
+        global.formationList.get(2).gridAllEffectList[1][2].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·火"));
-        formationList.get(3).gridAllEffectList[0][2].add(new SkillEffect("火属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(3).gridAllEffectList[1][0].add(new SkillEffect("火属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(3).gridAllEffectList[2][2].add(new SkillEffect("火属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·火"));
+        global.formationList.get(3).gridAllEffectList[0][2].add(new SkillEffect("火属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(3).gridAllEffectList[1][0].add(new SkillEffect("火属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(3).gridAllEffectList[2][2].add(new SkillEffect("火属性攻击力UP", 15, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·水"));
-        formationList.get(4).gridAllEffectList[0][2].add(new SkillEffect("水属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(4).gridAllEffectList[1][0].add(new SkillEffect("水属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(4).gridAllEffectList[2][2].add(new SkillEffect("水属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·水"));
+        global.formationList.get(4).gridAllEffectList[0][2].add(new SkillEffect("水属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(4).gridAllEffectList[1][0].add(new SkillEffect("水属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(4).gridAllEffectList[2][2].add(new SkillEffect("水属性攻击力UP", 15, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·木"));
-        formationList.get(5).gridAllEffectList[0][2].add(new SkillEffect("木属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(5).gridAllEffectList[1][0].add(new SkillEffect("木属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(5).gridAllEffectList[2][2].add(new SkillEffect("木属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·木"));
+        global.formationList.get(5).gridAllEffectList[0][2].add(new SkillEffect("木属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(5).gridAllEffectList[1][0].add(new SkillEffect("木属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(5).gridAllEffectList[2][2].add(new SkillEffect("木属性攻击力UP", 15, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·光"));
-        formationList.get(6).gridAllEffectList[0][2].add(new SkillEffect("光属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(6).gridAllEffectList[1][0].add(new SkillEffect("光属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(6).gridAllEffectList[2][2].add(new SkillEffect("光属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·光"));
+        global.formationList.get(6).gridAllEffectList[0][2].add(new SkillEffect("光属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(6).gridAllEffectList[1][0].add(new SkillEffect("光属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(6).gridAllEffectList[2][2].add(new SkillEffect("光属性攻击力UP", 15, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·暗"));
-        formationList.get(7).gridAllEffectList[0][2].add(new SkillEffect("暗属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(7).gridAllEffectList[1][0].add(new SkillEffect("暗属性攻击力UP", 15, "自", 0, 100));
-        formationList.get(7).gridAllEffectList[2][2].add(new SkillEffect("暗属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{0, 0, 2}, {2, 1, 1}, {0, 0, 2}}, "属性方阵·暗"));
+        global.formationList.get(7).gridAllEffectList[0][2].add(new SkillEffect("暗属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(7).gridAllEffectList[1][0].add(new SkillEffect("暗属性攻击力UP", 15, "自", 0, 100));
+        global.formationList.get(7).gridAllEffectList[2][2].add(new SkillEffect("暗属性攻击力UP", 15, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{0, 1, 0}, {1, 2, 1}, {0, 1, 0}}, "英勇十字"));
-        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("防御力UP", 15, "自", 0, 100));
-        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("异常状态耐性UP", 10, "自", 0, 100));
-        formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("Blast伤害UP", 10, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{0, 1, 0}, {1, 2, 1}, {0, 1, 0}}, "英勇十字"));
+        global.formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("防御力UP", 15, "自", 0, 100));
+        global.formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("异常状态耐性UP", 10, "自", 0, 100));
+        global.formationList.get(8).gridAllEffectList[1][1].add(new SkillEffect("Blast伤害UP", 10, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{2, 0, 2}, {0, 1, 0}, {2, 0, 2}}, "守护之力"));
-        formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
-        formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
-        formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
-        formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
-        formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
-        formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
-        formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
-        formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{2, 0, 2}, {0, 1, 0}, {2, 0, 2}}, "守护之力"));
+        global.formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
+        global.formationList.get(9).gridAllEffectList[0][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
+        global.formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
+        global.formationList.get(9).gridAllEffectList[0][2].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
+        global.formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
+        global.formationList.get(9).gridAllEffectList[2][0].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
+        global.formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("HP自动回复", 2, "自", 0, 100));
+        global.formationList.get(9).gridAllEffectList[2][2].add(new SkillEffect("防御力UP", 10, "自", 0, 100));
 
-        formationList.add(new Formation(new int[][]{{1, 0, 1}, {0, 2, 0}, {1, 0, 1}}, "强力梯队"));
-        formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
-        formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("伤害削减", 5, "自", 0, 100));
+        global.formationList.add(new Formation(new int[][]{{1, 0, 1}, {0, 2, 0}, {1, 0, 1}}, "强力梯队"));
+        global.formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("攻击力UP", 10, "自", 0, 100));
+        global.formationList.get(10).gridAllEffectList[1][1].add(new SkillEffect("伤害削减", 5, "自", 0, 100));
 
     }
 
     public void initMemoria(){
         for(int i = 0; i < 3; i++){
-            USEDMEMORIA[i] = new ArrayList<>();
+            global.USEDMEMORIA[i] = new ArrayList<>();
         }
         //把preloadMemoria中的记忆按照星级分到USEDMEMORIA中
-        for(int i = 0; i < preloadMemoria.length; i++){
-            int id = preloadMemoria[i];
+        for(int i = 0; i < global.preloadMemoria.length; i++){
+            int id = global.preloadMemoria[i];
             Memoria m = new Memoria("" + id, StartActivity.this);
-            USEDMEMORIA[m.star - 2].add(id);
+            global.USEDMEMORIA[m.star - 2].add(id);
         }
 
         ////把所有记忆都加载到背包中
@@ -608,38 +604,38 @@ public class StartActivity extends AppCompatActivity{
                 c.icon = temp.optString("icon");
                 c.price = temp.optInt("price");
                 c.background = temp.optString("background");
-                collectionList.add(c);
-                collectionDict.put(c.name, c);
+                global.collectionList.add(c);
+                global.collectionDict.put(c.name, c);
             }
         }catch(Exception e){
             e.printStackTrace();
         }
-        Collections.shuffle(collectionList);
+        Collections.shuffle(global.collectionList);
 
     }
 
     public void initBackground(){
-        DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_east_riverbank_down));
-        DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_east_street_down));
-        DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_riverbank_up, R.drawable.background_day_riverbank_down));
-        DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_shuide_street_down));
-        DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_riverbank_up, R.drawable.background_day_street2_down));
-        DUSK_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_dusk_street_up, R.drawable.background_dusk_east_riverbank_down));
-        DUSK_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_dusk_street_up, R.drawable.background_dusk_street2_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction1_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction2_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction3_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction4_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction5_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction6_up, R.drawable.background_junction6_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction7_up, R.drawable.background_junction7_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction8_up, R.drawable.background_junction8_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction9_up, R.drawable.background_junction9_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction10_up, R.drawable.background_junction10_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction11_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction12_up, R.drawable.background_junction12_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction13_down));
-        JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction14_down));
+        global.DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_east_riverbank_down));
+        global.DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_east_street_down));
+        global.DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_riverbank_up, R.drawable.background_day_riverbank_down));
+        global.DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_east_street_up, R.drawable.background_day_shuide_street_down));
+        global.DAY_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_day_riverbank_up, R.drawable.background_day_street2_down));
+        global.DUSK_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_dusk_street_up, R.drawable.background_dusk_east_riverbank_down));
+        global.DUSK_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_dusk_street_up, R.drawable.background_dusk_street2_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction1_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction2_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction3_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction4_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction5_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction6_up, R.drawable.background_junction6_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction7_up, R.drawable.background_junction7_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction8_up, R.drawable.background_junction8_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction9_up, R.drawable.background_junction9_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction10_up, R.drawable.background_junction10_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction11_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction12_up, R.drawable.background_junction12_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction13_down));
+        global.JUNCTION_BACKGROUND_IMAGE_LIST.add(new BackgroundImage(R.drawable.background_junction1_up, R.drawable.background_junction14_down));
     }
 
     public void initRandomBuff(){
@@ -667,7 +663,7 @@ public class StartActivity extends AppCompatActivity{
                 for(int j = 0; j < efList.length(); j++){
                     buffIdList.add(efList.optString(j));
                 }
-                ENEMY_RANDOM_BUFF_DICT.put(i, buffIdList);
+                global.ENEMY_RANDOM_BUFF_DICT.put(i, buffIdList);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -695,10 +691,10 @@ public class StartActivity extends AppCompatActivity{
         }
         try{
             JSONArray efList = textList.getJSONArray("mapPoints");
-            mapRandomPoint = new int[efList.length()][2];
+            global.mapRandomPoint = new int[efList.length()][2];
             for(int i = 0; i < efList.length(); i++){
-                mapRandomPoint[i][0] = efList.getJSONArray(i).getInt(0);
-                mapRandomPoint[i][1] = efList.getJSONArray(i).getInt(1);
+                global.mapRandomPoint[i][0] = efList.getJSONArray(i).getInt(0);
+                global.mapRandomPoint[i][1] = efList.getJSONArray(i).getInt(1);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -707,49 +703,49 @@ public class StartActivity extends AppCompatActivity{
 
     public void initExtraMissionList(){
         ExtraMission em = new ExtraMission("3回合内通关", new Bonus(1000, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("3回合内通关", new Bonus(0, 1));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("5回合内通关", new Bonus(500, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         //em = new ExtraMission("某次攻击对两名以上敌人造成伤害", new Bonus(1000,0));
         //extraMissionList.add(em);
 
         em = new ExtraMission("释放一次Magia", new Bonus(1000, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("释放一次Magia", new Bonus(0, 1));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("发动一次3BCombo", new Bonus(1000, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("发动一次3BCombo", new Bonus(0, 1));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("发动一次3CCombo", new Bonus(1000, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("发动一次3CCombo", new Bonus(0, 1));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("消耗5个charge", new Bonus(1000, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("消耗5个charge", new Bonus(0, 1));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("至少一人血量大于80%", new Bonus(1000, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("至少一人血量大于60%", new Bonus(500, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
 
         em = new ExtraMission("全员血量大于60%", new Bonus(1000, 0));
-        extraMissionList.add(em);
+        global.extraMissionList.add(em);
     }
 
     @Override

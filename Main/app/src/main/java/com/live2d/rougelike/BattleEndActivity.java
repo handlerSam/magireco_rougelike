@@ -72,10 +72,13 @@ public class BattleEndActivity extends AppCompatActivity {
 
     BattleInfo bi;
 
+    Global global;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_end);
+        global = (Global)getApplicationContext();
         findView();
         initView();
     }
@@ -130,23 +133,23 @@ public class BattleEndActivity extends AppCompatActivity {
         //设置背景
         isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
         if(isRandomBattle){
-            bi = MapActivity.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
+            bi = global.mpEvent.get(getIntent().getIntExtra("battleInfo",-1)).bi;
         }else{
-            bi = StartActivity.battleInfoList.get(getIntent().getIntExtra("battleInfo",-1));
+            bi = global.battleInfoList.get(getIntent().getIntExtra("battleInfo",-1));
         }
         if(bi.backgroundType == BattleInfo.JUNCTION){
-            underlay.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
-            backgroundLeft.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
-            backgroundRight.setImageResource(StartActivity.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            underlay.setImageResource(global.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(global.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(global.JUNCTION_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
         }else if(bi.backgroundType == BattleInfo.DAY){
-            underlay.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
-            backgroundLeft.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
-            backgroundRight.setImageResource(StartActivity.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            underlay.setImageResource(global.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).upImageId);
+            backgroundLeft.setImageResource(global.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
+            backgroundRight.setImageResource(global.DAY_BACKGROUND_IMAGE_LIST.get(bi.backgroundId).downImageId);
         }
 
         //额外任务
         Intent receivedIntent = getIntent();
-        ExtraMission em = StartActivity.extraMissionList.get(receivedIntent.getIntExtra("extraMissionId",0));
+        ExtraMission em = global.extraMissionList.get(receivedIntent.getIntExtra("extraMissionId",0));
         boolean isExtraMissionAchieve = receivedIntent.getBooleanExtra("achieveExtraMission", false);
         extra_mission_text.setText(em.name);
         if(em.bonus.cc > 0){
@@ -154,14 +157,14 @@ public class BattleEndActivity extends AppCompatActivity {
             extra_mission_cc_icon.setVisibility(View.VISIBLE);
             extra_mission_grief_seed_icon.setVisibility(View.GONE);
             if(isExtraMissionAchieve){
-                StartActivity.ccNumber += em.bonus.cc;
+                global.ccNumber += em.bonus.cc;
             }
         }else{
             extra_mission_add_number.setText("+"+em.bonus.griefSeed);
             extra_mission_cc_icon.setVisibility(View.GONE);
             extra_mission_grief_seed_icon.setVisibility(View.VISIBLE);
             if(isExtraMissionAchieve){
-                StartActivity.griefSeedNumber += em.bonus.griefSeed;
+                global.griefSeedNumber += em.bonus.griefSeed;
             }
         }
         if(!isExtraMissionAchieve){
@@ -179,12 +182,12 @@ public class BattleEndActivity extends AppCompatActivity {
         Bonus bb = getBattleBonus();
         int getGriefSeed = bb.griefSeed;
         int getCC = bb.cc;
-        if(StartActivity.collectionDict.get("\"死神的黑卡\"").isOwn){
+        if(global.collectionDict.get("\"死神的黑卡\"").isOwn){
             if(colorToss(50)){
                 getGriefSeed += 1;
             }
         }
-        if(StartActivity.collectionDict.get("特制的年糕汤").isOwn){
+        if(global.collectionDict.get("特制的年糕汤").isOwn){
             if(colorToss(50)){
                 getCC += 1000;
             }
@@ -192,13 +195,13 @@ public class BattleEndActivity extends AppCompatActivity {
         add_cc_number.setText("+"+getCC);
         add_grief_seed_number.setText("+"+getGriefSeed);
 
-        StartActivity.ccNumber += getCC;
-        StartActivity.griefSeedNumber += getGriefSeed;
+        global.ccNumber += getCC;
+        global.griefSeedNumber += getGriefSeed;
 
         //人物升级
-        for(int i = 0; i < StartActivity.characters.length; i++){
-            if(StartActivity.characters[i] != null){
-                Character c = StartActivity.characters[i];
+        for(int i = 0; i < global.characters.length; i++){
+            if(global.characters[i] != null){
+                Character c = global.characters[i];
                 View view = LayoutInflater.from(BattleEndActivity.this).inflate(R.layout.battle_end_character_item, character_list,false);
                 ImageView charImage = view.findViewById(R.id.charImage);
                 ConstraintLayout charFrame = view.findViewById(R.id.charFrame);
@@ -254,17 +257,17 @@ public class BattleEndActivity extends AppCompatActivity {
         //是否收到收藏品
         if(isReceivedCollection()){
             int collectionId = -1;
-            Collections.shuffle(StartActivity.collectionList);
-            for(int i = 0; i < StartActivity.collectionList.size(); i++){
-                if(!StartActivity.collectionList.get(i).isOwn){
+            Collections.shuffle(global.collectionList);
+            for(int i = 0; i < global.collectionList.size(); i++){
+                if(!global.collectionList.get(i).isOwn){
                     collectionId = i;
                     break;
                 }
             }
             if(collectionId != -1){
-                StartActivity.collectionList.get(collectionId).isOwn = true;
+                global.collectionList.get(collectionId).isOwn = true;
 
-                Collection c = StartActivity.collectionList.get(collectionId);
+                Collection c = global.collectionList.get(collectionId);
                 View view = LayoutInflater.from(BattleEndActivity.this).inflate(R.layout.battle_end_item_item, item_list,false);
                 LinearLayout item_background = view.findViewById(R.id.item_background);
                 ImageView item_image = view.findViewById(R.id.item_image);
@@ -318,8 +321,8 @@ public class BattleEndActivity extends AppCompatActivity {
                     for(int i = 0; i < 6; i++){
                         for(int j = 0; j < 3; j++){
                             //随机记忆
-                            int randomId = (int)(Math.random()*StartActivity.USEDMEMORIA[j].size());
-                            Memoria m = new Memoria(""+StartActivity.USEDMEMORIA[j].get(randomId),BattleEndActivity.this);
+                            int randomId = (int)(Math.random()*global.USEDMEMORIA[j].size());
+                            Memoria m = new Memoria(""+global.USEDMEMORIA[j].get(randomId),BattleEndActivity.this);
                             final CardView cd = new CardView(BattleEndActivity.this);
                             cd.setMemoria(m.id);
                             cd.setLv(m.lvNow,m.lvMax);
@@ -403,13 +406,13 @@ public class BattleEndActivity extends AppCompatActivity {
         }else{
             final Memoria m = new Memoria(chooseCardView.memoriaId,BattleEndActivity.this);
             memoria_price.setVisibility(View.VISIBLE);
-            int tempPrice = StartActivity.MEMORIA_PURCHASE_PRICE[m.star-2];
-            if(StartActivity.collectionDict.get("5万日元商品券").isOwn){
+            int tempPrice = global.MEMORIA_PURCHASE_PRICE[m.star-2];
+            if(global.collectionDict.get("5万日元商品券").isOwn){
                 if(m.star == 3){
                     tempPrice -= 1500;
                 }
             }
-            if(StartActivity.collectionDict.get("东西协议").isOwn){
+            if(global.collectionDict.get("东西协议").isOwn){
                 if(m.star == 4){
                     tempPrice -= 2000;
                 }
@@ -428,15 +431,15 @@ public class BattleEndActivity extends AppCompatActivity {
             skillName.setText("");
             skillIcon.setImageResource(getResourceByString(m.icon));
             skillDescription.setText(m.getEffectDescription());
-            if(StartActivity.ccNumber >= price){
+            if(global.ccNumber >= price){
                 purchase_button_text.setText("购买并离开");
                 purchase_button_background.setColorFilter(null);
                 purchase_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(BattleEndActivity.this, "购买成功", Toast.LENGTH_SHORT).show();
-                        StartActivity.memoriaBag.add(new Memoria(chooseCardView.memoriaId,BattleEndActivity.this));
-                        StartActivity.ccNumber -= price;
+                        global.memoriaBag.add(new Memoria(chooseCardView.memoriaId,BattleEndActivity.this));
+                        global.ccNumber -= price;
                         jumpToNextActivity();
                     }
                 });
@@ -450,7 +453,7 @@ public class BattleEndActivity extends AppCompatActivity {
 
     public Bonus getBattleBonus(){
         if(!bi.isBossBattle){
-            if(StartActivity.gameTime < 14.01f){
+            if(global.gameTime < 14.01f){
                 //说明是游戏前期, 1-2悲叹之种，2000-3000CC
                 int randomGF = (int)(Math.random()*2)+0;
                 int randomCC = ((int)(Math.random()*3))*500+2000;
@@ -462,7 +465,7 @@ public class BattleEndActivity extends AppCompatActivity {
                 return new Bonus(randomCC,randomGF);
             }
         }else{
-            if(StartActivity.gameTime < 14.01f){
+            if(global.gameTime < 14.01f){
                 //说明是游戏前期, 2-3悲叹之种，2000-4000CC
                 int randomGF = (int)(Math.random()*2)+1;
                 int randomCC = ((int)(Math.random()*5))*500+2000;
@@ -479,7 +482,7 @@ public class BattleEndActivity extends AppCompatActivity {
     public boolean isReceivedCollection(){
         int probability = 0;
         if(!bi.isBossBattle){
-            if(StartActivity.gameTime < 14.01f){
+            if(global.gameTime < 14.01f){
                 //说明是游戏前期, 普通战斗
                 probability = 0;
             }else{
@@ -487,7 +490,7 @@ public class BattleEndActivity extends AppCompatActivity {
                 probability = 20;
             }
         }else{
-            if(StartActivity.gameTime < 14.01f){
+            if(global.gameTime < 14.01f){
                 //说明是游戏前期, 魔女战斗
                 probability = 30;
             }else{
@@ -499,34 +502,46 @@ public class BattleEndActivity extends AppCompatActivity {
     }
 
     void updateCCAndGriefSeedView(){
-        cc_number.setText(" "+StartActivity.ccNumber+" ");
-        grief_seed_number.setText(" "+StartActivity.griefSeedNumber+" ");
+        cc_number.setText(" "+global.ccNumber+" ");
+        grief_seed_number.setText(" "+global.griefSeedNumber+" ");
     }
 
     public void jumpToNextActivity(){
         if(!isIntentSend){
+            Intent intent1 = null;
             if(!isRandomBattle){
                 if(getIntent().getIntExtra("battleInfo",-1) == 0){
                     //robbery battle
-                    Intent intent1 = new Intent(BattleEndActivity.this, DialogActivity.class);
+                    intent1 = new Intent(BattleEndActivity.this, DialogActivity.class);
                     intent1.putExtra("storyResourceId",R.raw.robbery_after);
-                    startActivity(intent1);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                    isIntentSend = true;
+                }else if(getIntent().getIntExtra("battleInfo",-1) == 1){
+                    //八千代相遇后第一次战斗
+                    intent1 = new Intent(BattleEndActivity.this, DialogActivity.class);
+                    intent1.putExtra("storyResourceId",R.raw.first_meet_yachiyo_after_battle);
                 }
             }else{
                 //随机战斗
-                MapActivity.mpEvent.clear();
-                StartActivity.gameTime += 0.5f;
-                Intent intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
-                startActivity(intent1);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                isIntentSend = true;
+                //若使用了Doppel，则触发发现doppel事件
+                String useDoppelCharName = getIntent().getStringExtra("useDoppelCharName");
+                if(useDoppelCharName != null && !useDoppelCharName.equals("")){
+                    intent1 = new Intent(BattleEndActivity.this, DialogActivity.class);
+                    if(useDoppelCharName.equals("Hiiragi Nemu")){
+                        intent1.putExtra("storyResourceId", R.raw.after_first_doppel_remu);
+                    }else if(useDoppelCharName.equals("Satomi Touka")){
+                        intent1.putExtra("storyResourceId", R.raw.after_first_doppel_toca);
+                    }else if(useDoppelCharName.equals("Tamaki Ui")){
+                        intent1.putExtra("storyResourceId", R.raw.after_first_doppel_ui);
+                    }
+                }else{
+                    global.mpEvent.clear();
+                    global.gameTime += 0.5f;
+                    intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
+                }
             }
-
-
+            startActivity(intent1);
+            finish();
+            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+            isIntentSend = true;
         }
     }
 

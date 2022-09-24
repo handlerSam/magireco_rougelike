@@ -16,14 +16,17 @@ public class FormationActivity extends AppCompatActivity {
     TextView[][] skillDescription_ = new TextView[3][3];
     ImageView confirm;
     RecyclerView formationRecyclerView;
-    public Formation choseFormation = StartActivity.formationList.get(TeamChooseActivity.usingFormationId);
+    public Formation choseFormation;
 
     boolean isIntentSend = false;
+
+    Global global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formation);
+        global = (Global)getApplicationContext();
         findView();
         init();
 
@@ -42,6 +45,7 @@ public class FormationActivity extends AppCompatActivity {
     }
 
     void init(){
+        choseFormation = global.formationList.get(global.usingFormationId);
         choseFormation.isChose = true;
         formationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         formationRecyclerView.setAdapter(new FormationAdapter(FormationActivity.this));

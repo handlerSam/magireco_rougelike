@@ -68,6 +68,10 @@ public class SpriteViewer extends ConstraintLayout {
                         webView.setVisibility(View.VISIBLE);
                         ((BattleActivity)context).loadedSpriteNumber++;
                         if(((BattleActivity)context).loadedSpriteNumber == ((BattleActivity)context).totalSpriteNumber){
+
+                            //设置战斗bgm
+                            global.setNewBGM(global.battleMusicList[(int)(Math.random()*global.battleMusicList.length)]);
+
                             ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((BattleActivity)context).tipLayout, "alpha", 1f, 0);
                             fadeOut.setDuration(500);
                             fadeOut.start();

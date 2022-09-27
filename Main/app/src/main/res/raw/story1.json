@@ -28,7 +28,8 @@
         "char2face": "011",
         "text": "忧，早上好。",
         "speakerName": "音梦",
-        "speakerDirection": 2
+        "speakerDirection": 2,
+        "backgroundMusic": "bgm01_anime03_hca"
     },
     {
         "flag": 0,

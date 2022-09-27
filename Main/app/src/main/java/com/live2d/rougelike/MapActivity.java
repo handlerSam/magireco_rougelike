@@ -301,6 +301,9 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         cm.setSaturation(0); // 设置饱和度
         grayColorFilter = new ColorMatrixColorFilter(cm);
 
+        //设置BGM
+        global.setNewBGM(R.raw.bgm24_story08_hca);
+
         //恢复上次地图
         if(global.isSimpleMap){
             kamihamaMap.setBackgroundResource(R.drawable.kamihama_map);
@@ -638,6 +641,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
             if(mpe.eventType == global.NORMAL_BATTLE){
                 //普通战斗
+
                 ep.setBackgroundResource(R.drawable.map_mark_battle);
                 ep.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -672,6 +676,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             @Override
                             public void onClick(View v){
                                 if(!isIntentSend){
+                                    global.cancelBGM();
                                     Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                                     intent1.putExtra("battleInfo", tempI);
                                     intent1.putExtra("isRandomBattle", true);
@@ -721,6 +726,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             @Override
                             public void onClick(View v){
                                 if(!isIntentSend){
+                                    global.cancelBGM();
                                     Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                                     intent1.putExtra("battleInfo", tempI);
                                     intent1.putExtra("isRandomBattle", true);
@@ -752,6 +758,7 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                         go_button.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v){
+                                global.cancelBGM();
                                 global.PLAYER_ON_MAP_X = mpe.x;
                                 global.PLAYER_ON_MAP_Y = mpe.y;
                                 if(!isIntentSend){

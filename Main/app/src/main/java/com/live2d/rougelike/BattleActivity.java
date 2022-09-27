@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -1231,6 +1232,7 @@ public class BattleActivity extends AppCompatActivity {
         //});
 
         barState = global.PLATE_SHOW;
+
 
         //设置战斗背景
         BattleInfo bi;
@@ -4638,6 +4640,7 @@ public class BattleActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                global.cancelBGM();
                 Intent receivedIntent = getIntent();
                 int bi = receivedIntent.getIntExtra("battleInfo",0);
                 boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",false);

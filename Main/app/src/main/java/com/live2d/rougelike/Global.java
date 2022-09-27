@@ -1,7 +1,12 @@
 package com.live2d.rougelike;
 
+import android.animation.ValueAnimator;
 import android.app.Application;
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.util.Log;
 import android.util.Pair;
+import android.view.animation.LinearInterpolator;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -67,6 +72,9 @@ public class Global extends Application{
     public int DELTA_BETWEEN_ATTACK_AND_DAMAGE = 700;
     public int DELTA_BETWEEN_EFFECT_SHOW = 750;
     public boolean hasTriggerFirstDoppelEvent = false;
+    public int[] battleMusicList = new int[]{R.raw.bgm01_anime12_hca, R.raw.bgm01_anime15_hca,
+    R.raw.bgm01_battle02_hca, R.raw.bgm01_battle03_hca, R.raw.bgm01_battle04_hca,
+    R.raw.bgm01_battle04_hca, R.raw.bgm01_battle06_hca, R.raw.bgm01_battle07_hca};
     int chargeNumber = 0;
 
     //dialog acticity
@@ -104,6 +112,11 @@ public class Global extends Application{
     public boolean isDesc = true;
 
     public boolean canSetMemoria = false;
+    
+    public MediaPlayer mainBGM = null;
+    public int musicResourceId = -1;// -1为不在播放音乐，若在播放则为musicResourceId
+    public int nextMusicResourceId = -1;//下一个要播放的音乐，是音乐设置唯一的对外接口，当音乐fade完之后会读取这个
+    public boolean isInFade = false;
 
 
     // teamChoose activity
@@ -114,6 +127,97 @@ public class Global extends Application{
         for(int i = 0; i < characterList.size(); i++){
 //            characterList.get(i).diamondNumber = 0;
             characterList.get(i).actionOrder = 2;
+        }
+    }
+
+    public void setNewBGM(final int fileResourceId){
+        nextMusicResourceId = fileResourceId;
+        Log.d("Sam","musicId:"+fileResourceId);
+        if(!isInFade){
+            if(fileResourceId != musicResourceId){
+                if(musicResourceId != -1){
+                    //说明之前有bgm在放
+                    setFade(1.0f,0,1500);
+                }else{
+                    //说明没有
+                    if((mainBGM != null) && (mainBGM.isPlaying())){
+                        mainBGM.release();
+                        mainBGM = null;
+                        musicResourceId = -1;
+                    }
+                    if(nextMusicResourceId != -1){
+                        musicResourceId = nextMusicResourceId;
+                        mainBGM = MediaPlayer.create(Global.this, musicResourceId);//用create方法会自动调用prepare不要再自己调用了
+                        mainBGM.setVolume(1.0f,1.0f);
+                        mainBGM.setLooping(true);
+                        mainBGM.start();
+                        mainBGM.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                setNewBGM(musicResourceId);
+                            }
+                        });
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void setFade(float from, int to, int duration){
+        isInFade = true;
+        ValueAnimator animator = ValueAnimator.ofFloat(from, to);
+        animator.setDuration(duration);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if(((float)animation.getAnimatedValue()) <= 0.1f){
+                    if((mainBGM != null) && (mainBGM.isPlaying())){
+                        mainBGM.release();
+                        mainBGM = null;
+                        musicResourceId = -1;
+                    }
+                    if(nextMusicResourceId != -1){
+                        musicResourceId = nextMusicResourceId;
+                        mainBGM = MediaPlayer.create(Global.this, musicResourceId);//用create方法会自动调用prepare不要再自己调用了
+                        mainBGM.setVolume(1.0f,1.0f);
+                        mainBGM.setLooping(true);
+                        mainBGM.start();
+                        mainBGM.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                setNewBGM(musicResourceId);
+                            }
+                        });
+                    }
+                    isInFade = false;
+                    animation.cancel();
+                }else{
+                    try{//mediaOnplay记录是哪个mediaplayer
+                        mainBGM.setVolume((float)animation.getAnimatedValue(),(float)animation.getAnimatedValue());
+                    }catch(Exception e){
+                        animation.cancel();
+                    }
+                }
+            }
+        });
+        animator.start();
+    }
+
+    public void cancelBGM(){
+//        if((mainBGM != null) && (mainBGM.isPlaying())){
+//            mainBGM.release();
+//            mainBGM = null;
+//            musicResourceId = -1;
+//        }
+        if(musicResourceId != -1){
+            //说明之前有bgm在放
+            nextMusicResourceId = -1;
+            Log.d("Sam","musicId:"+nextMusicResourceId);
+            if(!isInFade){
+                setFade(1.0f,0,1500);
+            }
         }
     }
 }

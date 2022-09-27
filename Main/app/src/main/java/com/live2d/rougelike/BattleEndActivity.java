@@ -130,6 +130,9 @@ public class BattleEndActivity extends AppCompatActivity {
         grayColorFilter = new ColorMatrixColorFilter(cm);
         updateCCAndGriefSeedView();
 
+        //设置BGM
+        global.setNewBGM(R.raw.bgm03_movie37_hca);
+
         //设置背景
         isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
         if(isRandomBattle){
@@ -508,6 +511,7 @@ public class BattleEndActivity extends AppCompatActivity {
 
     public void jumpToNextActivity(){
         if(!isIntentSend){
+            global.cancelBGM();
             Intent intent1 = null;
             if(!isRandomBattle){
                 if(getIntent().getIntExtra("battleInfo",-1) == 0){

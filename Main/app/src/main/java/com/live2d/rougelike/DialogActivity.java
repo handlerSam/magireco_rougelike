@@ -161,7 +161,6 @@ public class DialogActivity extends Activity {
                     m.what = 0;
                     handler.sendMessage(m);
                 }
-
             }
         };
         live2dTimer.schedule(live2dTimerTask,500,50);
@@ -524,6 +523,10 @@ public class DialogActivity extends Activity {
             };
             dialogTimer.schedule(dialogTimerTask,0,25);
         }
+
+        if(!p.getBackgroundMusic().equals("")){
+            global.setNewBGM(getMusicByString(p.getBackgroundMusic()));
+        }
     }
 
     void setLive2d(){
@@ -541,11 +544,14 @@ public class DialogActivity extends Activity {
 
     void jumpToNextActivity(){
         if(!isIntentSend){
+            isIntentSend = true;
             if(storyResourceId == R.raw.story1){
+                global.cancelBGM();
                 Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
                 canTouchNext = false;
                 startActivity(intent1);
             }else if(storyResourceId == R.raw.promotion_of_bangbangzai){
+                global.cancelBGM();
                 if(global.plotFlag == 3 || global.plotFlag == 4){
                     //所有人的HP恢复了25%
                     for(int i = 0; i < global.characterList.size(); i++){
@@ -563,6 +569,7 @@ public class DialogActivity extends Activity {
                 startActivity(intent1);
             }else if(storyResourceId == R.raw.robbery_before){
                 if(global.plotFlag == 1){
+                    global.cancelBGM();
                     //交出身上一半的钱，获得交朋友记忆
                     global.ccNumber -= (int)(global.ccNumber*0.5f);
                     global.memoriaBag.add(new Memoria("1122",DialogActivity.this));
@@ -581,6 +588,7 @@ public class DialogActivity extends Activity {
                 }
             }else if(storyResourceId == R.raw.robbery_after){
                 //获得交朋友记忆
+                global.cancelBGM();
                 global.memoriaBag.add(new Memoria("1122",DialogActivity.this));
                 global.mpEvent.clear();
                 global.randomEventList.remove(Integer.valueOf(R.raw.robbery_before));
@@ -588,6 +596,7 @@ public class DialogActivity extends Activity {
                 canTouchNext = false;
                 startActivity(intent1);
             }else if(storyResourceId == R.raw.after_first_doppel_remu || storyResourceId == R.raw.after_first_doppel_toca || storyResourceId == R.raw.after_first_doppel_ui){
+                global.cancelBGM();
                 global.mpEvent.clear();
                 global.gameTime += 0.5f;
                 global.randomEventList.add(R.raw.first_meet_yachiyo);
@@ -614,13 +623,16 @@ public class DialogActivity extends Activity {
                     startActivity(intent1);
                 }else{
                     //不进入八千代事件
+                    global.cancelBGM();
                     global.mpEvent.clear();
                     Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
                     canTouchNext = false;
                     startActivity(intent1);
                 }
+                global.randomEventList.remove(Integer.valueOf(R.raw.first_meet_yachiyo));
             }else if(storyResourceId == R.raw.first_meet_yachiyo_after_battle){
                 //八千代离队
+                global.cancelBGM();
                 for(int i = 0; i < global.characters.length; i++){
                     Character temp = global.characters[i];
                     if(temp != null && temp.spriteName.equals("Yachiyo Nanami")){
@@ -636,14 +648,36 @@ public class DialogActivity extends Activity {
                         break;
                     }
                 }
+                //如果此时队伍里没有人了，自动上一个人
+                int characterNumberInTeam = 0;
+                for(int i = 0; i < global.characters.length; i++){
+                    if(global.characters[i] != null){
+                        characterNumberInTeam++;
+                    }
+                }
+                if(characterNumberInTeam == 0){
+                    global.characters[2] = global.characterList.get(0);
+                }
+                //如果队伍里没有leader，自动把第一个人填充为leader
+                boolean hasLeader = false;
+                for(int i = 0; i < global.characters.length; i++){
+                    if(global.characters[i] != null && global.characters[i].isLeader){
+                        hasLeader = true;
+                    }
+                }
+                if(!hasLeader){
+                    global.characterList.get(0).isLeader = true;
+                }
+
                 global.mpEvent.clear();
                 Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
                 canTouchNext = false;
                 startActivity(intent1);
             }
+
             finish();
             overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-            isIntentSend = true;
+
         }
 
     }
@@ -710,6 +744,10 @@ public class DialogActivity extends Activity {
         yachiyo.updateAttributionBasedOnLv();
 
         return yachiyo;
+    }
+
+    public int getMusicByString(String idName){
+        return getResources().getIdentifier(idName,"raw", getPackageName());
     }
 }
 
@@ -815,6 +853,15 @@ class Plot{
             e.printStackTrace();
         }
         return -1;
+    }
+
+    String getBackgroundMusic(){
+        try{
+            return ((JSONObject)(jsonArray.get(id))).getString("backgroundMusic");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
     }
 
     boolean isChoice(){

@@ -6,10 +6,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +39,9 @@ public class TeamChooseActivity extends AppCompatActivity {
     TextView[] charHP = new TextView[5];
     TextView[] charATK = new TextView[5];
     TextView[] charDEF = new TextView[5];
+    TextView[] charMP = new TextView[5];
     ImageView[][] skillIcon_ = new ImageView[5][4];
+    ImageView[] recover_HP_ = new ImageView[5];
     LinearLayout[] breakThoughLayout = new LinearLayout[5];
     ImageView[][] breakThough_ = new ImageView[5][3];
     ConstraintLayout[] showMemoriaLayout = new ConstraintLayout[5];
@@ -52,6 +60,8 @@ public class TeamChooseActivity extends AppCompatActivity {
     boolean isIntentSend = false;
     
     Global global;
+
+    ColorMatrixColorFilter grayColorFilter;//用于灰度设置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +94,12 @@ public class TeamChooseActivity extends AppCompatActivity {
             charHP[i] = findViewById(getIDByStr("charHP"+i));
             charATK[i] = findViewById(getIDByStr("charATK"+i));
             charDEF[i] = findViewById(getIDByStr("charDEF"+i));
+            charMP[i] = findViewById(getIDByStr("charMP"+i));
             for(int j = 0; j < 4; j++){
                 skillIcon_[i][j] = findViewById(getIDByStr("skillIcon"+i+"_"+j));
             }
             breakThoughLayout[i] = findViewById(getIDByStr("breakThoughLayout"+i));
+            recover_HP_[i] = findViewById(getIDByStr("recover_HP_"+i));
             for(int j = 0; j < 3; j++){
                 breakThough_[i][j] = findViewById(getIDByStr("breakThough"+i+"_"+j));
             }
@@ -107,6 +119,10 @@ public class TeamChooseActivity extends AppCompatActivity {
     }
 
     public void init(){
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0); // 设置饱和度
+        grayColorFilter = new ColorMatrixColorFilter(cm);
+
         updateCCAndGriefSeedView();
         changeState.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +224,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                 startBattle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        global.cancelBGM();
                         int characterInTeamNumber = 0;
                         for(int i = 0; i < global.characters.length; i++){
                             if(global.characters[i] != null){
@@ -278,12 +295,20 @@ public class TeamChooseActivity extends AppCompatActivity {
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!isIntentSend){
-                        Intent intent1 = new Intent(TeamChooseActivity.this, MapActivity.class);
-                        startActivity(intent1);
-                        finish();
-                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                        isIntentSend = true;
+                    int characterNumberOnTeam = 0;
+                    for(int i = 0; i < global.characters.length; i++){
+                        if(global.characters[i] != null){
+                            characterNumberOnTeam++;
+                        }
+                    }
+                    if(characterNumberOnTeam > 0){
+                        if(!isIntentSend){
+                            Intent intent1 = new Intent(TeamChooseActivity.this, MapActivity.class);
+                            startActivity(intent1);
+                            finish();
+                            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                            isIntentSend = true;
+                        }
                     }
                 }
             });
@@ -317,6 +342,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                     charHP[i].setText(global.characters[i].realHP+"/"+global.characters[i].getRealMaxHP());
                     charATK[i].setText(""+global.characters[i].getRealATK());
                     charDEF[i].setText(""+global.characters[i].getRealDEF());
+                    charMP[i].setText(""+(global.characters[i].realMP/10)+"/"+(global.characters[i].getMaxMp()/10));
                     if(global.characters[i].getRealMaxHP() == global.characters[i].HP){
                         charHP[i].setTextColor(getColor(R.color.shader));
                     }else{
@@ -332,6 +358,56 @@ public class TeamChooseActivity extends AppCompatActivity {
                     }else{
                         charDEF[i].setTextColor(getColor(R.color.textPink));
                     }
+                    recover_HP_[i].setVisibility(View.VISIBLE);
+                    if(global.ccNumber == 0){
+                        recover_HP_[i].setColorFilter(grayColorFilter);
+                        recover_HP_[i].setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v){
+
+                            }
+                        });
+                    }else{
+                        final int tempI = i;
+                        recover_HP_[i].setColorFilter(null);
+                        recover_HP_[i].setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TeamChooseActivity.this);
+                                final AlertDialog dialog = builder.create();
+                                View dialog_frame = LayoutInflater.from(TeamChooseActivity.this).inflate(R.layout.alert_dialog_frame, null);
+                                ((TextView) dialog_frame.findViewById(R.id.alert_dialog_title_name)).setText("使用悲叹之种");
+                                ((TextView) dialog_frame.findViewById(R.id.alert_dialog_content_text)).setText(
+                                        "是否花费 1 悲叹之种为"+ global.characters[tempI].name +"恢复 "
+                                        + Math.min(global.characters[tempI].getRealMaxHP() - global.characters[tempI].realHP, 5000) + "HP 与 "
+                                        + Math.min(global.characters[tempI].getMaxMp() - global.characters[tempI].realMP, 300)/10 + "MP ？");
+                                ((FrameLayout)dialog_frame.findViewById(R.id.alert_dialog_extra_layout)).removeAllViews();
+                                ((ImageView) dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setColorFilter(null);
+                                (dialog_frame.findViewById(R.id.alert_dialog_ok_button)).setOnClickListener(new View.OnClickListener(){
+                                    @Override
+                                    public void onClick(View v){
+                                        global.characters[tempI].realHP += Math.min(global.characters[tempI].getRealMaxHP() - global.characters[tempI].realHP, 5000);
+                                        global.characters[tempI].realMP += Math.min(global.characters[tempI].getMaxMp() - global.characters[tempI].realMP, 300);
+                                        global.griefSeedNumber--;
+                                        updateCheckingViews();
+                                        updateCCAndGriefSeedView();
+                                        dialog.cancel();
+                                        dialog.dismiss();
+                                    }
+                                });
+                                (dialog_frame.findViewById(R.id.alert_dialog_cancel_button)).setOnClickListener(new View.OnClickListener(){
+                                    @Override
+                                    public void onClick(View v){
+                                        dialog.cancel();
+                                        dialog.dismiss();
+                                    }
+                                });
+                                dialog.show();
+                                dialog.getWindow().setContentView(dialog_frame);
+                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                            }
+                        });
+                    }
                     for(int j = 0; j < 4; j++){
                         if(global.characters[i].memoriaList[j] != null){
                             skillIcon_[i][j].setVisibility(View.VISIBLE);
@@ -344,6 +420,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                         }
                     }
                 }else{
+                    recover_HP_[i].setVisibility(View.INVISIBLE);
                     charAll[i].setVisibility(View.INVISIBLE);
                 }
 
@@ -378,6 +455,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                 showCharacterLayout[i].setVisibility(View.INVISIBLE);
                 breakThoughLayout[i].setVisibility(View.INVISIBLE);
                 showMemoriaLayout[i].setVisibility(View.INVISIBLE);
+                recover_HP_[i].setVisibility(View.INVISIBLE);
             }
 
         }

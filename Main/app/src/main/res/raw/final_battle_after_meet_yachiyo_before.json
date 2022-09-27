@@ -1,0 +1,323 @@
+[
+    {
+        "flag": 0,
+        "char1id": "101401",
+        "char1motion": "100",
+        "char1face": "000",
+        "text": "嗯？那棵樱花树...我好像有印象。",
+        "speakerName": "音梦",
+        "speakerDirection": 1,
+        "background":"19092",
+        "backgroundMusic": "bgm03_story12_hca"
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "201",
+        "char1face": "010",
+        "text": "你们也找到这片地方来了吗。",
+        "speakerName": "???",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "200",
+        "char1face": "050",
+        "text": "你是...之前碰到的那位姐姐！",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100701",
+        "char1motion": "001",
+        "char1face": "050",
+        "text": "大姐姐怎么也来到了这里？",
+        "speakerName": "灯花",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "200",
+        "char1face": "010",
+        "text": "因为整个神滨所有的景象都和现实中一样，除了这棵樱花树。",
+        "speakerName": "???",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "我从来没有听说过北养区的山丘上有这样大一棵盛开的樱花树。",
+        "speakerName": "???",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "所以我觉得这一定是这个世界的关键。",
+        "speakerName": "???",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "000",
+        "char1face": "010",
+        "text": "你们好，忧，音梦，灯花。",
+        "speakerName": "???",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "100701",
+        "char0motion": "400",
+        "char0face": "050",
+        "char2id": "101401",
+        "char2motion": "000",
+        "char2face": "000",
+        "text": "哇！吓我一跳，你从哪里冒出来的喵！",
+        "speakerName": "灯花",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "100701",
+        "char2id": "101401",
+        "char2motion": "100",
+        "char2face": "000",
+        "text": "你是...？",
+        "speakerName": "音梦",
+        "speakerDirection": 2
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "100",
+        "char1face": "000",
+        "text": "抱歉，为了你们能更好的生活在这里，我封印了你们一部分记忆。",
+        "speakerName": "???",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "100",
+        "char1face": "000",
+        "text": "但现在事态紧急，我不得不把记忆还给你们了。",
+        "speakerName": "???",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "400",
+        "char1face": "050",
+        "text": "啊？你在说什...",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char0id": "100701",
+        "char0motion": "000",
+        "char0face": "050",
+        "char2id": "101401",
+        "char2motion": "000",
+        "char2face": "050",
+        "text": "...",
+        "speakerName": "灯花",
+        "speakerDirection": 0
+    },
+    {
+        "flag": 0,
+        "char0id": "100701",
+        "char2id": "101401",
+        "text": "...",
+        "speakerName": "音梦",
+        "speakerDirection": 2,
+        "backgroundMusic":"bgm03_story04_hca"
+    },
+    {
+        "flag": 0,
+        "char0id": "100701",
+        "char2id": "101401",
+        "text": "...原来如此。",
+        "speakerName": "音梦",
+        "speakerDirection": 2,
+        "backgroundMusic":"bgm03_story04_hca"
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "200",
+        "char1face": "042",
+        "text": "...我明白了。这个世界是彩羽为她们三人而建的，对吧？守护者小姐。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "200",
+        "char1face": "000",
+        "text": "是的。在净化系统消失后彩羽已经驾驭不了她的doppel了。所以她现在拜托了我维护和管理这里。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "201",
+        "char1face": "021",
+        "text": "由于彩羽维护这个世界花费了太多的精力，所以她现在陷入了昏迷。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "200",
+        "char1face": "000",
+        "text": "对。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "030",
+        "text": "所以我们...不是真的，只是姐姐内心世界里的形象吗...",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "100",
+        "char1face": "010",
+        "text": "不，你们是真的。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "text": "彩羽在你们灵魂宝石破碎前容纳了你们灵魂的一部分，所以你们能作为拥有独立意识的个体生活在这里。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "text": "这也是樱花树盛开的原因。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "001",
+        "char1face": "020",
+        "text": "...八千代小姐，希望你了解了这一切之后可以离开这里。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "text": "这是彩羽自己的选择，你无权做出干涉。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "text": "我会安全的把你送离这里。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "200",
+        "char1face": "042",
+        "text": "...对不起，我无法认同彩羽的做法。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "是她教会了我如何从过去队友牺牲的悲伤中走出来。而现在她自己却又在重蹈我的覆辙。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "char1motion": "201",
+        "char1face": "021",
+        "text": "我想只要消灭了你，这个世界也就维持不住了，彩羽也就会醒过来了吧？",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "200",
+        "char1face": "020",
+        "text": "...",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "text": "预料之中的执迷不悟。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "char1motion": "000",
+        "char1face": "000",
+        "text": "音梦，灯花，忧，这也是我呼唤你们来的原因。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "text": "我从其他谣那里了解过八千代的实力。她不是现在的我能够对抗的存在。",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "304302",
+        "text": "我希望借助你们的力量一起击败她，可以吗？",
+        "speakerName": "万年樱",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "101503",
+        "char1motion": "300",
+        "char1face": "031",
+        "text": "我们...",
+        "speakerName": "忧",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "isChoice": 1,
+        "choose0": "帮助万年樱",
+        "choose0Flag": 1,
+        "choose1": "帮助八千代",
+        "choose1Flag": 2
+    }
+]

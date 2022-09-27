@@ -1,6 +1,10 @@
 package com.live2d.rougelike;
 
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -59,6 +63,8 @@ public class StartActivity extends AppCompatActivity{
 
         initRandomBuff();
 
+        initSoundPool();
+
         //Intent intent1 = new Intent(StartActivity.this, TeamChooseActivity.class);
         //intent1.putExtra("battleInfo",0);
         //startActivity(intent1);
@@ -91,10 +97,11 @@ public class StartActivity extends AppCompatActivity{
         remu.isLeader = false;
         remu.lv = 1;
         remu.star = 5;
-        remu.realMP = 1500;
+        remu.realMP = 0;
         remu.plateList = new int[]{ACCELE, ACCELE, ACCELE, BLAST_VERTICAL, CHARGE};
         remu.mpAttackRatio = 1.2f;
         remu.mpDefendRatio = 1.0f;
+        remu.characterId = "1014";
 
         remu.fourStarMinHP = 6300;
         remu.fourStarMaxHP = 23007;
@@ -154,10 +161,11 @@ public class StartActivity extends AppCompatActivity{
         toca.spriteName = "Satomi Touka";
         toca.lv = 1;
         toca.star = 5;
-        toca.realMP = 1500;
+        toca.realMP = 0;
         toca.plateList = new int[]{ACCELE, ACCELE, BLAST_HORIZONTAL, BLAST_VERTICAL, CHARGE};
         toca.mpAttackRatio = 1.2f;
         toca.mpDefendRatio = 1.2f;
+        toca.characterId = "1007";
 
         toca.fourStarMinHP = 4704;
         toca.fourStarMaxHP = 16689;
@@ -211,10 +219,11 @@ public class StartActivity extends AppCompatActivity{
         ui.spriteName = "Tamaki Ui";
         ui.lv = 1;
         ui.star = 5;
-        ui.realMP = 1500;
+        ui.realMP = 0;
         ui.plateList = new int[]{ACCELE, ACCELE, BLAST_HORIZONTAL, CHARGE, CHARGE};
         ui.mpAttackRatio = 0.9f;
         ui.mpDefendRatio = 0.9f;
+        ui.characterId = "1015";
 
         ui.fourStarMinHP = 5973;
         ui.fourStarMaxHP = 21658;
@@ -747,6 +756,18 @@ public class StartActivity extends AppCompatActivity{
         em = new ExtraMission("全员血量大于60%", new Bonus(1000, 0));
         global.extraMissionList.add(em);
     }
+
+    private void initSoundPool(){
+        //effect sound:
+        int[] soundList = new int[]{42,43,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,68,69,70,72,73,74};
+        SoundPool.Builder builder = new SoundPool.Builder();
+        builder.setMaxStreams(soundList.length*4);
+        AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder();
+        attrBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
+        builder.setAudioAttributes(attrBuilder.build());
+        global.soundPool = builder.build();
+    }
+
 
     @Override
     public void onBackPressed(){

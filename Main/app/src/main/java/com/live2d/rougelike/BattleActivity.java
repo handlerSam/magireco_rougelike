@@ -1327,6 +1327,7 @@ public class BattleActivity extends AppCompatActivity {
                                             if(isChosed){
                                                 cancelSmallPlate(temp);
                                             }else{
+                                                global.playSound(plateList[temp].c.characterId, "choosePlate");
                                                 smallPlateXList[smallPlateNumber] = chooseMonsterX;
                                                 smallPlateYList[smallPlateNumber] = chooseMonsterY;
                                                 setSmallPlate(smallPlateNumber,temp,null);
@@ -1458,6 +1459,9 @@ public class BattleActivity extends AppCompatActivity {
                                             smallPlateYList[smallPlateNumber] = chooseMonsterY;
                                             setSmallPlate(smallPlateNumber,dragPlateId,rightCharList[tempI][tempJ].c);
                                             smallPlateNumber++;
+                                            global.playSound(plateList[dragPlateId].c.characterId, "connectToOtherWhenChoosePlate");
+                                            global.playSound(rightCharList[tempI][tempJ].c.characterId, "connectFromOtherWhenChoosePlate");
+
                                             if(smallPlateNumber == 3){//说明三个盘选择完毕
                                                 prepareRightAttack();
                                             }
@@ -1716,6 +1720,15 @@ public class BattleActivity extends AppCompatActivity {
                         final Character c = global.characters[tempC];
                         rightCharList[c.formationX][c.formationY].spriteName = "activate";
                         changeSprite(c.formationX,c.formationY,true);
+
+                        // 播放语音
+                        if((m.breakthrough == 4? m.effectAfterList:m.effectOriginList).get(0).target.contains("敌")){
+                            global.playSound(c.characterId, "sendNegativeSkill");
+                        }else{
+                            global.playSound(c.characterId, "sendPositiveSkill");
+                        }
+
+
                         for(int i = 0; i < (m.breakthrough == 4? m.effectAfterList.size():m.effectOriginList.size()); i++){
                             final int tempI = i;
                             handler.postDelayed(new Runnable() {
@@ -2924,6 +2937,14 @@ public class BattleActivity extends AppCompatActivity {
                 }else if(plate == CharacterPlateView.BLAST_VERTICAL){
                     rightCharList[fx][fy].spriteName = "attackv_in";
                 }
+                //播放声音，查看前面出现过几次该角色的攻击
+                int attackTime = 0;
+                for(int i = 0; i <= smallPlateNumber; i++){
+                    if(plateList[smallPlateList[i]].c == c){
+                        attackTime++;
+                    }
+                }
+                global.playSound(c.characterId, "attack"+attackTime);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -2942,11 +2963,13 @@ public class BattleActivity extends AppCompatActivity {
             if(smallPlateNumber == 0) {
                 magnifyCharacter(true);
             }
+
             int plate = plateList[smallPlateList[smallPlateNumber]].plate;
             Character c = plateList[smallPlateList[smallPlateNumber]].c;
             final int fx = c.formationX;
             final int fy = c.formationY;
             rightCharList[fx][fy].spriteName = "activate";
+            global.playSound(rightCharList[fx][fy].c.characterId, "connectToOtherWhenBattle");
             changeSprite(fx,fy, true);
             handler.postDelayed(new Runnable() {
                 @Override
@@ -2954,6 +2977,8 @@ public class BattleActivity extends AppCompatActivity {
                     final int connectToX = smallPlateConnectToList[smallPlateNumber].formationX;
                     final int connectToY = smallPlateConnectToList[smallPlateNumber].formationY;
                     rightCharList[connectToX][connectToY].spriteName = "reaction";
+                    global.playSound(rightCharList[connectToX][connectToY].c.characterId, "connectFromOtherWhenBattle");
+
                     changeSprite(connectToX,connectToY, true);
                     final ArrayList<SkillEffect> tempArrayList = (rightCharList[fx][fy].c.star == 4)?rightCharList[fx][fy].c.connectOriginEffectList:rightCharList[fx][fy].c.connectAfterEffectList;
 
@@ -3778,6 +3803,15 @@ public class BattleActivity extends AppCompatActivity {
     public void setDamageOnCharacter(Character c, int damage, boolean isRight, boolean isMagnified){
         //不负责发送伤害数字
         c.realHP -= damage;
+
+        // 播放语音
+        if(isRight){
+            if(1.0f * c.realHP / c.getRealMaxHP() <= 0.2f){
+                global.playSound(c.characterId, "beHeavilyAttacked");
+            }else{
+                global.playSound(c.characterId, "beAttacked");
+            }
+        }
 
         if(c.realHP <= 0){
             //是否触发忍耐
@@ -4637,10 +4671,10 @@ public class BattleActivity extends AppCompatActivity {
                 }
             }
         }
+        global.cancelBGM(3000);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                global.cancelBGM();
                 Intent receivedIntent = getIntent();
                 int bi = receivedIntent.getIntExtra("battleInfo",0);
                 boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",false);

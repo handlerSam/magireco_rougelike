@@ -3,7 +3,10 @@ package com.live2d.rougelike;
 import android.animation.ValueAnimator;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.util.Log;
 import android.util.Pair;
 import android.view.animation.LinearInterpolator;
@@ -16,6 +19,7 @@ public class Global extends Application{
     final public int[] CHARACTER_BREAK_THROUGH_PRICE = new int[]{1, 1, 2};
     //选中的formation：StartActivity.formationList.get(TeamChooseActivity.usingFormationId)
     final public int CHARACTER_STAR_UP_PRICE = 5;
+    SoundPool soundPool;
 
     //    public  ArrayList<Character> monsterList = new ArrayList<>();
     final public int[] CHARACTER_CHANGE_PLATE_PRICE = new int[]{1, 1, 2, 3, 5, 8};
@@ -58,6 +62,7 @@ public class Global extends Application{
     public int griefSeedNumber = 3;
     public int ccNumber = 4000;
     public float gameTime = 7.0f;
+    final public float ADD_GAME_TIME = 1.0f;
     public int PLAYER_ON_MAP_X = 760;// 改动后要调用MapActivity.eventX.clear();MapActivity.eventY.clear();，地图才会更新
     public int PLAYER_ON_MAP_Y = 471;
     public int COST_FOR_SUMMON_ADJUSTMENT_HOUSE = 2000;
@@ -206,11 +211,6 @@ public class Global extends Application{
     }
 
     public void cancelBGM(){
-//        if((mainBGM != null) && (mainBGM.isPlaying())){
-//            mainBGM.release();
-//            mainBGM = null;
-//            musicResourceId = -1;
-//        }
         if(musicResourceId != -1){
             //说明之前有bgm在放
             nextMusicResourceId = -1;
@@ -219,5 +219,120 @@ public class Global extends Application{
                 setFade(1.0f,0,1500);
             }
         }
+    }
+
+    public void cancelBGM(int duration){
+        if(musicResourceId != -1){
+            //说明之前有bgm在放
+            nextMusicResourceId = -1;
+            Log.d("Sam","musicId:"+nextMusicResourceId);
+            if(!isInFade){
+                setFade(1.0f,0,duration);
+            }
+        }
+    }
+
+    public void playSound(String characterId, String action){
+        String soundName = "";
+        switch(action){
+            case "battleStart":
+                soundName = "vo_char_"+characterId+"_00_"+42+"_hca";
+                break;
+            case "choosePlate":
+                soundName = "vo_char_"+characterId+"_00_"+(47+ (int)(Math.random()*4))+"_hca";
+                break;
+            case "connectToOtherWhenChoosePlate":
+                soundName = "vo_char_"+characterId+"_00_"+51+"_hca";
+                break;
+            case "connectFromOtherWhenChoosePlate":
+                soundName = "vo_char_"+characterId+"_00_"+52+"_hca";
+                break;
+            case "connectToOtherWhenBattle":
+                soundName = "vo_char_"+characterId+"_00_"+68+"_hca";
+                break;
+            case "connectFromOtherWhenBattle":
+                soundName = "vo_char_"+characterId+"_00_"+69+"_hca";
+                break;
+            case "sendPositiveSkill":
+                soundName = "vo_char_"+characterId+"_00_"+70+"_hca";
+                break;
+            case "sendNegativeSkill":
+                soundName = "vo_char_"+characterId+"_00_"+72+"_hca";
+                break;
+            case "beAttacked":
+                soundName = "vo_char_"+characterId+"_00_"+73+"_hca";
+                break;
+            case "beHeavilyAttacked":
+                soundName = "vo_char_"+characterId+"_00_"+74+"_hca";
+                break;
+            case "attack1":
+                soundName = "vo_char_"+characterId+"_00_"+(53+ (int)(Math.random()*3))+"_hca";
+                break;
+            case "attack2":
+                soundName = "vo_char_"+characterId+"_00_"+(56+ (int)(Math.random()*2))+"_hca";
+                break;
+            case "attack3":
+                soundName = "vo_char_"+characterId+"_00_"+62+"_hca";
+                break;
+            case "enterShop":
+                soundName = "vo_game_0002_0"+(1+(int)(Math.random()*3))+"_hca";
+                break;
+            default:
+        }
+        final int voiceId = soundPool.load(this,getSoundByString(soundName), 1);
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener(){
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status){
+                soundPool.play(voiceId, 1, 1, 1, 0, 1);
+            }
+        });
+
+    }
+
+    public void savePlayerData(){
+//        public Character[] characters = {null, null, null, null, null};
+//        public ArrayList<Collection> collectionList = new ArrayList<>();
+//        public ArrayList<Character> characterList = new ArrayList<>();
+//        public ArrayList<Memoria> memoriaBag = new ArrayList<>();
+//        public int plate_change_time = 0;
+//        public int griefSeedNumber = 3;
+//        public int ccNumber = 4000;
+//        public float gameTime = 7.0f;
+//        public int PLAYER_ON_MAP_X = 760;// 改动后要调用MapActivity.eventX.clear();MapActivity.eventY.clear();，地图才会更新
+//        public int PLAYER_ON_MAP_Y = 471;
+//        public ArrayList<Integer> randomEventList = new ArrayList<>();
+//
+//        public int winBattleCount1 = 0;
+//        public int winBattleCount2 = 0;
+//        public boolean hasTriggerFirstDoppelEvent = false;
+//        int chargeNumber = 0;
+//        //dialog acticity
+//        public int plotFlag = 0; // 只读取flag标志和该标志相同的对话，对话默认flag=0
+//
+//        //map activity
+//        //用来记录地图上的事件点，每次移动角色时清空，在加载本activity时会依据其长度而决定是否补充event
+//        public ArrayList<MapEvent> mpEvent = new ArrayList<>();
+//
+//        // memoria activity
+//        public int chooseCharacter = 0;
+//        public int chooseEquipSlot = -1;
+//        public boolean isOrderByLV = false;
+//        public boolean isDesc = true;
+//        public boolean canSetMemoria = false;
+//        public boolean isInFade = false;
+//
+//        // teamChoose activity
+//        public int choseCharacter = -1;
+//        public int usingFormationId = 0;
+//
+//
+//
+//        SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
+//        editor.putString("Name","Sam");
+//        editor.apply();
+    }
+
+    public int getSoundByString(String name){
+        return getResources().getIdentifier(name,"raw",getPackageName());
     }
 }

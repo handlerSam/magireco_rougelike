@@ -7,7 +7,8 @@
         "text": " 嗯？有魔女的气息。",
         "speakerName": "灯花",
         "speakerDirection": 1,
-        "background":"11021"
+        "background":"11021",
+        "backgroundMusic": "bgm03_story10_hca"
     },
     {
         "flag": 0,
@@ -33,7 +34,8 @@
         "char1face": "020",
         "text": "忧，等等！先看看情况，不要冲动！",
         "speakerName": "灯花",
-        "speakerDirection": 1
+        "speakerDirection": 1,
+        "backgroundMusic": "-1"
     },
     {
         "flag": 1,

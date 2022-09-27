@@ -162,8 +162,6 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         screenWidth = kamihamaMap.getMeasuredWidth();
         Log.d("Sam", "mapHeight:" + screenHeight + ", mapWidth:" + screenWidth);
 
-
-
         if(!isInit){
             initView();
             isInit = true;
@@ -302,7 +300,12 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         grayColorFilter = new ColorMatrixColorFilter(cm);
 
         //设置BGM
-        global.setNewBGM(R.raw.bgm24_story08_hca);
+        if(Math.abs(global.gameTime - 17.0f) <= 0.1f){
+            global.setNewBGM(R.raw.bgm24_story08_hca);
+        }else{
+            global.setNewBGM(R.raw.bgm24_story07_hca);
+        }
+
 
         //恢复上次地图
         if(global.isSimpleMap){
@@ -374,10 +377,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             if(!isIntentSend){
                                 global.ccNumber -= global.COST_FOR_SUMMON_ADJUSTMENT_HOUSE;
                                 global.mpEvent.clear();
-                                global.gameTime += 0.5f;
+                                global.gameTime += global.ADD_GAME_TIME;
                                 if(global.collectionDict.get("幽灵执照").isOwn){
                                     if(colorToss(25)){
-                                        global.gameTime -= 0.5f;
+                                        global.gameTime -= global.ADD_GAME_TIME;
                                     }
                                 }
                                 Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);
@@ -526,12 +529,9 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     public void initSurrendingEvents(){
-        int finalEventNumber = global.EVENT_NUMBER;
-        if(global.collectionDict.get("红蓝蜡烛").isOwn){
-            finalEventNumber += 2;
-        }
-        if(global.mpEvent.size() < finalEventNumber){
-            //选择所有可能的点
+        if(Math.abs(global.gameTime - 16.0f) <= 0.1f){
+            //进入万年樱事件
+            global.mpEvent.clear();
             for(int i = 0; i < global.mapRandomPoint.length; i++){
                 //1.在leader的一定距离范围内
                 int tempX = global.mapRandomPoint[i][0];
@@ -557,70 +557,126 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             Log.d("Sam", "randomMpeX:" + tempX + ", mpeY:" + tempY);
                             global.mpEvent.add(mpe);
                             Log.d("Sam", "addEventPoint:" + tempX + "," + tempY);
+                            break;
                         }
                     }
                 }
             }
 
-            //筛选点
-            Collections.shuffle(global.mpEvent);
-            while(global.mpEvent.size() > finalEventNumber){
-                int markPoint = -1;
-                double maxD = -1d;
-                for(int i = 0; i < global.mpEvent.size(); i++){
-                    //计算除去某个点后所有点之间的距离，最终remove掉距离总和最大的点
-                    double tempD = calculateSumDistance(global.mpEvent, i);
-                    if(tempD > maxD){
-                        maxD = tempD;
-                        markPoint = i;
+            MapEvent mpe = global.mpEvent.get(0);
+            mpe.eventType = global.EVENT;
+            mpe.bi = null;
+            mpe.randomEvent = R.raw.time_16_event;
+        }else if(Math.abs(global.gameTime - 17.0f) <= 0.1f){
+            //进入最终事件
+            global.mpEvent.clear();
+            MapEvent mpe = new MapEvent();
+            mpe.x = (int) (1.0f * 2573 / 4096.0f * screenWidth);
+            mpe.y = (int) (1.0f * 150 / 2048.0f * screenHeight);
+            mpe.eventType = global.EVENT;
+            mpe.bi = null;
+            mpe.randomEvent = R.raw.final_battle_after_meet_yachiyo_before;
+            global.mpEvent.add(mpe);
+        }else{
+            //不是16,17点，进入普通的事件判断
+            int finalEventNumber = global.EVENT_NUMBER;
+            if(global.collectionDict.get("红蓝蜡烛").isOwn){
+                finalEventNumber += 2;
+            }
+            if(global.mpEvent.size() < finalEventNumber){
+                //选择所有可能的点
+                for(int i = 0; i < global.mapRandomPoint.length; i++){
+                    //1.在leader的一定距离范围内
+                    int tempX = global.mapRandomPoint[i][0];
+                    int tempY = global.mapRandomPoint[i][1];
+                    if(Math.pow(tempX - leaderX, 2) + Math.pow(tempY - leaderY, 2) <= global.EXPLORE_RADIUS * global.EXPLORE_RADIUS){
+                        //2.不能在leader的图像范围内 80*110 与 25*32
+                        if(!(Math.pow(tempX - leaderX, 2) + Math.pow(tempY - 16 - leaderY + 55, 2) <= Math.pow(80, 2))){
+                            //if(!(Math.abs(tempX-12-leaderX) <= 40 && Math.abs(tempY-16-leaderY+55) <= 55)){
+                            //3.不能和已经触发的点图像重叠 25*32
+                            boolean isOverlap = false;
+                            for(int j = 0; j < global.mpEvent.size(); j++){
+                                int tempJx = global.mpEvent.get(j).x;
+                                int tempJy = global.mpEvent.get(j).y;
+                                if(Math.pow(tempX - tempJx, 2) + Math.pow(tempY - tempJy, 2) <= Math.pow(32, 2)){
+                                    isOverlap = true;
+                                    break;
+                                }
+                            }
+                            if(!isOverlap){
+                                MapEvent mpe = new MapEvent();
+                                mpe.x = tempX;
+                                mpe.y = tempY;
+                                Log.d("Sam", "randomMpeX:" + tempX + ", mpeY:" + tempY);
+                                global.mpEvent.add(mpe);
+                                Log.d("Sam", "addEventPoint:" + tempX + "," + tempY);
+                            }
+                        }
                     }
                 }
-                global.mpEvent.remove(markPoint);
-                Log.d("Sam","removePoint:" + markPoint);
-            }
 
-            while(global.mpEvent.size() > finalEventNumber){
-                int randomId = (int) (Math.random() * global.mpEvent.size());
-                global.mpEvent.remove(randomId);
-            }
+                //筛选点
+                Collections.shuffle(global.mpEvent);
+                while(global.mpEvent.size() > finalEventNumber){
+                    int markPoint = -1;
+                    double maxD = -1d;
+                    for(int i = 0; i < global.mpEvent.size(); i++){
+                        //计算除去某个点后所有点之间的距离，最终remove掉距离总和最大的点
+                        double tempD = calculateSumDistance(global.mpEvent, i);
+                        if(tempD > maxD){
+                            maxD = tempD;
+                            markPoint = i;
+                        }
+                    }
+                    global.mpEvent.remove(markPoint);
+                    Log.d("Sam","removePoint:" + markPoint);
+                }
 
-            boolean hasShop = false;
-            //为留下来的点添加事件
-            for(int i = 0; i < global.mpEvent.size(); i++){
-                MapEvent mpe = global.mpEvent.get(i);
-                double tempRandom = Math.random();
-                if(tempRandom < 0.3d && global.randomEventList.size() > 0){
-                    //事件
-                    mpe.eventType = global.EVENT;
-                    mpe.bi = null;
-                    ArrayList<Integer> availableEventList = new ArrayList<>();
-                    for(int j = 0; j < global.randomEventList.size(); j++){
-                        int temp = global.randomEventList.get(j);
-                        if(temp == R.raw.promotion_of_bangbangzai){
-                            if(global.ccNumber > 500){
+                while(global.mpEvent.size() > finalEventNumber){
+                    int randomId = (int) (Math.random() * global.mpEvent.size());
+                    global.mpEvent.remove(randomId);
+                }
+
+                boolean hasShop = false;
+                //为留下来的点添加事件
+                for(int i = 0; i < global.mpEvent.size(); i++){
+                    MapEvent mpe = global.mpEvent.get(i);
+                    double tempRandom = Math.random();
+                    if(tempRandom < 0.3d && global.randomEventList.size() > 0){
+                        //事件
+                        mpe.eventType = global.EVENT;
+                        mpe.bi = null;
+                        ArrayList<Integer> availableEventList = new ArrayList<>();
+                        for(int j = 0; j < global.randomEventList.size(); j++){
+                            int temp = global.randomEventList.get(j);
+                            if(temp == R.raw.promotion_of_bangbangzai){
+                                if(global.ccNumber > 500){
+                                    availableEventList.add(temp);
+                                }
+                            }else{
                                 availableEventList.add(temp);
                             }
-                        }else{
-                            availableEventList.add(temp);
                         }
+                        mpe.randomEvent = availableEventList.get((int)(Math.random()*availableEventList.size()));
+                    }else if(tempRandom < 0.5d){
+                        //魔女战斗
+                        mpe.eventType = global.BOSS_BATTLE;
+                        mpe.bi = generateRandomBattle(mpe.x, mpe.y, true);
+                    }else if(tempRandom < 0.6d && !hasShop){
+                        //商店
+                        mpe.eventType = global.SHOP;
+                        hasShop = true;
+                    }else{
+                        //普通战斗
+                        mpe.eventType = global.NORMAL_BATTLE;
+                        mpe.bi = generateRandomBattle(mpe.x, mpe.y, false);
                     }
-                    mpe.randomEvent = availableEventList.get((int)(Math.random()*availableEventList.size()));
-                }else if(tempRandom < 0.5d){
-                    //魔女战斗
-                    mpe.eventType = global.BOSS_BATTLE;
-                    mpe.bi = generateRandomBattle(mpe.x, mpe.y, true);
-                }else if(tempRandom < 0.6d && !hasShop){
-                    //商店
-                    mpe.eventType = global.SHOP;
-                    hasShop = true;
-                }else{
-                    //普通战斗
-                    mpe.eventType = global.NORMAL_BATTLE;
-                    mpe.bi = generateRandomBattle(mpe.x, mpe.y, false);
                 }
-            }
 
+            }
         }
+
+
 
 
         //在地图上生成筛选后的点
@@ -641,7 +697,6 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
             if(mpe.eventType == global.NORMAL_BATTLE){
                 //普通战斗
-
                 ep.setBackgroundResource(R.drawable.map_mark_battle);
                 ep.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -765,10 +820,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                                     if(global.collectionDict.get("便携式照相机").isOwn){
                                         global.ccNumber += 500;
                                     }
-                                    global.gameTime += 0.5f;
+                                    global.gameTime += global.ADD_GAME_TIME;
                                     if(global.collectionDict.get("幽灵执照").isOwn){
                                         if(colorToss(25)){
-                                            global.gameTime -= 0.5f;
+                                            global.gameTime -= global.ADD_GAME_TIME;
                                         }
                                     }
                                     Intent intent1 = new Intent(MapActivity.this, DialogActivity.class);
@@ -803,10 +858,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                                 global.PLAYER_ON_MAP_Y = mpe.y;
                                 if(!isIntentSend){
                                     global.mpEvent.clear();
-                                    global.gameTime += 0.5f;
+                                    global.gameTime += global.ADD_GAME_TIME;
                                     if(global.collectionDict.get("幽灵执照").isOwn){
                                         if(colorToss(25)){
-                                            global.gameTime -= 0.5f;
+                                            global.gameTime -= global.ADD_GAME_TIME;
                                         }
                                     }
                                     Intent intent1 = new Intent(MapActivity.this, AdjustmentHouseActivity.class);

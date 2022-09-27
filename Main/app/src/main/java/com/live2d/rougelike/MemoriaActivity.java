@@ -761,6 +761,7 @@ class Character{
     String choosingActivityImage = "team_choose_101400_1";
     String miniImage = "mini_remu";
     String charIconImage = "card_10144_";// 灯花10074 10075 音梦10144 10145 忧10154 10155
+    String characterId = "";
     int[] plateList = {ACCELE,ACCELE,ACCELE,BLAST_VERTICAL,CHARGE};
     boolean isLeader = false;
 

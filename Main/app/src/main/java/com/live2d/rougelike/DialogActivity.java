@@ -525,7 +525,11 @@ public class DialogActivity extends Activity {
         }
 
         if(!p.getBackgroundMusic().equals("")){
-            global.setNewBGM(getMusicByString(p.getBackgroundMusic()));
+            if(p.getBackgroundMusic().equals("-1")){
+                global.cancelBGM();
+            }else{
+                global.setNewBGM(getMusicByString(p.getBackgroundMusic()));
+            }
         }
     }
 
@@ -598,7 +602,7 @@ public class DialogActivity extends Activity {
             }else if(storyResourceId == R.raw.after_first_doppel_remu || storyResourceId == R.raw.after_first_doppel_toca || storyResourceId == R.raw.after_first_doppel_ui){
                 global.cancelBGM();
                 global.mpEvent.clear();
-                global.gameTime += 0.5f;
+                global.gameTime += global.ADD_GAME_TIME;
                 global.randomEventList.add(R.raw.first_meet_yachiyo);
                 Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
                 canTouchNext = false;
@@ -673,8 +677,14 @@ public class DialogActivity extends Activity {
                 Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
                 canTouchNext = false;
                 startActivity(intent1);
+            }else if(storyResourceId == R.raw.time_16_event){
+                //听到了万年樱的声音，回到主地图
+                global.cancelBGM();
+                global.mpEvent.clear();
+                Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                canTouchNext = false;
+                startActivity(intent1);
             }
-
             finish();
             overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 
@@ -704,6 +714,7 @@ public class DialogActivity extends Activity {
         yachiyo.plateList = new int[]{ACCELE, BLAST_HORIZONTAL, BLAST_HORIZONTAL, BLAST_HORIZONTAL, CHARGE};
         yachiyo.mpAttackRatio = 1.2f;
         yachiyo.mpDefendRatio = 1.0f;
+        yachiyo.characterId = "1002";
 
         yachiyo.fourStarMinHP = 5380;
         yachiyo.fourStarMaxHP = 18948;

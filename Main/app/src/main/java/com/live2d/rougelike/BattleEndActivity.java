@@ -538,7 +538,7 @@ public class BattleEndActivity extends AppCompatActivity {
                     }
                 }else{
                     global.mpEvent.clear();
-                    global.gameTime += 0.5f;
+                    global.gameTime += global.ADD_GAME_TIME;
                     intent1 = new Intent(BattleEndActivity.this, MapActivity.class);
                 }
             }

@@ -10,7 +10,8 @@
         "char2face": "030",
         "text": "可恶...好强。",
         "speakerDirection": 0,
-        "background": "12041"
+        "background": "12041",
+        "backgroundMusic": "bgm03_story20_hca"
     },
     {
         "flag": 0,

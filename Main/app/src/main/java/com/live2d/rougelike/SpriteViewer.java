@@ -75,6 +75,15 @@ public class SpriteViewer extends ConstraintLayout {
                             ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((BattleActivity)context).tipLayout, "alpha", 1f, 0);
                             fadeOut.setDuration(500);
                             fadeOut.start();
+
+                            handler.postDelayed(new Runnable(){
+                                @Override
+                                public void run(){
+                                    Character c = global.characters[(int)(Math.random()*global.characters.length)];
+                                    global.playSound(c.characterId, "battleStart");
+                                }
+                            }, 500);
+
                             if(!((BattleActivity)context).randomChoosePlates()){
                                 //说明没有可行动角色
                                 ((BattleActivity)context).startLeftAttack();

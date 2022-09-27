@@ -7,7 +7,8 @@
         "text": "音梦！",
         "speakerName": "忧",
         "speakerDirection": 1,
-        "background":"11021"
+        "background":"11021",
+        "backgroundMusic": "bgm03_story12_hca"
     },
     {
         "flag": 0,

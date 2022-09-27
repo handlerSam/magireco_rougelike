@@ -127,6 +127,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
         DEFAULT_COLLECTION = new Collection("", "", "", "", 0, "item_frame_3");
         DEFAULT_COLLECTION.isOwn = true;
 
+        //播放欢迎语音
+        global.playSound("", "enterShop");
+
         back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

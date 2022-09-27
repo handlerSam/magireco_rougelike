@@ -38,7 +38,8 @@
         "char1face": "042",
         "text": "你们三个，我有事情要问你们。",
         "speakerName": "八千代",
-        "speakerDirection": 1
+        "speakerDirection": 1,
+        "backgroundMusic": "bgm03_story08_hca"
     },
     {
         "flag": 0,
@@ -145,7 +146,7 @@
     {
         "flag": 0,
         "char1id": "100200",
-        "text": "首先，这里不是现实世界。",
+        "text": "首先，你们知道这里不是现实世界吗？",
         "speakerName": "八千代",
         "speakerDirection": 1
     },
@@ -163,14 +164,14 @@
         "char1id": "100200",
         "char1motion": "201",
         "char1face": "010",
-        "text": "这里是彩羽的内心世界。",
+        "text": "我们在彩羽的精神世界。",
         "speakerName": "八千代",
         "speakerDirection": 1
     },
     {
         "flag": 0,
         "char1id": "100200",
-        "text": "我是在御魂的帮助下才从现实世界里进到这里来的。",
+        "text": "我是在御魂的帮助下才进到这里来的。",
         "speakerName": "八千代",
         "speakerDirection": 1
     },
@@ -196,6 +197,13 @@
         "char1motion": "200",
         "char1face": "010",
         "text": "御魂告诉我，尽管彩羽在昏迷，她的彩羽的灵魂宝石却在持续消耗着能量。",
+        "speakerName": "八千代",
+        "speakerDirection": 1
+    },
+    {
+        "flag": 0,
+        "char1id": "100200",
+        "text": "她发现彩羽的灵魂宝石有着奇怪的波动，似乎在不断耗费能量维持这个精神世界。",
         "speakerName": "八千代",
         "speakerDirection": 1
     },

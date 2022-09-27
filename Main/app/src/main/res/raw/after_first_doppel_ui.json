@@ -10,7 +10,8 @@
         "text": "忧！身体没事吧！",
         "speakerName": "灯花",
         "speakerDirection": 0,
-        "background":"11021"
+        "background":"11021",
+        "backgroundMusic": "bgm03_story12_hca"
     },
     {
         "flag": 0,

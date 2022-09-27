@@ -40,7 +40,8 @@
         "char2motion": "000",
         "char2face": "010",
         "text": "打劫！把身上的钱交出来！",
-        "speakerDirection": 0
+        "speakerDirection": 0,
+        "backgroundMusic": "bgm03_story20_hca"
     },
     {
         "flag": 0,

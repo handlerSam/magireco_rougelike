@@ -7,7 +7,8 @@
         "char1face": "011",
         "text": "三位！中华饭店万万岁现在正在举办特价优惠活动，要不要来体验一下呢！",
         "speakerDirection": 1,
-        "background": "12021"
+        "background": "12021",
+        "backgroundMusic": "bgm03_story16_hca"
     },
     {
         "flag": 0,

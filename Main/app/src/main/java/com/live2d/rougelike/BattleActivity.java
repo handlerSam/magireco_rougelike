@@ -1006,7 +1006,10 @@ public class BattleActivity extends AppCompatActivity {
                                                 leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackv_in";
                                             }
 
-
+                                            //对characterId有值的角色添加战斗语音
+                                            if(!leftCharList[monsterAttackerX][monsterAttackerY].c.characterId.equals("")){
+                                                global.playSound(leftCharList[monsterAttackerX][monsterAttackerY].c.characterId, "attack1");
+                                            }
                                             //对某些角色，限制其动画播放时间
                                             String tempStr = leftCharList[monsterAttackerX][monsterAttackerY].c.spriteName;
                                             if(tempStr.equals("Mitsuki Felicia") || tempStr.equals("Natsume Kako") || tempStr.equals("Mikuri Ayame")){
@@ -2088,7 +2091,7 @@ public class BattleActivity extends AppCompatActivity {
             int[] plateIdList = new int[]{-1,-1,-1,-1,-1};
             for(int i = 0; i < 5; i++){
                 int choosePlate;
-                if(i <= 3){
+                if(i <= 2){
                     choosePlate = (int)(Math.random()*5);
                     while(isInList(plateIdList,choosePlate)){
                         choosePlate = (int)(Math.random()*5);
@@ -2940,7 +2943,7 @@ public class BattleActivity extends AppCompatActivity {
                 //播放声音，查看前面出现过几次该角色的攻击
                 int attackTime = 0;
                 for(int i = 0; i <= smallPlateNumber; i++){
-                    if(plateList[smallPlateList[i]].c == c){
+                    if(smallPlateList[i] <= 4 && plateList[smallPlateList[i]].c == c){
                         attackTime++;
                     }
                 }
@@ -3322,13 +3325,13 @@ public class BattleActivity extends AppCompatActivity {
 
         //攻击力Buff
         int atkBuff = 0;
-        if(global.collectionDict.get("等等力徽章").isOwn){
+        if(isPlayerAttack && global.collectionDict.get("等等力徽章").isOwn){
             if(turn == 1){
                 atkBuff += 100;
             }
         }
         ArrayList<Effect> efList = isPlayerAttack? rightEffectList[attacker.formationX][attacker.formationY]:leftEffectList[attacker.formationX][attacker.formationY];
-        if(global.collectionDict.get("圣诞科学14号").isOwn){
+        if(isPlayerAttack && global.collectionDict.get("圣诞科学14号").isOwn){
             if(isPlayerAttack){
                 atkBuff += 5 * efList.size();
             }
@@ -3382,10 +3385,8 @@ public class BattleActivity extends AppCompatActivity {
         //防御力Buff
         int DEFBuff = 0;
         efList = isPlayerAttack? leftEffectList[defender.formationX][defender.formationY]:rightEffectList[defender.formationX][defender.formationY];
-        if(global.collectionDict.get("粘贴文件夹").isOwn){
-            if(isPlayerAttack){
-                DEFBuff -= 5 * efList.size();
-            }
+        if(isPlayerAttack && global.collectionDict.get("粘贴文件夹").isOwn){
+            DEFBuff -= 5 * efList.size();
         }
         for(int i = 0; i < efList.size(); i++){
             Effect e = efList.get(i);
@@ -3525,7 +3526,7 @@ public class BattleActivity extends AppCompatActivity {
                 default:
             }
 
-            if(global.collectionDict.get("知古辣屋的可可块").isOwn){
+            if(isPlayerAttack && global.collectionDict.get("知古辣屋的可可块").isOwn){
                 if(isPuella){
                     fundamentalPlateCoefficient *= 1.5f;
                 }
@@ -3537,7 +3538,7 @@ public class BattleActivity extends AppCompatActivity {
         if(plateType == BLAST_HORIZONTAL || plateType == BLAST_VERTICAL){
             //为b盘
             BlastPositionCoefficient = (smallPlateNumber == 0)? 1.0f:((smallPlateNumber == 1)? 1.1f:1.2f);
-            if(global.collectionDict.get("龙真流秘籍").isOwn){
+            if(isPlayerAttack && global.collectionDict.get("龙真流秘籍").isOwn){
                 BlastPositionCoefficient *= 1.5f;
             }
         }
@@ -3805,13 +3806,18 @@ public class BattleActivity extends AppCompatActivity {
         c.realHP -= damage;
 
         // 播放语音
-        if(isRight){
-            if(1.0f * c.realHP / c.getRealMaxHP() <= 0.2f){
-                global.playSound(c.characterId, "beHeavilyAttacked");
+        if(damage > 0){
+            if(!c.characterId.equals("")){
+                if(1.0f * c.realHP / c.getRealMaxHP() <= 0.2f){
+                    global.playSound(c.characterId, "beHeavilyAttacked");
+                }else{
+                    global.playSound(c.characterId, "beAttacked");
+                }
             }else{
-                global.playSound(c.characterId, "beAttacked");
+                global.playSound("", "beAttackCommon");
             }
         }
+
 
         if(c.realHP <= 0){
             //是否触发忍耐
@@ -4064,7 +4070,10 @@ public class BattleActivity extends AppCompatActivity {
                                 }else if(plate == CharacterPlateView.BLAST_VERTICAL){
                                     leftCharList[monsterAttackerX][monsterAttackerY].spriteName = "attackv_in";
                                 }
-
+                                //对characterId有值的角色添加战斗语音
+                                if(!leftCharList[monsterAttackerX][monsterAttackerY].c.characterId.equals("")){
+                                    global.playSound(leftCharList[monsterAttackerX][monsterAttackerY].c.characterId, "attack1");
+                                }
                                 //对某些角色，限制其动画播放时间
                                 String tempStr = leftCharList[monsterAttackerX][monsterAttackerY].c.spriteName;
                                 if(tempStr.equals("Mitsuki Felicia") || tempStr.equals("Natsume Kako") || tempStr.equals("Mikuri Ayame")){

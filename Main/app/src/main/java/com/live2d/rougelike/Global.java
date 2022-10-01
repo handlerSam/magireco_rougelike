@@ -16,15 +16,15 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 public class Global extends Application{
-    final public int[] CHARACTER_BREAK_THROUGH_PRICE = new int[]{1, 1, 2};
+    final public int[] CHARACTER_BREAK_THROUGH_PRICE = new int[]{1, 1, 1};
     //选中的formation：StartActivity.formationList.get(TeamChooseActivity.usingFormationId)
-    final public int CHARACTER_STAR_UP_PRICE = 5;
+    final public int CHARACTER_STAR_UP_PRICE = 3;
     SoundPool soundPool;
 
     //    public  ArrayList<Character> monsterList = new ArrayList<>();
     final public int[] CHARACTER_CHANGE_PLATE_PRICE = new int[]{1, 1, 2, 3, 5, 8};
-    final public int[] MEMORIA_LV_UP_PRICE = new int[]{1000, 2000, 4000};
-    final public int[] MEMORIA_PURCHASE_PRICE = new int[]{0, 3000, 6000};
+    final public int[] MEMORIA_LV_UP_PRICE = new int[]{500, 1000, 2000};
+    final public int[] MEMORIA_PURCHASE_PRICE = new int[]{0, 2000, 4000};
     final public int CHARACTER_NORMAL_SIZE = 1200;
     final public int CHARACTER_MAGNIFIED_SIZE = 1200;
     final public int DOPPEL_NEED_MP = 1500;
@@ -61,7 +61,7 @@ public class Global extends Application{
     public int plate_change_time = 0;
     public int griefSeedNumber = 3;
     public int ccNumber = 4000;
-    public float gameTime = 7.0f;
+    public float gameTime = 16.0f;
     final public float ADD_GAME_TIME = 1.0f;
     public int PLAYER_ON_MAP_X = 760;// 改动后要调用MapActivity.eventX.clear();MapActivity.eventY.clear();，地图才会更新
     public int PLAYER_ON_MAP_Y = 471;
@@ -96,7 +96,7 @@ public class Global extends Application{
     public final int MODE_DRAG = 1;//单指操作
     public final int MODE_SCALE = 2;//双指操作
     public final int EXPLORE_RADIUS = 200;//相对于4096*2048的地图而言
-    public final int EVENT_NUMBER = 2;
+    public final int EVENT_NUMBER = 3;
     public float mapX = 1720;
     public float mapY = 855;
     public boolean isMapSizeTransferred = false;
@@ -128,6 +128,9 @@ public class Global extends Application{
     public int choseCharacter = -1;
     public int usingFormationId = 0;
 
+    public float previousVolume = 0f;
+    public float nextMusicVolume = 0f;
+
     public void clearCharBattleInfo(){
         for(int i = 0; i < characterList.size(); i++){
 //            characterList.get(i).diamondNumber = 0;
@@ -135,14 +138,17 @@ public class Global extends Application{
         }
     }
 
-    public void setNewBGM(final int fileResourceId){
+
+
+    public void setNewBGM(final int fileResourceId, final float volume){
         nextMusicResourceId = fileResourceId;
+        nextMusicVolume = volume;
         Log.d("Sam","musicId:"+fileResourceId);
         if(!isInFade){
             if(fileResourceId != musicResourceId){
                 if(musicResourceId != -1){
                     //说明之前有bgm在放
-                    setFade(1.0f,0,1500);
+                    setFade(previousVolume,0,1500);
                 }else{
                     //说明没有
                     if((mainBGM != null) && (mainBGM.isPlaying())){
@@ -152,16 +158,19 @@ public class Global extends Application{
                     }
                     if(nextMusicResourceId != -1){
                         musicResourceId = nextMusicResourceId;
+                        previousVolume = nextMusicVolume;
                         mainBGM = MediaPlayer.create(Global.this, musicResourceId);//用create方法会自动调用prepare不要再自己调用了
-                        mainBGM.setVolume(1.0f,1.0f);
+                        mainBGM.setVolume(nextMusicVolume,nextMusicVolume);
                         mainBGM.setLooping(true);
                         mainBGM.start();
                         mainBGM.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                setNewBGM(musicResourceId);
+                                setNewBGM(musicResourceId, previousVolume);
                             }
                         });
+                    }else{
+                        previousVolume = 0;
                     }
 
                 }
@@ -185,16 +194,20 @@ public class Global extends Application{
                     }
                     if(nextMusicResourceId != -1){
                         musicResourceId = nextMusicResourceId;
+                        previousVolume = nextMusicVolume;
                         mainBGM = MediaPlayer.create(Global.this, musicResourceId);//用create方法会自动调用prepare不要再自己调用了
-                        mainBGM.setVolume(1.0f,1.0f);
+                        mainBGM.setVolume(nextMusicVolume,nextMusicVolume);
                         mainBGM.setLooping(true);
                         mainBGM.start();
                         mainBGM.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                setNewBGM(musicResourceId);
+                                setNewBGM(musicResourceId,previousVolume);
                             }
                         });
+                    }else{
+                        musicResourceId = -1;
+                        previousVolume = 0;
                     }
                     isInFade = false;
                     animation.cancel();
@@ -276,6 +289,9 @@ public class Global extends Application{
                 break;
             case "enterShop":
                 soundName = "vo_game_0002_0"+(1+(int)(Math.random()*3))+"_hca";
+                break;
+            case "beAttackCommon":
+                soundName = "be_attack_common";
                 break;
             default:
         }

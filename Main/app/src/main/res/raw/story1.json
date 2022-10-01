@@ -186,6 +186,7 @@
         "char0motion": "100",
         "char0face": "000",
         "char2id": "100701",
+        "char2face": "011",
         "text": "你平时不是不下雨也会带伞吗？",
         "speakerName": "音梦",
         "speakerDirection": 0

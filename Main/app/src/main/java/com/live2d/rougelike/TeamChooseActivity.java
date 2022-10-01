@@ -161,7 +161,14 @@ public class TeamChooseActivity extends AppCompatActivity {
                                 intent1.putExtra("touchMemoriaId",tempJ);
                                 intent1.putExtra("eventX", getIntent().getIntExtra("eventX",-1));
                                 intent1.putExtra("eventY", getIntent().getIntExtra("eventY",-1));
-                                intent1.putExtra("HPRatio",1.0f*global.characters[temp].realHP/global.characters[temp].getRealMaxHP());
+                                for(int i = 0; i < global.characters.length; i++){
+                                    Character c = global.characters[i];
+                                    if(c != null){
+                                        intent1.putExtra("HPRatio"+i,1.0f*global.characters[i].realHP/global.characters[i].getRealMaxHP());
+                                    }
+                                }
+
+
                                 startActivity(intent1);
                                 finish();
                                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -359,7 +366,7 @@ public class TeamChooseActivity extends AppCompatActivity {
                         charDEF[i].setTextColor(getColor(R.color.textPink));
                     }
                     recover_HP_[i].setVisibility(View.VISIBLE);
-                    if(global.ccNumber == 0){
+                    if(global.griefSeedNumber == 0){
                         recover_HP_[i].setColorFilter(grayColorFilter);
                         recover_HP_[i].setOnClickListener(new View.OnClickListener(){
                             @Override

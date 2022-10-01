@@ -528,7 +528,7 @@ public class DialogActivity extends Activity {
             if(p.getBackgroundMusic().equals("-1")){
                 global.cancelBGM();
             }else{
-                global.setNewBGM(getMusicByString(p.getBackgroundMusic()));
+                global.setNewBGM(getMusicByString(p.getBackgroundMusic()), 1.0f);
             }
         }
     }
@@ -550,8 +550,7 @@ public class DialogActivity extends Activity {
         if(!isIntentSend){
             isIntentSend = true;
             if(storyResourceId == R.raw.story1){
-                global.cancelBGM();
-                Intent intent1 = new Intent(DialogActivity.this, MapActivity.class);
+                Intent intent1 = new Intent(DialogActivity.this, BonusActivity.class);
                 canTouchNext = false;
                 startActivity(intent1);
             }else if(storyResourceId == R.raw.promotion_of_bangbangzai){

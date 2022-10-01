@@ -315,9 +315,9 @@
     {
         "flag": 0,
         "isChoice": 1,
-        "choose0": "帮助万年樱",
-        "choose0Flag": 1,
-        "choose1": "帮助八千代",
-        "choose1Flag": 2
+        "choose1": "帮助万年樱",
+        "choose1Flag": 1,
+        "choose2": "帮助八千代",
+        "choose2Flag": 2
     }
 ]

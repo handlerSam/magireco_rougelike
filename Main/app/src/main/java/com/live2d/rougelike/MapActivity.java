@@ -114,9 +114,10 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
             return true;
         }
     });
-    private List<String> commonBossNameList = Arrays.asList("monster_钟摆的魔女", "monster_立耳的魔女",
-            "monster_Flower Speaker之谣", "monster_沙地的魔女", "monster_羊之魔女", "monster_屋顶的魔女",
-            "monster_保护孩子的魔女", "monster_生神的魔女", "monster_班长的魔女", "monster_玫瑰园的魔女");
+    private List<String> commonBossNameList = Arrays.asList("monster_钟摆的魔女", "monster_立耳的魔女","monster_Flower Speaker之谣", "monster_沙地的魔女", "monster_羊之魔女", "monster_屋顶的魔女",
+//            "monster_生神的魔女", "monster_班长的魔女",
+            "monster_保护孩子的魔女",   "monster_玫瑰园的魔女");
+
     private List<String> commonMonsterNameList = Arrays.asList("monster_立耳的魔女的手下",
             "monster_沙地的魔女的手下", "monster_羊之魔女的手下", "monster_屋顶的魔女的手下",
             "monster_保护孩子的魔女的手下", "monster_生神的魔女的手下", "monster_班长的魔女的手下",
@@ -301,9 +302,9 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
 
         //设置BGM
         if(Math.abs(global.gameTime - 17.0f) <= 0.1f){
-            global.setNewBGM(R.raw.bgm24_story08_hca);
+            global.setNewBGM(R.raw.bgm24_story07_hca, 1.0f);
         }else{
-            global.setNewBGM(R.raw.bgm24_story07_hca);
+            global.setNewBGM(R.raw.bgm24_story08_hca, 1.0f);
         }
 
 
@@ -642,34 +643,47 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                 for(int i = 0; i < global.mpEvent.size(); i++){
                     MapEvent mpe = global.mpEvent.get(i);
                     double tempRandom = Math.random();
-                    if(tempRandom < 0.3d && global.randomEventList.size() > 0){
-                        //事件
-                        mpe.eventType = global.EVENT;
-                        mpe.bi = null;
-                        ArrayList<Integer> availableEventList = new ArrayList<>();
-                        for(int j = 0; j < global.randomEventList.size(); j++){
-                            int temp = global.randomEventList.get(j);
-                            if(temp == R.raw.promotion_of_bangbangzai){
-                                if(global.ccNumber > 500){
+                    if(Math.abs(global.gameTime - 7.0f) <= 0.1f){
+                        //第一次进入，全都是战斗
+                        if(tempRandom < 0.3d){
+                            //魔女战斗
+                            mpe.eventType = global.BOSS_BATTLE;
+                            mpe.bi = generateRandomBattle(mpe.x, mpe.y, true);
+                        }else{
+                            //普通战斗
+                            mpe.eventType = global.NORMAL_BATTLE;
+                            mpe.bi = generateRandomBattle(mpe.x, mpe.y, false);
+                        }
+                    }else{
+                        if(tempRandom < 0.3d && global.randomEventList.size() > 0){
+                            //事件
+                            mpe.eventType = global.EVENT;
+                            mpe.bi = null;
+                            ArrayList<Integer> availableEventList = new ArrayList<>();
+                            for(int j = 0; j < global.randomEventList.size(); j++){
+                                int temp = global.randomEventList.get(j);
+                                if(temp == R.raw.promotion_of_bangbangzai){
+                                    if(global.ccNumber > 500){
+                                        availableEventList.add(temp);
+                                    }
+                                }else{
                                     availableEventList.add(temp);
                                 }
-                            }else{
-                                availableEventList.add(temp);
                             }
+                            mpe.randomEvent = availableEventList.get((int)(Math.random()*availableEventList.size()));
+                        }else if(tempRandom < 0.5d){
+                            //魔女战斗
+                            mpe.eventType = global.BOSS_BATTLE;
+                            mpe.bi = generateRandomBattle(mpe.x, mpe.y, true);
+                        }else if(tempRandom < 0.6d && !hasShop){
+                            //商店
+                            mpe.eventType = global.SHOP;
+                            hasShop = true;
+                        }else{
+                            //普通战斗
+                            mpe.eventType = global.NORMAL_BATTLE;
+                            mpe.bi = generateRandomBattle(mpe.x, mpe.y, false);
                         }
-                        mpe.randomEvent = availableEventList.get((int)(Math.random()*availableEventList.size()));
-                    }else if(tempRandom < 0.5d){
-                        //魔女战斗
-                        mpe.eventType = global.BOSS_BATTLE;
-                        mpe.bi = generateRandomBattle(mpe.x, mpe.y, true);
-                    }else if(tempRandom < 0.6d && !hasShop){
-                        //商店
-                        mpe.eventType = global.SHOP;
-                        hasShop = true;
-                    }else{
-                        //普通战斗
-                        mpe.eventType = global.NORMAL_BATTLE;
-                        mpe.bi = generateRandomBattle(mpe.x, mpe.y, false);
                     }
                 }
 
@@ -731,7 +745,6 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             @Override
                             public void onClick(View v){
                                 if(!isIntentSend){
-                                    global.cancelBGM();
                                     Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                                     intent1.putExtra("battleInfo", tempI);
                                     intent1.putExtra("isRandomBattle", true);
@@ -781,7 +794,6 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
                             @Override
                             public void onClick(View v){
                                 if(!isIntentSend){
-                                    global.cancelBGM();
                                     Intent intent1 = new Intent(MapActivity.this, TeamChooseActivity.class);
                                     intent1.putExtra("battleInfo", tempI);
                                     intent1.putExtra("isRandomBattle", true);
@@ -1108,81 +1120,82 @@ public class MapActivity extends AppCompatActivity implements View.OnTouchListen
         }
 
         //数值
+        float difficultCoefficient = 0.6f;
         if(!isBossBattle){
             if(global.gameTime < 8.01f){
                 c.lv = 1;
                 c.HP = 3000;
                 c.realHP = c.HP;
-                c.ATK = 750;
-                c.DEF = 1000;
+                c.ATK = (int)(750 * difficultCoefficient);
+                c.DEF = (int)(1000 * difficultCoefficient);
             }else if(global.gameTime < 10.01f){
                 c.lv = 20;
-                c.HP = 9800;
+                c.HP = (int)(9800 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 1500;
-                c.DEF = 4500;
+                c.ATK = (int)(1500 * difficultCoefficient);
+                c.DEF = (int)(4500 * difficultCoefficient);
             }else if(global.gameTime < 12.01f){
                 c.lv = 40;
-                c.HP = 15000;
+                c.HP = (int)(15000 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 2250;
-                c.DEF = 6500;
+                c.ATK = (int)(2250 * difficultCoefficient);
+                c.DEF = (int)(6500 * difficultCoefficient);
             }else if(global.gameTime < 14.01f){
                 c.lv = 60;
-                c.HP = 35000;
+                c.HP = (int)(35000 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 4800;
-                c.DEF = 7000;
+                c.ATK = (int)(4800 * difficultCoefficient);
+                c.DEF = (int)(7000 * difficultCoefficient);
             }else if(global.gameTime < 16.01f){
                 c.lv = 80;
-                c.HP = 80000;
+                c.HP = (int)(80000 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 9000;
-                c.DEF = 10500;
+                c.ATK = (int)(9000 * difficultCoefficient);
+                c.DEF = (int)(10500 * difficultCoefficient);
             }else if(global.gameTime < 18.01f){
                 c.lv = 100;
-                c.HP = 150000;
+                c.HP = (int)(150000 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 14400;
-                c.DEF = 13000;
+                c.ATK = (int)(14400 * difficultCoefficient);
+                c.DEF = (int)(13000 * difficultCoefficient);
             }
         }else{
             if(global.gameTime < 8.01f){
                 c.lv = 1;
-                c.HP = 16000;
+                c.HP = (int)(16000 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 1500;
-                c.DEF = 1300;
+                c.ATK = (int)(1500 * difficultCoefficient);
+                c.DEF = (int)(1300 * difficultCoefficient);
             }else if(global.gameTime < 10.01f){
                 c.lv = 20;
-                c.HP = 34300;
+                c.HP = (int)(34300 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 2875;
-                c.DEF = 4750;
+                c.ATK = (int)(2875 * difficultCoefficient);
+                c.DEF = (int)(4075 * difficultCoefficient);
             }else if(global.gameTime < 12.01f){
                 c.lv = 40;
-                c.HP = 52500;
+                c.HP = (int)(52500 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 4700;
-                c.DEF = 7000;
+                c.ATK = (int)(4700 * difficultCoefficient);
+                c.DEF = (int)(7000 * difficultCoefficient);
             }else if(global.gameTime < 14.01f){
                 c.lv = 60;
-                c.HP = 122500;
+                c.HP = (int)(122500 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 8700;
-                c.DEF = 9000;
+                c.ATK = (int)(8700 * difficultCoefficient);
+                c.DEF = (int)(9000 * difficultCoefficient);
             }else if(global.gameTime < 16.01f){
                 c.lv = 80;
-                c.HP = 280000;
+                c.HP = (int)(280000 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 14000;
-                c.DEF = 15500;
+                c.ATK = (int)(14000 * difficultCoefficient);
+                c.DEF = (int)(15500 * difficultCoefficient);
             }else if(global.gameTime < 18.01f){
                 c.lv = 100;
-                c.HP = 525000;
+                c.HP = (int)(552500 * difficultCoefficient);
                 c.realHP = c.HP;
-                c.ATK = 18000;
-                c.DEF = 20000;
+                c.ATK = (int)(18000 * difficultCoefficient);
+                c.DEF = (int)(20000 * difficultCoefficient);
             }
         }
 

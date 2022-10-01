@@ -70,7 +70,7 @@ public class SpriteViewer extends ConstraintLayout {
                         if(((BattleActivity)context).loadedSpriteNumber == ((BattleActivity)context).totalSpriteNumber){
 
                             //设置战斗bgm
-                            global.setNewBGM(global.battleMusicList[(int)(Math.random()*global.battleMusicList.length)]);
+                            global.setNewBGM(global.battleMusicList[(int)(Math.random()*global.battleMusicList.length)], 0.7f);
 
                             ObjectAnimator fadeOut = ObjectAnimator.ofFloat(((BattleActivity)context).tipLayout, "alpha", 1f, 0);
                             fadeOut.setDuration(500);
@@ -80,6 +80,9 @@ public class SpriteViewer extends ConstraintLayout {
                                 @Override
                                 public void run(){
                                     Character c = global.characters[(int)(Math.random()*global.characters.length)];
+                                    while(c == null){
+                                        c = global.characters[(int)(Math.random()*global.characters.length)];
+                                    }
                                     global.playSound(c.characterId, "battleStart");
                                 }
                             }, 500);

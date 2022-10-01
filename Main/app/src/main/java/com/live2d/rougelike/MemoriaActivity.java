@@ -292,12 +292,17 @@ public class MemoriaActivity extends AppCompatActivity {
                 int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                 boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
 
-                // 按照百分比增加血量
-                float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
-                characterList.get(global.chooseCharacter).realHP = (int)(1.0f*characterList.get(global.chooseCharacter).getRealMaxHP()*HPRatio);
-                //Log.d("Sam","realMaxHp:"+characterList.get(global.chooseCharacter).getRealMaxHP());
-                if(characterList.get(global.chooseCharacter).realHP <= 1){
-                    characterList.get(global.chooseCharacter).realHP = 1;
+                // 按照百分比重置所有角色HP
+                for(int i = 0; i < global.characters.length; i++){
+                    Character c = global.characters[i];
+                    if(c != null){
+                        float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
+                        c.realHP = (int)(1.0f*c.getRealMaxHP()*HPRatio);
+                        //Log.d("Sam","realMaxHp:"+characterList.get(global.chooseCharacter).getRealMaxHP());
+                        if(c.realHP <= 1){
+                            c.realHP = 1;
+                        }
+                    }
                 }
                 if(!isIntentSend){
                     Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);
@@ -321,12 +326,17 @@ public class MemoriaActivity extends AppCompatActivity {
                 Intent receivedIntent = getIntent();
                 int battleId = receivedIntent.getIntExtra("battleInfo",-1);
                 boolean isRandomBattle = receivedIntent.getBooleanExtra("isRandomBattle",true);
-                // 按照百分比增加血量
-                float HPRatio = receivedIntent.getFloatExtra("HPRatio",1.0f);
-                characterList.get(global.chooseCharacter).realHP = (int)(1.0f*characterList.get(global.chooseCharacter).getRealMaxHP()*HPRatio);
-                //Log.d("Sam","realMaxHp:"+characterList.get(global.chooseCharacter).getRealMaxHP());
-                if(characterList.get(global.chooseCharacter).realHP <= 1){
-                    characterList.get(global.chooseCharacter).realHP = 1;
+                // 按照百分比重置所有角色HP
+                for(int i = 0; i < global.characters.length; i++){
+                    Character c = global.characters[i];
+                    if(c != null){
+                        float HPRatio = receivedIntent.getFloatExtra("HPRatio"+i,1.0f);
+                        c.realHP = (int)(1.0f*c.getRealMaxHP()*HPRatio);
+                        //Log.d("Sam","realMaxHp:"+characterList.get(global.chooseCharacter).getRealMaxHP());
+                        if(c.realHP <= 1){
+                            c.realHP = 1;
+                        }
+                    }
                 }
                 if(!isIntentSend){
                     Intent intent1 = new Intent(MemoriaActivity.this,TeamChooseActivity.class);

@@ -131,7 +131,7 @@ public class BattleEndActivity extends AppCompatActivity {
         updateCCAndGriefSeedView();
 
         //设置BGM
-        global.setNewBGM(R.raw.bgm03_movie37_hca);
+        global.setNewBGM(R.raw.bgm03_movie37_hca, 1.0f);
 
         //设置背景
         isRandomBattle = getIntent().getBooleanExtra("isRandomBattle",false);
@@ -320,11 +320,17 @@ public class BattleEndActivity extends AppCompatActivity {
                     memoria_choose_frame.startAnimation(memoriaChooseAnimation);
 
                     //boolean isChooseSkillMemoria = Math.random() > 0.5f;
+                    ArrayList<Integer> loadedMemoriaList = new ArrayList<>();
+
                     cardNumber.setText("请选择一张记忆结晶: ");
                     for(int i = 0; i < 6; i++){
                         for(int j = 0; j < 3; j++){
                             //随机记忆
                             int randomId = (int)(Math.random()*global.USEDMEMORIA[j].size());
+                            while(loadedMemoriaList.contains(randomId)){
+                                randomId = (int)(Math.random()*global.USEDMEMORIA[j].size());
+                            }
+                            loadedMemoriaList.add(randomId);
                             Memoria m = new Memoria(""+global.USEDMEMORIA[j].get(randomId),BattleEndActivity.this);
                             final CardView cd = new CardView(BattleEndActivity.this);
                             cd.setMemoria(m.id);
@@ -432,6 +438,7 @@ public class BattleEndActivity extends AppCompatActivity {
             break_throughLinearLayout.setVisibility(View.INVISIBLE);
             coolTimeView.setText(m.isSkill() ? "冷却时间 "+m.CDOrigin:"");
             skillName.setText("");
+            skillIcon.setVisibility(View.VISIBLE);
             skillIcon.setImageResource(getResourceByString(m.icon));
             skillDescription.setText(m.getEffectDescription());
             if(global.ccNumber >= price){

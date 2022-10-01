@@ -128,7 +128,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
         DEFAULT_COLLECTION.isOwn = true;
 
         //播放欢迎语音
-        global.playSound("", "enterShop");
+        //global.playSound("", "enterShop");
 
         back.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -299,7 +299,9 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
                         LinearLayout starsLayout = item.findViewById(R.id.left_stars_layout);
                         ImageView[] char_star = new ImageView[]{item.findViewById(R.id.left_char_star0), item.findViewById(R.id.left_char_star1),
                                 item.findViewById(R.id.left_char_star2), item.findViewById(R.id.left_char_star3), item.findViewById(R.id.left_char_star4)};
-
+                        for(int j = 0; j < 5; j++){
+                            char_star[j].setVisibility(j < c.star ? View.VISIBLE : View.GONE);
+                        }
                         //init
                         final int price = global.CHARACTER_CHANGE_PLATE_PRICE[global.plate_change_time < global.CHARACTER_CHANGE_PLATE_PRICE.length ? global.plate_change_time : (global.CHARACTER_CHANGE_PLATE_PRICE.length - 1)];
                         charImage.setImageResource(getResourceByString(c.charIconImage + "d"));
@@ -640,6 +642,7 @@ public class AdjustmentHouseActivity extends AppCompatActivity{
 
         //设置商店的商品
         //随机取六个商品
+        Collections.shuffle(global.collectionList);
         ArrayList<Collection> tempShopItemList = new ArrayList<>();
         int cnt = 6;
         for(int i = 0; i < global.collectionList.size() && cnt > 0; i++){
